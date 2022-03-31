@@ -24,20 +24,19 @@ public class Runner : MonoBehaviour
     {
         if (collision.transform.parent && collision.transform.parent.parent && collision.transform.parent.parent.TryGetComponent<AddRuners>(out AddRuners addRuners))
         {
-            if ((addRuners.IsHuman != transform.parent.parent.GetComponent<AddRuners>().IsHuman) && (transform.parent.parent.childCount >= addRuners.transform.childCount))
+            if (transform.parent && transform.parent.parent && transform.parent.parent.GetComponent<AddRuners>() && (addRuners.IsHuman != transform.parent.parent.GetComponent<AddRuners>().IsHuman) && (transform.parent.parent.childCount >= addRuners.transform.childCount))
             {
-                
                 transform.parent.parent.GetComponent<AddRuners>().AddRunners(addRuners.transform.childCount);
-                GameObject.FindObjectOfType<Spawner>().SpawnSquad(1, 3, addRuners.IsHuman);
-                //GameObject.FindObjectOfType<GameController>().GetTopPlayers();
+
                 if (addRuners.GetComponent<Movement>())
                 {
-                    GameObject.FindObjectOfType<Spawner>().ClearChildren(addRuners.transform);
+                    //GameObject.FindObjectOfType<Spawner>().ClearChildren(addRuners.transform);
+                    GameObject.FindObjectOfType<Spawner>().ClearRuners(addRuners.transform, addRuners.IsHuman);
                     GameObject.FindObjectOfType<GameController>().EndGame2();
                 }
                 else
                 {
-                    Destroy(addRuners.gameObject);
+                    GameObject.FindObjectOfType<Spawner>().KillSquad(addRuners);
                 }
 
                 StartCoroutine(CallTop());
@@ -50,4 +49,7 @@ public class Runner : MonoBehaviour
         yield return new WaitForSeconds(0.5f);
         GameObject.FindObjectOfType<GameController>().GetTopPlayers();
     }
+
+    
 }
+

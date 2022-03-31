@@ -6,8 +6,13 @@ public class BonusCollider : MonoBehaviour
 {
     [SerializeField] private int bonusCount;
     [SerializeField] private bool isHuman;
+    [SerializeField] private string bonusName;
 
     [SerializeField] private GameObject toDestroy;
+
+    public GameObject ToDestroy=> toDestroy;
+    public bool IsHuman=> isHuman;
+    public string BonusName => bonusName;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -16,7 +21,8 @@ public class BonusCollider : MonoBehaviour
             if (addRunners.IsHuman == isHuman)
             {
                 addRunners.AddRunners(bonusCount);
-                Destroy(toDestroy);
+                GameObject.FindObjectOfType<Spawner>().RemoveBonus(toDestroy);
+               // Destroy(toDestroy);
             }
         }
     }

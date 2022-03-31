@@ -17,19 +17,27 @@ public class MovementNPC : MonoBehaviour
 
     private float dirX = 0;
     private float dirZ = 0;
+    private Vector3 direction;
 
     public bool isStopped = false;
 
-    private void Start()
+    private Spawner spawner;
+
+    private void Awake()
+    {
+        spawner = GameObject.FindObjectOfType<Spawner>();
+    }
+
+    public void OnStartMoving()
     {
         ChangeDirection();
-        Spawner spawner = GameObject.FindObjectOfType<Spawner>();
         maxPosX = spawner._spawnPosCenter.x + spawner._maxSpawnPos;
         minPosX = spawner._spawnPosCenter.x - spawner._maxSpawnPos;
         maxPosZ = spawner._spawnPosCenter.z + spawner._maxSpawnPos;
         minPosZ = spawner._spawnPosCenter.z - spawner._maxSpawnPos;
+        isStopped = false;
     }
-
+    
     private void Update()
     {
         if (isStopped)
@@ -37,10 +45,9 @@ public class MovementNPC : MonoBehaviour
             return;
         }
 
-        float xValue = dirX * Time.deltaTime * moveSpeed;
-        float zValue = dirZ * Time.deltaTime * moveSpeed;
-        transform.Translate(xValue, 0, zValue, Space.World);
-        RotatePlayer(new Vector3(xValue, 0, zValue));
+        direction = new Vector3(dirX, 0, dirZ).normalized * Time.deltaTime * moveSpeed;
+        transform.Translate(direction.x, 0, direction.z, Space.World);
+        RotatePlayer(new Vector3(direction.x, 0, direction.z));
 
         timer += Time.deltaTime;
         if (timer >= timeToChangeDirection)
@@ -73,8 +80,9 @@ public class MovementNPC : MonoBehaviour
 
     private void ChangeDirection()
     {
-        dirX = Random.Range(-100, 100) * 0.01f;
-        dirZ = Random.Range(-100, 100) * 0.01f;
+        dirX = Random.Range(-10, 11) * 0.1f;
+        dirZ = Random.Range(-10, 11) * 0.1f;
+        
         timeToChangeDirection = Random.Range(100, 500) * 0.01f;
         timer = 0;
     }

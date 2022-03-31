@@ -38,7 +38,7 @@ namespace RandomNameGeneratorLibrary
         {
             // var stream = ReadResourceStreamForFileName(resourceFileName);
 
-            Debug.Log("SHOULD LOAD:::" + resourceFileName);
+            //Debug.Log("SHOULD LOAD:::" + resourceFileName);
             TextAsset asset = Resources.Load("Resources."+resourceFileName) as TextAsset;
             
             if (asset == null)

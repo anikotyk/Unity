@@ -38,7 +38,7 @@ public class GameController : MonoBehaviour
     private void Awake()
     {
         spawner = GameObject.FindObjectOfType<Spawner>();
-        spawner.enabled = false;
+        spawner.isStopped = true;
     }
 
     private void Start()
@@ -74,33 +74,18 @@ public class GameController : MonoBehaviour
         spawner.isStopped = false;
         //playerSquad.GetComponent<Movement>().enabled = true;
         playerSquad.GetComponent<Movement>().OnStartMoving();
-        playerSquad.GetComponent<Movement>().isStopped = false;
         playerSquad.SetIsRun(true);
         canvasStart.SetActive(false);
         canvasPlay.SetActive(true);
         setGameTimer = StartCoroutine(SetGameTimer());
 
     }
-
-    public void EndGame()
-    {
-        StopCoroutine(setGameTimer);
-        spawner.ClearChildren(playerSquad.transform);
-        spawner.EndGame();
-        spawner.enabled = false;
-
-
-        canvasStart.SetActive(true);
-        canvasPlay.SetActive(false);
-
-        playerSquad.OnGameStart();
-        playerSquad.SetIsRun(false);
-        playerSquad.GetComponent<Movement>().enabled = false;
-    }
+    
 
     public void ConfirmGameOver()
     {
-        spawner.ClearChildren(playerSquad.transform);
+        //spawner.ClearChildren(playerSquad.transform);
+        spawner.ClearRuners(playerSquad.transform, playerSquad.IsHuman);
         spawner.EndGame();
 
         canvasGameEnd.SetActive(false);

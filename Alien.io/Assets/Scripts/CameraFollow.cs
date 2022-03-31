@@ -11,6 +11,8 @@ public class CameraFollow : MonoBehaviour
     private float smoothSpeed = 1f;
     private Vector3 newPos;
 
+    public float coefHowNeadCam=10f;
+
     void LateUpdate()
     {
         if (_target == null) return;
@@ -22,11 +24,13 @@ public class CameraFollow : MonoBehaviour
 
     public void SetCameraOffset(float coef)
     {
-        _direction = _direction.normalized * coef;
+        _direction = _direction.normalized * coef* coefHowNeadCam;
     }
 
     public void SetOffsetX(float x)
     {
         _offset = new Vector3(x, _offset.y, _offset.z);
     }
+
+
 }

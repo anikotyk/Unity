@@ -8,15 +8,21 @@ public class AddRuners : MonoBehaviour
     [Header(" Formation Settings ")]
     [Range(0f, 1f)] [SerializeField] private float radiusFactor;
     [Range(0f, 1f)] [SerializeField] private float angleFactor;
-
-    [Header(" Settings ")]
-    [SerializeField] private GameObject humanRunnerPrefab;
-    [SerializeField] private GameObject alienRunnerPrefab;
+    
 
     public Color _colorSquad;
     public bool IsHuman;
     public string nameInTop;
+
+    public Spawner spawner;
+
     //public bool IsHuman=>IsHuman;
+
+    private void Awake()
+    {
+        spawner = GameObject.FindObjectOfType<Spawner>();
+    }
+
     private void OnEnable()
     {
         OnGameStart();
@@ -42,9 +48,11 @@ public class AddRuners : MonoBehaviour
         if (GetComponent<Movement>() != null)
         {
             IsHuman = (Random.value > 0.5f);
+            
             int count = Random.Range(1, 3);
             AddRunners(count);
-            GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(radiusFactor * Mathf.Sqrt(count) * 10);
+            GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 10f;
+            GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(radiusFactor * Mathf.Sqrt(count));
             if (count == 1)
             {
                 GameObject.FindObjectOfType<CameraFollow>().SetOffsetX(-0.5f);
@@ -52,7 +60,7 @@ public class AddRuners : MonoBehaviour
         }
         else
         {
-            nameInTop = GameObject.FindObjectOfType<Spawner>().pGen.GenerateRandomFirstName();
+            nameInTop = spawner.pGen.GenerateRandomFirstName();
         }
     }
 
@@ -83,30 +91,51 @@ public class AddRuners : MonoBehaviour
 
     public void AddRunners(int amount)
     {
-        if (transform.childCount > 60)
+        if (transform.childCount > 500)
         {
             return;
         }
+
         for (int i = 0; i < amount; i++)
         {
             GameObject runnerInstance;
             if (IsHuman)
             {
-                runnerInstance = Instantiate(humanRunnerPrefab, transform);
+                runnerInstance = spawner.GetHuman();
             }
             else
             {
-                runnerInstance = Instantiate(alienRunnerPrefab, transform); 
+                runnerInstance = spawner.GetAlien();
+                
             }
-            
+            runnerInstance.transform.SetParent(transform);
 
+            runnerInstance.transform.localPosition = Vector3.zero;
             runnerInstance.GetComponentInChildren<SkinnedMeshRenderer>().material = new Material(Shader.Find("Standard"));
             runnerInstance.GetComponentInChildren<SkinnedMeshRenderer>().material.color = _colorSquad;
+
+            Runner runner = runnerInstance.GetComponentInChildren<Runner>();
+
+            runner.SetRun(true);
+            runnerInstance.SetActive(true);
+            runnerInstance.GetComponent<RunnerData>().StartCoroutine(runnerInstance.GetComponent<RunnerData>().CallEnableRunner());
         }
         if (GetComponent<Movement>())
         {
             //Camera.main.fieldOfView += amount;
-            GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(GetSquadRadius()*10);
+            if (transform.childCount > 15)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 7f;
+            }
+            else if (transform.childCount > 10)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 8f;
+            }
+            else if (transform.childCount > 5)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 9f;
+            }
+            GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(GetSquadRadius());
             GameObject.FindObjectOfType<CameraFollow>().SetOffsetX(0);
         }
         //GameObject.FindObjectOfType<GameController>().CheckInTop(this);

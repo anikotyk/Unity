@@ -35,6 +35,7 @@ public class Movement : MonoBehaviour
         minPosX = spawner._spawnPosCenter.x - spawner._maxSpawnPos;
         maxPosZ = spawner._spawnPosCenter.z + spawner._maxSpawnPos;
         minPosZ = spawner._spawnPosCenter.z - spawner._maxSpawnPos;
+        isStopped = false;
     }
    
     void Update()
@@ -59,7 +60,9 @@ public class Movement : MonoBehaviour
         }
 #endif
 
+        
         direction = new Vector3(pointer_x, 0, pointer_y).normalized * Time.deltaTime * moveSpeed;
+       
         transform.Translate(direction.x, 0, direction.z, Space.World);
         
         // direction = MovePlayer();
