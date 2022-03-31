@@ -20,13 +20,6 @@ public class MovementNPC : MonoBehaviour
 
     public bool isStopped = false;
 
-    private Transform targetRunner;
-
-    private void Awake()
-    {
-        targetRunner = GetComponent<AddRuners>().targetRunner;
-    }
-
     private void Start()
     {
         ChangeDirection();
@@ -46,7 +39,7 @@ public class MovementNPC : MonoBehaviour
 
         float xValue = dirX * Time.deltaTime * moveSpeed;
         float zValue = dirZ * Time.deltaTime * moveSpeed;
-        targetRunner.Translate(xValue, 0, zValue, Space.World);
+        transform.Translate(xValue, 0, zValue, Space.World);
         RotatePlayer(new Vector3(xValue, 0, zValue));
 
         timer += Time.deltaTime;
@@ -55,25 +48,25 @@ public class MovementNPC : MonoBehaviour
             ChangeDirection();
         }
 
-        if (targetRunner.position.x > maxPosX)
+        if (transform.position.x > maxPosX)
         {
-            targetRunner.position = new Vector3(maxPosX, targetRunner.position.y, targetRunner.position.z);
+            transform.position = new Vector3(maxPosX, transform.position.y, transform.position.z);
             ChangeDirection();
         }
-        else if (targetRunner.position.x < minPosX)
+        else if (transform.position.x < minPosX)
         {
-            targetRunner.position = new Vector3(minPosX, targetRunner.position.y, targetRunner.position.z);
+            transform.position = new Vector3(minPosX, transform.position.y, transform.position.z);
             ChangeDirection();
         }
 
-        if (targetRunner.position.z > maxPosZ)
+        if (transform.position.z > maxPosZ)
         {
-            targetRunner.position = new Vector3(targetRunner.position.x, targetRunner.position.y, maxPosZ);
+            transform.position = new Vector3(transform.position.x, transform.position.y, maxPosZ);
             ChangeDirection();
         }
-        else if (targetRunner.position.z < minPosZ)
+        else if (transform.position.z < minPosZ)
         {
-            targetRunner.position = new Vector3(targetRunner.position.x, targetRunner.position.y, minPosZ);
+            transform.position = new Vector3(transform.position.x, transform.position.y, minPosZ);
             ChangeDirection();
         }
     }
