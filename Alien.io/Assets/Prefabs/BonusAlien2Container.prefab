@@ -1,0 +1,120 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2473521079766151935
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1939520814462040928}
+  - component: {fileID: 2531787700977256465}
+  m_Layer: 0
+  m_Name: BonusAlien2Container
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1939520814462040928
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2473521079766151935}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.07582259, y: 0.98458076, z: -0.07501951}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 273346461149808750}
+  m_Father: {fileID: 0}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &2531787700977256465
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2473521079766151935}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ca11ce747b6503041abb7bbb384a501b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!1001 &356116536595652525
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1939520814462040928}
+    m_Modifications:
+    - target: {fileID: 49689470624182315, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: toDestroy
+      value: 
+      objectReference: {fileID: 2473521079766151935}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0.47
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 896745871854308729, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+      propertyPath: m_Name
+      value: BonusAlien2
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 1285529982224895916, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+--- !u!4 &273346461149808750 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 520782798053496771, guid: bed4a241c31da554287a6c902894f1f2, type: 3}
+  m_PrefabInstance: {fileID: 356116536595652525}
+  m_PrefabAsset: {fileID: 0}
