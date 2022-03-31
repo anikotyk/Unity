@@ -24,9 +24,12 @@ public class Movement : MonoBehaviour
 
     private Spawner spawner;
 
+    private Transform targetRunner;
+
     private void Awake()
     {
         spawner = GameObject.FindObjectOfType<Spawner>();
+        targetRunner = GetComponent<AddRuners>().targetRunner;
     }
 
     public void OnStartMoving()
@@ -60,26 +63,26 @@ public class Movement : MonoBehaviour
 #endif
 
         direction = new Vector3(pointer_x, 0, pointer_y).normalized * Time.deltaTime * moveSpeed;
-        transform.Translate(direction.x, 0, direction.z, Space.World);
-        
+        targetRunner.Translate(direction.x, 0, direction.z, Space.World);
+         
         // direction = MovePlayer();
         RotatePlayer(direction);
 
-        if (transform.position.x > maxPosX)
+        if (targetRunner.position.x > maxPosX)
         {
-            transform.position = new Vector3(maxPosX, transform.position.y, transform.position.z);
-        }else if (transform.position.x < minPosX)
+            targetRunner.position = new Vector3(maxPosX, targetRunner.position.y, targetRunner.position.z);
+        }else if (targetRunner.position.x < minPosX)
         {
-            transform.position = new Vector3(minPosX, transform.position.y, transform.position.z);
+            targetRunner.position = new Vector3(minPosX, targetRunner.position.y, targetRunner.position.z);
         }
 
-        if (transform.position.z > maxPosZ)
+        if (targetRunner.position.z > maxPosZ)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, maxPosZ);
+            targetRunner.position = new Vector3(targetRunner.position.x, targetRunner.position.y, maxPosZ);
         }
-        else if (transform.position.z < minPosZ)
+        else if (targetRunner.position.z < minPosZ)
         {
-            transform.position = new Vector3(transform.position.x, transform.position.y, minPosZ);
+            targetRunner.position = new Vector3(targetRunner.position.x, targetRunner.position.y, minPosZ);
         }
     }
 

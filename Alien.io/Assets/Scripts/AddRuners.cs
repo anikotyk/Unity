@@ -12,10 +12,13 @@ public class AddRuners : MonoBehaviour
     [Header(" Settings ")]
     [SerializeField] private GameObject humanRunnerPrefab;
     [SerializeField] private GameObject alienRunnerPrefab;
+    public Transform targetRunner;
 
     public Color _colorSquad;
     public bool IsHuman;
     public string nameInTop;
+
+    
     //public bool IsHuman=>IsHuman;
     private void OnEnable()
     {
@@ -44,6 +47,7 @@ public class AddRuners : MonoBehaviour
             IsHuman = (Random.value > 0.5f);
             int count = Random.Range(1, 3);
             AddRunners(count);
+            GameObject.FindObjectOfType<CameraFollow>()._target = targetRunner.gameObject;
             GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(radiusFactor * Mathf.Sqrt(count) * 10);
             if (count == 1)
             {
@@ -64,7 +68,21 @@ public class AddRuners : MonoBehaviour
     private void FermatSpiralPlacement()
     {
         float goldenAngle = 137.5f * angleFactor;
+        
+        float RunnerX = targetRunner.position.x;
+        float RunnerZ = targetRunner.position.z;
 
+        for(int i = 1; i<transform.childCount; i++)
+        {
+            float x = radiusFactor * Mathf.Sqrt(i-1 + 1) * Mathf.Cos(Mathf.Deg2Rad * goldenAngle * (i-1 + 1));
+            float z = radiusFactor * Mathf.Sqrt(i-1 + 1) * Mathf.Sin(Mathf.Deg2Rad * goldenAngle * (i-1 + 1));
+
+            Vector3 runnerLocalPosition = new Vector3(RunnerX + x, 0, RunnerZ + z);
+
+            transform.GetChild(i).localPosition = Vector3.Lerp(transform.GetChild(i).localPosition, runnerLocalPosition, 0.1f);
+            //transform.GetChild(i).GetComponentInChildren<Unit>().Flock(runnerLocalPosition);
+        }
+        /*
         for (int i = 0; i < transform.childCount; i++)
         {
             float x = radiusFactor * Mathf.Sqrt(i + 1) * Mathf.Cos(Mathf.Deg2Rad * goldenAngle * (i + 1));
@@ -72,7 +90,7 @@ public class AddRuners : MonoBehaviour
 
             Vector3 runnerLocalPosition = new Vector3(x, 0, z);
             transform.GetChild(i).localPosition = Vector3.Lerp(transform.GetChild(i).localPosition, runnerLocalPosition, 0.1f);
-        }
+        }*/
     }
 
     public float GetSquadRadius()
