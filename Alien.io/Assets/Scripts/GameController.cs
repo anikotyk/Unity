@@ -11,8 +11,6 @@ public class GameController : MonoBehaviour
     [SerializeField] private Text timeText;
 
     private List<KeyValuePair<AddRuners, int>> topRunners = new List<KeyValuePair<AddRuners, int>>();
-    [SerializeField] private Text[] topPlaces;
-    [SerializeField] private Text[] topPlacesCount;
 
     [SerializeField] private InputField nameInput;
     [SerializeField] private AddRuners playerSquad;
@@ -24,11 +22,23 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject canvasGameEndKilledPanel;
     [SerializeField] private GameObject extraTimeButton;
 
+    [SerializeField] private Color greenColor;
+    [SerializeField] private Color orangeColor;
+    [SerializeField] private Color textGreenColor;
+    [SerializeField] private Color textOrangeColor;
+
+    [SerializeField] private Sprite humanIcon;
+    [SerializeField] private Sprite alienIcon;
+
+    [SerializeField] private GameObject topParent;
+
     private Spawner spawner;
 
     private Coroutine setGameTimer;
 
     private bool isExtraTime=false;
+
+    
 
     public void OpenScene(string name)
     {
@@ -237,33 +247,49 @@ public class GameController : MonoBehaviour
     {
         for(int i = 0; i < topRunners.Count; i++)
         {
+            TopPlaceData data = topParent.transform.GetChild(i).GetComponent<TopPlaceData>();
             if (topRunners[i].Key == null)
             {
-                topPlaces[i].fontStyle = FontStyle.Normal;
-                topPlacesCount[i].fontStyle = FontStyle.Normal;
+                data.runnerName.fontStyle = FontStyle.Normal;
+                data.runnerCount.fontStyle = FontStyle.Normal;
 
-                topPlaces[i].text = "";
-                topPlaces[i].color = Color.black;
-                
-                topPlacesCount[i].text = "0";
+                data.runnerName.text = "";
+                data.runnerName.color = Color.black;
+
+                data.runnerCount.text = "0";
+
+                data.background.color = greenColor;
+                data.runnerCount.color = textGreenColor;
+                data.icon.sprite = alienIcon;
             }
             else
             {
-                
                 if (topRunners[i].Key.gameObject.GetComponent<Movement>())
                 {
-                    topPlaces[i].fontStyle = FontStyle.Bold;
-                    topPlacesCount[i].fontStyle = FontStyle.Bold;
+                    data.runnerName.fontStyle = FontStyle.Bold;
+                    data.runnerCount.fontStyle = FontStyle.Bold;
                 }
                 else
                 {
-                    topPlaces[i].fontStyle = FontStyle.Normal;
-                    topPlacesCount[i].fontStyle = FontStyle.Normal;
+                    data.runnerName.fontStyle = FontStyle.Normal;
+                    data.runnerCount.fontStyle = FontStyle.Normal;
                 }
-                topPlaces[i].text = topRunners[i].Key.nameInTop;
-                topPlaces[i].color = topRunners[i].Key._colorSquad;
-                topPlacesCount[i].text = topRunners[i].Value + "";
-               
+                if (topRunners[i].Key.IsHuman)
+                {
+                    data.background.color = orangeColor;
+                    data.runnerCount.color = textOrangeColor;
+                    data.icon.sprite = humanIcon;
+                }
+                else
+                {
+                    data.background.color = greenColor;
+                    data.runnerCount.color = textGreenColor;
+                    data.icon.sprite = alienIcon;
+                }
+
+                data.runnerName.text = topRunners[i].Key.nameInTop;
+                data.runnerName.color = topRunners[i].Key._colorSquad;
+                data.runnerCount.text = topRunners[i].Value + "";
             }
         }
     }

@@ -7,6 +7,8 @@ public class RunnerData : MonoBehaviour
     [SerializeField] private Collider colliderRunner;
     [SerializeField] private SkinnedMeshRenderer skin;
 
+    public Collider ColliderRunner=> colliderRunner;
+
     public IEnumerator CallEnableRunner()
     {
         skin.enabled = true;

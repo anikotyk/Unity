@@ -8,10 +8,10 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Vector3 _direction;
     [SerializeField] private Vector3 _offset;
 
-    private float smoothSpeed = 1f;
+    private float smoothSpeed = 2f;
     private Vector3 newPos;
 
-    public float coefHowNeadCam=10f;
+    public float coefHowNeadCam=15f;
 
     void LateUpdate()
     {

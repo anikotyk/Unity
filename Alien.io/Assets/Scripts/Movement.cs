@@ -37,7 +37,16 @@ public class Movement : MonoBehaviour
         minPosZ = spawner._spawnPosCenter.z - spawner._maxSpawnPos;
         isStopped = false;
     }
-   
+
+    //Attach this script to an empty GameObject
+//Create some UI Text by going to Create>UI>Text.
+//Drag this GameObject into the Text field of your GameObject’s Inspector window.
+
+    public Vector2 startPos;
+    public Vector2 directionSwipe;
+    
+    
+
     void Update()
     {
         if (isStopped)
@@ -45,24 +54,45 @@ public class Movement : MonoBehaviour
             return;
         }
 
+        
+
 #if UNITY_EDITOR
         pointer_x = Input.mousePosition.x;
         pointer_y = Input.mousePosition.y;
         pointer_x -= Screen.width / 2;
         pointer_y -= Screen.height / 2;
 #elif UNITY_ANDROID
-        if (Input.touchCount > 0)
+       /* if (Input.touchCount > 0)
         {
             pointer_x = Input.touches[0].position.x;
             pointer_y = Input.touches[0].position.y;
             pointer_x -= Screen.width/2;
             pointer_y -= Screen.height/2;
-        }
-#endif
+        }*/
 
         
-        direction = new Vector3(pointer_x, 0, pointer_y).normalized * Time.deltaTime * moveSpeed;
-       
+#endif
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    startPos = touch.position;
+                    break;
+                case TouchPhase.Moved:
+                    directionSwipe = touch.position - startPos;
+                    break;
+
+                case TouchPhase.Ended:
+                    break;
+            }
+        }
+
+        //direction = new Vector3(pointer_x, 0, pointer_y).normalized * Time.deltaTime * moveSpeed;
+        direction = new Vector3(directionSwipe.x, 0, directionSwipe.y).normalized * Time.deltaTime * moveSpeed;
+
         transform.Translate(direction.x, 0, direction.z, Space.World);
         
         // direction = MovePlayer();

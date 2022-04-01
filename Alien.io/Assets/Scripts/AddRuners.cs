@@ -48,10 +48,9 @@ public class AddRuners : MonoBehaviour
         if (GetComponent<Movement>() != null)
         {
             IsHuman = (Random.value > 0.5f);
-            
             int count = Random.Range(1, 3);
             AddRunners(count);
-            GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 10f;
+            GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 15f;
             GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(radiusFactor * Mathf.Sqrt(count));
             if (count == 1)
             {
@@ -123,17 +122,37 @@ public class AddRuners : MonoBehaviour
         if (GetComponent<Movement>())
         {
             //Camera.main.fieldOfView += amount;
-            if (transform.childCount > 15)
+            if (transform.childCount > 25)
             {
                 GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 7f;
             }
-            else if (transform.childCount > 10)
+            else if (transform.childCount > 21)
             {
                 GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 8f;
             }
-            else if (transform.childCount > 5)
+            else if(transform.childCount > 18)
             {
                 GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 9f;
+            }
+            else if (transform.childCount > 15)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 10f;
+            }
+            else if (transform.childCount > 12)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 11f;
+            }
+            else if(transform.childCount > 10)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 12f;
+            }
+            else if (transform.childCount > 5)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 13f;
+            }
+            else if (transform.childCount > 3)
+            {
+                GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 14f;
             }
             GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(GetSquadRadius());
             GameObject.FindObjectOfType<CameraFollow>().SetOffsetX(0);
@@ -149,4 +168,23 @@ public class AddRuners : MonoBehaviour
             runner.SetRun(isRun);
         }
     }
+
+    public void DeadAllRunners()
+    {
+        foreach (Runner runner in transform.GetComponentsInChildren<Runner>())
+        {
+            runner.Dead();
+        }
+
+        TurnOffAllColliders();
+    }
+
+    public void TurnOffAllColliders()
+    {
+        foreach(RunnerData data in GetComponentsInChildren<RunnerData>())
+        {
+            data.ColliderRunner.enabled = false;
+        }
+    }
+    
 }

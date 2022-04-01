@@ -253,21 +253,66 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void KillSquad(AddRuners addRuners)
+    public void KillSquad(AddRuners addRuners, bool isWithAnimation=false, bool isForPlayer=false)
     {
-        if (addRuners.IsHuman)
+        if(!isForPlayer)
         {
-           countHuman -= 1;
+            if (addRuners.IsHuman)
+            {
+                countHuman -= 1;
+            }
+            else
+            {
+                countAlien -= 1;
+            }
+        }
+        
+
+        if (isWithAnimation)
+        {
+            if (addRuners.GetComponent<MovementNPC>())
+            {
+                addRuners.GetComponent<MovementNPC>().isStopped = true;
+            }
+            else if (addRuners.GetComponent<Movement>())
+            {
+                addRuners.GetComponent<Movement>().isStopped = true;
+            }
+            addRuners.DeadAllRunners();
+            StartCoroutine(SetActiveFalseAfterAnimation(addRuners, isForPlayer));
         }
         else
         {
-            countAlien -= 1;
+            ClearRuners(addRuners.transform, addRuners.IsHuman);
+            if (!isForPlayer)
+            {
+                addRuners.transform.SetParent(_usedSquadParent);
+                StartCoroutine(setActiveFalseAfterTime(addRuners.gameObject));
+            }
         }
-
-        ClearRuners(addRuners.transform, addRuners.IsHuman);
-        addRuners.transform.SetParent(_usedSquadParent);
-        StartCoroutine(setActiveFalseAfterTime(addRuners.gameObject));
-        //addRuners.gameObject.SetActive(false);
+        
+    }
+    
+    private IEnumerator SetActiveFalseAfterAnimation(AddRuners addRuners, bool isForPlayer=false)
+    {
+        Animator animator = addRuners.GetComponentInChildren<Runner>().animator;
+        yield return null;
+        while (true)
+        {
+            if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
+            {
+                yield return new WaitForSeconds(0.3f);
+                ClearRuners(addRuners.transform, addRuners.IsHuman);
+                if (!isForPlayer)
+                {
+                    addRuners.transform.SetParent(_usedSquadParent);
+                    yield return null;
+                    addRuners.gameObject.SetActive(false);
+                }
+                yield break;
+            }
+            yield return null;
+        }
     }
 
     public IEnumerator setActiveFalseAfterTime(GameObject obj)
