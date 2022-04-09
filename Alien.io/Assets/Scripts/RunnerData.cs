@@ -15,7 +15,6 @@ public class RunnerData : MonoBehaviour
 
         yield return new WaitForSeconds(0.1f);
         colliderRunner.enabled = true;
-        
     }
 
     public void DisableRunner()

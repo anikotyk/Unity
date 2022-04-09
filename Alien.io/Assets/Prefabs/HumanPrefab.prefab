@@ -89,6 +89,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 3787444739346386023}
+  startPos: {x: 0, y: -0.42, z: 0}
 --- !u!1001 &7342311350098031094
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -148,6 +149,10 @@ PrefabInstance:
       propertyPath: m_Controller
       value: 
       objectReference: {fileID: 9100000, guid: 83e0038fd2a0cd644b78c39174f2b011, type: 2}
+    - target: {fileID: 5866666021909216657, guid: 0edcd50a9f475754f80e998ee2061362, type: 3}
+      propertyPath: m_ApplyRootMotion
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 0edcd50a9f475754f80e998ee2061362, type: 3}
 --- !u!1 &7576260275396168871 stripped

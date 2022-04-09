@@ -16,10 +16,13 @@ public class AddRuners : MonoBehaviour
 
     public Spawner spawner;
 
+    public bool isPointedNow=false;
+
     //public bool IsHuman=>IsHuman;
 
     private void Awake()
     {
+        isPointedNow = false;
         spawner = GameObject.FindObjectOfType<Spawner>();
     }
 
@@ -61,6 +64,7 @@ public class AddRuners : MonoBehaviour
         {
             nameInTop = spawner.pGen.GenerateRandomFirstName();
         }
+        FermatSpiralPlacement(1f);
     }
 
     void Update()
@@ -68,7 +72,7 @@ public class AddRuners : MonoBehaviour
         FermatSpiralPlacement();
     }
 
-    private void FermatSpiralPlacement()
+    private void FermatSpiralPlacement(float lerpcoef=0.1f)
     {
         float goldenAngle = 137.5f * angleFactor;
 
@@ -78,7 +82,7 @@ public class AddRuners : MonoBehaviour
             float z = radiusFactor * Mathf.Sqrt(i + 1) * Mathf.Sin(Mathf.Deg2Rad * goldenAngle * (i + 1));
 
             Vector3 runnerLocalPosition = new Vector3(x, 0, z);
-            transform.GetChild(i).localPosition = Vector3.Lerp(transform.GetChild(i).localPosition, runnerLocalPosition, 0.1f);
+            transform.GetChild(i).localPosition = Vector3.Lerp(transform.GetChild(i).localPosition, runnerLocalPosition, lerpcoef);
         }
     }
 
@@ -107,8 +111,8 @@ public class AddRuners : MonoBehaviour
                 runnerInstance = spawner.GetAlien();
                 
             }
-            runnerInstance.transform.SetParent(transform);
 
+            runnerInstance.transform.SetParent(transform);
             runnerInstance.transform.localPosition = Vector3.zero;
             runnerInstance.GetComponentInChildren<SkinnedMeshRenderer>().material = new Material(Shader.Find("Standard"));
             runnerInstance.GetComponentInChildren<SkinnedMeshRenderer>().material.color = _colorSquad;
@@ -176,14 +180,14 @@ public class AddRuners : MonoBehaviour
             runner.Dead();
         }
 
-        TurnOffAllColliders();
+        TurnOffOnAllColliders();
     }
 
-    public void TurnOffAllColliders()
+    public void TurnOffOnAllColliders(bool turnOn=false)
     {
         foreach(RunnerData data in GetComponentsInChildren<RunnerData>())
         {
-            data.ColliderRunner.enabled = false;
+            data.ColliderRunner.enabled = turnOn;
         }
     }
     

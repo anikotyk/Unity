@@ -11,6 +11,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private Text timeText;
 
     private List<KeyValuePair<AddRuners, int>> topRunners = new List<KeyValuePair<AddRuners, int>>();
+    public List<KeyValuePair<AddRuners, int>> TopRunners => topRunners;
 
     [SerializeField] private InputField nameInput;
     [SerializeField] private AddRuners playerSquad;
@@ -31,6 +32,9 @@ public class GameController : MonoBehaviour
     [SerializeField] private Sprite alienIcon;
 
     [SerializeField] private GameObject topParent;
+
+    [SerializeField] private Transform pointersParent;
+
 
     private Spawner spawner;
 
@@ -95,7 +99,8 @@ public class GameController : MonoBehaviour
     public void ConfirmGameOver()
     {
         //spawner.ClearChildren(playerSquad.transform);
-        spawner.ClearRuners(playerSquad.transform, playerSquad.IsHuman);
+        playerSquad.GetComponent<Player>().KillPlayer();
+        //spawner.ClearRuners(playerSquad.transform, playerSquad.IsHuman);
         spawner.EndGame();
 
         canvasGameEnd.SetActive(false);
@@ -195,6 +200,8 @@ public class GameController : MonoBehaviour
         }
         
         ShowTop();
+        
+
     }
 
     public void CheckInTop(AddRuners runner)
@@ -305,5 +312,53 @@ public class GameController : MonoBehaviour
         }
 
         return -1;
+    }
+
+    private void ShowPointers()
+    {
+        int cnt = Mathf.Min(topRunners.Count, pointersParent.childCount);
+        int pointescount = 0;
+        for (int i = 0; i < cnt; i++)
+        {
+            if (topRunners[i].Key == null)
+            {
+                cnt = i;
+                break;
+            }
+
+            if (topRunners[i].Key.GetComponent<Player>())
+            {
+                cnt++;
+                continue;
+            }
+            if (topRunners[i].Key.isPointedNow)
+            {
+                continue;
+            }
+
+            while (pointersParent.GetChild(pointescount).GetComponent<Pointer>().Target != null)
+            {
+                pointescount++;
+            }
+
+            pointersParent.GetChild(pointescount).gameObject.SetActive(true);
+            pointersParent.GetChild(pointescount).GetComponent<Pointer>().SetTarget(topRunners[i].Key, topRunners[i].Value);
+            topRunners[i].Key.isPointedNow = true;
+            pointescount++;
+        }
+
+        for (int i = pointescount; i < pointersParent.childCount; i++)
+        {
+            pointersParent.GetChild(i).GetComponent<Pointer>().SetTarget(null, 0);
+            pointersParent.GetChild(i).gameObject.SetActive(false);
+        }
+
+        for (int i = cnt; i < topRunners.Count; i++)
+        {
+            if (topRunners[i].Key != null)
+            {
+                topRunners[i].Key.isPointedNow = false;
+            }
+        }
     }
 }

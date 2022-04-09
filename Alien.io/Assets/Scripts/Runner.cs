@@ -5,6 +5,12 @@ using UnityEngine;
 public class Runner : MonoBehaviour
 {
     public Animator animator;
+    [SerializeField] private Vector3 startPos;
+
+    private void OnEnable()
+    {
+        transform.localPosition = startPos;
+    }
 
     public void SetRun(bool isRun)
     {
@@ -45,13 +51,10 @@ public class Runner : MonoBehaviour
                 }
                 
 
-                if (addRuners.GetComponent<Movement>())
+                if (addRuners.TryGetComponent<Player>(out Player player))
                 {
-                    GameObject.FindObjectOfType<Spawner>().KillSquad(addRuners, isWithAnimationDeath, true);
-                    GameObject.FindObjectOfType<GameController>().EndGame2();
-                    /*
-                    GameObject.FindObjectOfType<Spawner>().ClearRuners(addRuners.transform, addRuners.IsHuman);
-                    */
+                    player.KillPlayer(isWithAnimationDeath);
+                    
                 }
                 else
                 {
@@ -74,6 +77,9 @@ public class Runner : MonoBehaviour
         animator.SetBool("IsDead", true);
     }
 
-    
+    public void Alive()
+    {
+        animator.SetBool("IsDead", false);
+    }
 }
 

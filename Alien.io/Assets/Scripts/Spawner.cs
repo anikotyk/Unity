@@ -143,21 +143,20 @@ public class Spawner : MonoBehaviour
 
     public void ClearRuners(Transform obj, bool isHuman)
     {
+        Transform parent;
         if (isHuman)
         {
-            foreach (RunnerData runnerData in obj.GetComponentsInChildren<RunnerData>())
-            {
-                RemoveHuman(runnerData.gameObject);
-            }
+            parent = _usedHumansParent;
         }
         else
         {
-            foreach (RunnerData runnerData in obj.GetComponentsInChildren<RunnerData>())
-            {
-                RemoveAlien(runnerData.gameObject);
-            }
+            parent = _usedAliensParent;
         }
-        
+
+        foreach (RunnerData runnerData in obj.GetComponentsInChildren<RunnerData>())
+        {
+            RemoveRunner(runnerData.gameObject, parent);
+        }
     }
 
     public void SpawnSquad(int minRunners, int maxRunners, bool isHuman, int deep=0)
@@ -253,47 +252,36 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void KillSquad(AddRuners addRuners, bool isWithAnimation=false, bool isForPlayer=false)
+    public void KillSquad(AddRuners addRuners, bool isWithAnimation=false)
     {
-        if(!isForPlayer)
+        if (addRuners.IsHuman)
         {
-            if (addRuners.IsHuman)
-            {
-                countHuman -= 1;
-            }
-            else
-            {
-                countAlien -= 1;
-            }
+            countHuman -= 1;
+        }
+        else
+        {
+            countAlien -= 1;
         }
         
-
         if (isWithAnimation)
         {
             if (addRuners.GetComponent<MovementNPC>())
             {
                 addRuners.GetComponent<MovementNPC>().isStopped = true;
             }
-            else if (addRuners.GetComponent<Movement>())
-            {
-                addRuners.GetComponent<Movement>().isStopped = true;
-            }
             addRuners.DeadAllRunners();
-            StartCoroutine(SetActiveFalseAfterAnimation(addRuners, isForPlayer));
+            StartCoroutine(SetActiveFalseAfterAnimation(addRuners));
         }
         else
         {
             ClearRuners(addRuners.transform, addRuners.IsHuman);
-            if (!isForPlayer)
-            {
-                addRuners.transform.SetParent(_usedSquadParent);
-                StartCoroutine(setActiveFalseAfterTime(addRuners.gameObject));
-            }
+            addRuners.transform.SetParent(_usedSquadParent);
+            StartCoroutine(setActiveFalseAfterTime(addRuners.gameObject));
         }
         
     }
     
-    private IEnumerator SetActiveFalseAfterAnimation(AddRuners addRuners, bool isForPlayer=false)
+    private IEnumerator SetActiveFalseAfterAnimation(AddRuners addRuners)
     {
         Animator animator = addRuners.GetComponentInChildren<Runner>().animator;
         yield return null;
@@ -303,12 +291,10 @@ public class Spawner : MonoBehaviour
             {
                 yield return new WaitForSeconds(0.3f);
                 ClearRuners(addRuners.transform, addRuners.IsHuman);
-                if (!isForPlayer)
-                {
-                    addRuners.transform.SetParent(_usedSquadParent);
-                    yield return null;
-                    addRuners.gameObject.SetActive(false);
-                }
+                addRuners.transform.SetParent(_usedSquadParent);
+                yield return null;
+                addRuners.gameObject.SetActive(false);
+                
                 yield break;
             }
             yield return null;
@@ -350,15 +336,11 @@ public class Spawner : MonoBehaviour
         return Instantiate(alienRunnerPrefab);
     }
 
-    public void RemoveHuman(GameObject human)
+    public void RemoveRunner(GameObject runner, Transform parent)
     {
-        human.transform.parent = _usedHumansParent;
-        human.SetActive(false);
-    }
-
-    public void RemoveAlien(GameObject alien)
-    {
-        alien.transform.parent = _usedAliensParent;
-        alien.SetActive(false);
+        runner.GetComponentInChildren<Runner>().Alive();
+        runner.GetComponent<RunnerData>().ColliderRunner.enabled = true;
+        runner.transform.parent = parent;
+        runner.SetActive(false);
     }
 }

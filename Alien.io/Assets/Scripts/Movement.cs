@@ -24,9 +24,13 @@ public class Movement : MonoBehaviour
 
     private Spawner spawner;
 
+    public Vector2 startPos;
+    public Vector2 directionSwipe;
+
     private void Awake()
     {
         spawner = GameObject.FindObjectOfType<Spawner>();
+        directionSwipe = new Vector3(0, 0.5f);
     }
 
     public void OnStartMoving()
@@ -42,9 +46,7 @@ public class Movement : MonoBehaviour
 //Create some UI Text by going to Create>UI>Text.
 //Drag this GameObject into the Text field of your GameObject’s Inspector window.
 
-    public Vector2 startPos;
-    public Vector2 directionSwipe;
-    
+   
     
 
     void Update()
