@@ -5,25 +5,22 @@ using UnityEngine;
 
 public class AddRuners : MonoBehaviour
 {
-    [Header(" Formation Settings ")]
-    [Range(0f, 1f)] [SerializeField] private float radiusFactor;
-    [Range(0f, 1f)] [SerializeField] private float angleFactor;
-    
+    [Range(0f, 1f)] [SerializeField] private float _radiusFactor;
+    [Range(0f, 1f)] [SerializeField] private float _angleFactor;
 
-    public Color _colorSquad;
-    public bool IsHuman;
+    public bool isPointedNow = false;
     public string nameInTop;
+    public bool IsHuman;
 
-    public Spawner spawner;
-
-    public bool isPointedNow=false;
-
-    //public bool IsHuman=>IsHuman;
-
+    private Color _colorSquad;
+    public Color ColorSquad=> _colorSquad;
+    
+    private Spawner _spawner;
+    
     private void Awake()
     {
         isPointedNow = false;
-        spawner = GameObject.FindObjectOfType<Spawner>();
+        _spawner = GameObject.FindObjectOfType<Spawner>();
     }
 
     private void OnEnable()
@@ -54,7 +51,7 @@ public class AddRuners : MonoBehaviour
             int count = Random.Range(1, 3);
             AddRunners(count);
             GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 15f;
-            GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(radiusFactor * Mathf.Sqrt(count));
+            GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(_radiusFactor * Mathf.Sqrt(count));
             if (count == 1)
             {
                 GameObject.FindObjectOfType<CameraFollow>().SetOffsetX(-0.5f);
@@ -62,24 +59,24 @@ public class AddRuners : MonoBehaviour
         }
         else
         {
-            nameInTop = spawner.pGen.GenerateRandomFirstName();
+            nameInTop = _spawner.pGen.GenerateRandomFirstName();
         }
         FermatSpiralPlacement(1f);
     }
 
-    void Update()
+    private void Update()
     {
         FermatSpiralPlacement();
     }
 
     private void FermatSpiralPlacement(float lerpcoef=0.1f)
     {
-        float goldenAngle = 137.5f * angleFactor;
+        float goldenAngle = 137.5f * _angleFactor;
 
         for (int i = 0; i < transform.childCount; i++)
         {
-            float x = radiusFactor * Mathf.Sqrt(i + 1) * Mathf.Cos(Mathf.Deg2Rad * goldenAngle * (i + 1));
-            float z = radiusFactor * Mathf.Sqrt(i + 1) * Mathf.Sin(Mathf.Deg2Rad * goldenAngle * (i + 1));
+            float x = _radiusFactor * Mathf.Sqrt(i + 1) * Mathf.Cos(Mathf.Deg2Rad * goldenAngle * (i + 1));
+            float z = _radiusFactor * Mathf.Sqrt(i + 1) * Mathf.Sin(Mathf.Deg2Rad * goldenAngle * (i + 1));
 
             Vector3 runnerLocalPosition = new Vector3(x, 0, z);
             transform.GetChild(i).localPosition = Vector3.Lerp(transform.GetChild(i).localPosition, runnerLocalPosition, lerpcoef);
@@ -88,7 +85,7 @@ public class AddRuners : MonoBehaviour
 
     public float GetSquadRadius()
     {
-        return radiusFactor * Mathf.Sqrt(transform.childCount);
+        return _radiusFactor * Mathf.Sqrt(transform.childCount);
     }
 
 
@@ -104,11 +101,11 @@ public class AddRuners : MonoBehaviour
             GameObject runnerInstance;
             if (IsHuman)
             {
-                runnerInstance = spawner.GetHuman();
+                runnerInstance = _spawner.GetHuman();
             }
             else
             {
-                runnerInstance = spawner.GetAlien();
+                runnerInstance = _spawner.GetAlien();
                 
             }
 
@@ -121,11 +118,11 @@ public class AddRuners : MonoBehaviour
 
             runner.SetRun(true);
             runnerInstance.SetActive(true);
+            runner.addRunnersComponent = this;
             runnerInstance.GetComponent<RunnerData>().StartCoroutine(runnerInstance.GetComponent<RunnerData>().CallEnableRunner());
         }
         if (GetComponent<Movement>())
         {
-            //Camera.main.fieldOfView += amount;
             if (transform.childCount > 25)
             {
                 GameObject.FindObjectOfType<CameraFollow>().coefHowNeadCam = 7f;
@@ -161,7 +158,6 @@ public class AddRuners : MonoBehaviour
             GameObject.FindObjectOfType<CameraFollow>().SetCameraOffset(GetSquadRadius());
             GameObject.FindObjectOfType<CameraFollow>().SetOffsetX(0);
         }
-        //GameObject.FindObjectOfType<GameController>().CheckInTop(this);
         GameObject.FindObjectOfType<GameController>().GetTopPlayers();
     }
 
@@ -179,7 +175,6 @@ public class AddRuners : MonoBehaviour
         {
             runner.Dead();
         }
-
         TurnOffOnAllColliders();
     }
 
@@ -190,5 +185,4 @@ public class AddRuners : MonoBehaviour
             data.ColliderRunner.enabled = turnOn;
         }
     }
-    
 }

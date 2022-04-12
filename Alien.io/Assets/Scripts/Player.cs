@@ -4,11 +4,11 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    private Spawner spawner;
+    private Spawner _spawner;
 
     private void Awake()
     {
-        spawner = GameObject.FindObjectOfType<Spawner>();
+        _spawner = GameObject.FindObjectOfType<Spawner>();
     }
 
     public void KillPlayer(bool isWithAnimation = false)
@@ -21,15 +21,10 @@ public class Player : MonoBehaviour
         }
         else
         {
-            spawner.ClearRuners(transform, GetComponent<AddRuners>().IsHuman);
-            GameObject.FindObjectOfType<GameController>().EndGame2();
+            _spawner.ClearRuners(transform, GetComponent<AddRuners>().IsHuman);
+            GameObject.FindObjectOfType<GameController>().EndGame();
         }
         
-    }
-
-    private void AlivePlayer()
-    {
-        GetComponent<Movement>().isStopped = false;
     }
 
     private IEnumerator SetActiveFalseAfterAnimation()
@@ -41,8 +36,8 @@ public class Player : MonoBehaviour
             if (animator.GetCurrentAnimatorStateInfo(0).normalizedTime > 1)
             {
                 yield return new WaitForSeconds(0.3f);
-                spawner.ClearRuners(transform, GetComponent<AddRuners>().IsHuman);
-                GameObject.FindObjectOfType<GameController>().EndGame2();
+                _spawner.ClearRuners(transform, GetComponent<AddRuners>().IsHuman);
+                GameObject.FindObjectOfType<GameController>().EndGame();
                 yield break;
             }
             yield return null;

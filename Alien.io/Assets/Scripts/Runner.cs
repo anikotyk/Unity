@@ -4,17 +4,21 @@ using UnityEngine;
 
 public class Runner : MonoBehaviour
 {
-    public Animator animator;
-    [SerializeField] private Vector3 startPos;
+    [SerializeField] private Animator _animator;
+    public Animator animator=>_animator;
+
+    [SerializeField] private Vector3 _startPos;
+
+    public AddRuners addRunnersComponent;
 
     private void OnEnable()
     {
-        transform.localPosition = startPos;
+        transform.localPosition = _startPos;
     }
 
     public void SetRun(bool isRun)
     {
-        animator.SetBool("IsRun", isRun);
+        _animator.SetBool("IsRun", isRun);
     }
 
     public void RotateRunner(Vector3 direction, float rotationSpeed)
@@ -28,40 +32,48 @@ public class Runner : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
-
-        if (collision.transform.parent && collision.transform.parent.parent && collision.transform.parent.parent.TryGetComponent<AddRuners>(out AddRuners addRuners))
+        if(collision.transform.TryGetComponent<Runner>(out Runner collisionRunner))
         {
-            if(collision.transform.parent.parent == transform.parent.parent)
+            AddRuners addRuners = collisionRunner.addRunnersComponent;
+            if (addRuners != null)
             {
-                return;
-            }
-            if (transform.parent && transform.parent.parent && transform.parent.parent.GetComponent<AddRuners>() && (transform.parent.parent.childCount >= addRuners.transform.childCount))   
-            {
-                if((transform.parent.parent.childCount == addRuners.transform.childCount) && transform.parent.parent.GetComponent<MovementNPC>())
+                if (addRuners.transform == addRunnersComponent.transform)
                 {
                     return;
                 }
-
-                bool isWithAnimationDeath = true;
-
-                if(addRuners.IsHuman == transform.parent.parent.GetComponent<AddRuners>().IsHuman)
+                if (addRunnersComponent != null && (addRunnersComponent.transform.childCount >= addRuners.transform.childCount))
                 {
-                    transform.parent.parent.GetComponent<AddRuners>().AddRunners(addRuners.transform.childCount);
-                    isWithAnimationDeath = false;
-                }
-                
+                    if ((addRunnersComponent.transform.childCount == addRuners.transform.childCount) && addRunnersComponent.transform.GetComponent<MovementNPC>())
+                    {
+                        return;
+                    }
 
-                if (addRuners.TryGetComponent<Player>(out Player player))
-                {
-                    player.KillPlayer(isWithAnimationDeath);
-                    
-                }
-                else
-                {
-                    GameObject.FindObjectOfType<Spawner>().KillSquad(addRuners, isWithAnimationDeath);
-                }
+                    bool isWithAnimationDeath = true;
 
-                StartCoroutine(CallTop());
+                    if (addRuners.IsHuman == addRunnersComponent.IsHuman)
+                    {
+                        addRunnersComponent.AddRunners(addRuners.transform.childCount);
+                        if (addRunnersComponent.transform.GetComponent<Player>())
+                        {
+                            GameObject.FindObjectOfType<GameController>().ShowCountAddedRunners(transform.position, addRuners.transform.childCount);
+                        }
+
+                        isWithAnimationDeath = false;
+                    }
+
+
+                    if (addRuners.TryGetComponent<Player>(out Player player))
+                    {
+                        player.KillPlayer(isWithAnimationDeath);
+
+                    }
+                    else
+                    {
+                        GameObject.FindObjectOfType<Spawner>().KillSquad(addRuners, isWithAnimationDeath);
+                    }
+
+                    StartCoroutine(CallTop());
+                }
             }
         }
     }
@@ -74,12 +86,12 @@ public class Runner : MonoBehaviour
 
     public void Dead()
     {
-        animator.SetBool("IsDead", true);
+        _animator.SetBool("IsDead", true);
     }
 
     public void Alive()
     {
-        animator.SetBool("IsDead", false);
+        _animator.SetBool("IsDead", false);
     }
 }
 

@@ -6,53 +6,49 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private float timeLevel;
-    [SerializeField] private float extraTimeLevel;
-    [SerializeField] private Text timeText;
-
-    private List<KeyValuePair<AddRuners, int>> topRunners = new List<KeyValuePair<AddRuners, int>>();
-    public List<KeyValuePair<AddRuners, int>> TopRunners => topRunners;
-
-    [SerializeField] private InputField nameInput;
-    [SerializeField] private AddRuners playerSquad;
-
-    [SerializeField] private GameObject canvasStart;
-    [SerializeField] private GameObject canvasPlay;
-    [SerializeField] private GameObject canvasGameEnd;
-    [SerializeField] private GameObject canvasGameEndTimeOutPanel;
-    [SerializeField] private GameObject canvasGameEndKilledPanel;
-    [SerializeField] private GameObject extraTimeButton;
-
-    [SerializeField] private Color greenColor;
-    [SerializeField] private Color orangeColor;
-    [SerializeField] private Color textGreenColor;
-    [SerializeField] private Color textOrangeColor;
-
-    [SerializeField] private Sprite humanIcon;
-    [SerializeField] private Sprite alienIcon;
-
-    [SerializeField] private GameObject topParent;
-
-    [SerializeField] private Transform pointersParent;
-
-
-    private Spawner spawner;
-
-    private Coroutine setGameTimer;
-
-    private bool isExtraTime=false;
-
+    [SerializeField] private float _timeLevel;
+    [SerializeField] private float _extraTimeLevel;
+    [SerializeField] private Text _timeText;
     
+    [SerializeField] private InputField _nameInput;
+    [SerializeField] private AddRuners _playerSquad;
 
-    public void OpenScene(string name)
-    {
-        SceneManager.LoadScene(name);
-    }
+    [SerializeField] private GameObject _canvasStart;
+    [SerializeField] private GameObject _canvasPlay;
+    [SerializeField] private GameObject _canvasGameEnd;
+    [SerializeField] private GameObject _canvasGameEndTimeOutPanel;
+    [SerializeField] private GameObject _canvasGameEndKilledPanel;
+    [SerializeField] private GameObject _extraTimeButton;
+
+    [SerializeField] private GameObject _addedRunnersCountParent;
+    [SerializeField] private GameObject _addedRunnersCountPrefab;
+
+    [SerializeField] private Color _greenColor;
+    [SerializeField] private Color _orangeColor;
+    [SerializeField] private Color _textGreenColor;
+    [SerializeField] private Color _textOrangeColor;
+
+    [SerializeField] private Sprite _humanIcon;
+    [SerializeField] private Sprite _alienIcon;
+
+    [SerializeField] private GameObject _topParent;
+
+    private List<KeyValuePair<AddRuners, int>> _topRunners = new List<KeyValuePair<AddRuners, int>>();
+
+    private Spawner _spawner;
+
+    private Coroutine _setGameTimer;
+
+    private bool _isExtraTime=false;
+
+    private int _adsCount = 0;
+
+    private int _topSize = 5;
 
     private void Awake()
     {
-        spawner = GameObject.FindObjectOfType<Spawner>();
-        spawner.isStopped = true;
+        _spawner = GameObject.FindObjectOfType<Spawner>();
+        _spawner.isStopped = true;
     }
 
     private void Start()
@@ -62,86 +58,105 @@ public class GameController : MonoBehaviour
             PlayerPrefs.SetString("PlayerLastName", "Player");
         }
 
-        nameInput.placeholder.GetComponent<Text>().text = PlayerPrefs.GetString("PlayerLastName");
-        canvasStart.SetActive(true);
-        canvasPlay.SetActive(false);
-        playerSquad.SetIsRun(false);
-        canvasGameEnd.SetActive(false);
-        playerSquad.GetComponent<Movement>().isStopped = true;
+        _nameInput.placeholder.GetComponent<Text>().text = PlayerPrefs.GetString("PlayerLastName");
+        _canvasStart.SetActive(true);
+        _canvasPlay.SetActive(false);
+        _playerSquad.SetIsRun(false);
+        _canvasGameEnd.SetActive(false);
+        _playerSquad.GetComponent<Movement>().isStopped = true;
     }
     
-    public void StartGame()
+    public void OnClickStartGame()
     {
-        isExtraTime = false;
+        StartGame();
+    }
+
+    private void StartGame()
+    {
+        _isExtraTime = false;
         
-        if (nameInput.text.Trim() != "")
+        if (_nameInput.text.Trim() != "")
         {
-            playerSquad.nameInTop = nameInput.text;
+            _playerSquad.nameInTop = _nameInput.text;
         }
         else
         {
-            playerSquad.nameInTop = nameInput.placeholder.GetComponent<Text>().text;
+            _playerSquad.nameInTop = _nameInput.placeholder.GetComponent<Text>().text;
         }
 
-        //spawner.enabled = true;
-        spawner.StartGame();
-        spawner.isStopped = false;
-        //playerSquad.GetComponent<Movement>().enabled = true;
-        playerSquad.GetComponent<Movement>().OnStartMoving();
-        playerSquad.SetIsRun(true);
-        canvasStart.SetActive(false);
-        canvasPlay.SetActive(true);
-        setGameTimer = StartCoroutine(SetGameTimer());
+        PlayerPrefs.SetString("PlayerLastName", _playerSquad.nameInTop);
+        
+        _spawner.StartGame();
+        _spawner.isStopped = false;
+        _playerSquad.GetComponent<Movement>().OnStartMoving();
+        _playerSquad.SetIsRun(true);
+        _canvasStart.SetActive(false);
+        _canvasPlay.SetActive(true);
+        _setGameTimer = StartCoroutine(SetGameTimer());
 
     }
     
-
-    public void ConfirmGameOver()
+    public void OnClickConfirmGameOver()
     {
-        //spawner.ClearChildren(playerSquad.transform);
-        playerSquad.GetComponent<Player>().KillPlayer();
-        //spawner.ClearRuners(playerSquad.transform, playerSquad.IsHuman);
-        spawner.EndGame();
-
-        canvasGameEnd.SetActive(false);
-        canvasStart.SetActive(true);
-        
-        playerSquad.OnGameStart();
-        playerSquad.SetIsRun(false);
-        //playerSquad.GetComponent<Movement>().enabled = false;
+        ConfirmGameOver();
     }
 
-    public void ContinueRuning()
+    private void ConfirmGameOver()
     {
-        isExtraTime = true;
-        canvasGameEnd.SetActive(false);
+        _adsCount += 1;
+
+        if (_adsCount >= 3)
+        {
+            AdsManager.ShowAdsVideo(AdsManager.interstitialVideo);
+            _adsCount = 0;
+        }
+
+        _playerSquad.GetComponent<Player>().KillPlayer();
+        _spawner.EndGame();
+
+        _canvasGameEnd.SetActive(false);
+        _canvasStart.SetActive(true);
+        
+        _playerSquad.OnGameStart();
+        _playerSquad.SetIsRun(false);
+    }
+
+    public void OnExtraTimeButtonClick()
+    {
+        AdsManager.ShowAdsVideo(AdsManager.rewardedVideo);
+    }
+
+    public void ContinueRuningExtraTime()
+    {
+        _isExtraTime = true;
+        _canvasGameEnd.SetActive(false);
         StopStartAllRuners(false);
-        spawner.isStopped = false;
-        canvasPlay.SetActive(true);
-        setGameTimer = StartCoroutine(SetGameTimer(extraTimeLevel));
+        _spawner.isStopped = false;
+        _canvasPlay.SetActive(true);
+        _setGameTimer = StartCoroutine(SetGameTimer(_extraTimeLevel));
     }
 
-    public void EndGame2(bool isTimeExpired = false)
+    public void EndGame(bool isTimeExpired = false)
     {
-        StopCoroutine(setGameTimer);
-        canvasPlay.SetActive(false);
-        spawner.isStopped = true;
+        StopCoroutine(_setGameTimer);
+        _canvasPlay.SetActive(false);
+        _spawner.isStopped = true;
         StopStartAllRuners(true);
-        canvasGameEnd.SetActive(true);
-        if (isExtraTime)
+        _canvasGameEnd.SetActive(true);
+        if (_isExtraTime)
         {
-            extraTimeButton.SetActive(false);
+            _extraTimeButton.SetActive(false);
         }
         else
         {
-            extraTimeButton.SetActive(true);
+            _extraTimeButton.SetActive(true);
         }
 
-        canvasGameEndTimeOutPanel.SetActive(isTimeExpired);
-        canvasGameEndKilledPanel.SetActive(!isTimeExpired);
+        _canvasGameEndTimeOutPanel.SetActive(isTimeExpired);
+        _canvasGameEndKilledPanel.SetActive(!isTimeExpired);
     }
 
-    public IEnumerator SetGameTimer(float timetotimer=-1)
+    private IEnumerator SetGameTimer(float timetotimer=-1)
     {
         float timer;
         if (timetotimer > 0)
@@ -150,95 +165,36 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            timer = timeLevel;
+            timer = _timeLevel;
         }
         
-        timeText.text = (int)timer / 60 + ":" + (timer - (int)(timer / 60) * 60);
+        _timeText.text = (int)timer / 60 + ":" + (timer - (int)(timer / 60) * 60);
         while (timer > 0)
         {
             yield return new WaitForSeconds(1f);
             timer -= 1f;
-            timeText.text = ((int)timer /60).ToString("00")+":" +(timer- (int)(timer / 60) *60).ToString("00");
+            _timeText.text = ((int)timer /60).ToString("00")+":" +(timer- (int)(timer / 60) *60).ToString("00");
         }
-        //OpenScene("Menu");
-        //EndGame();
-        EndGame2(true);
+        EndGame(true);
     }
 
 
     public void GetTopPlayers()
     {
-        AddRuners[] squads = GameObject.FindObjectsOfType<AddRuners>();
+        _topRunners.Clear();
 
-        topRunners.Clear();
-       
-        for (int i = 0; i < squads.Length - 1; i++)
+        foreach (AddRuners addRunners in GameObject.FindObjectsOfType<AddRuners>())
         {
-            for (int j = 0; j < squads.Length - i - 1; j++)
-            {
-                if (squads[j].transform.childCount < squads[j + 1].transform.childCount)
-                {
-                    AddRuners temp = squads[j];
-                    squads[j] = squads[j + 1];
-                    squads[j + 1] = temp;
-                }
-            }
+            _topRunners.Add(new KeyValuePair<AddRuners, int>(addRunners, addRunners.transform.childCount));
+        }
+
+        _topRunners.Sort((x, y) => (x.Value.CompareTo(y.Value)));
+
+        while (_topRunners.Count < _topSize)
+        {
+            _topRunners.Add(new KeyValuePair<AddRuners, int>(null, 0));
         }
         
-        for (int i = 0; i < squads.Length; i++)
-        {
-            if (i >= 5)
-            {
-                break;
-            }
-            topRunners.Add(new KeyValuePair<AddRuners, int>(squads[i], squads[i].transform.childCount));
-        }
-
-        while (topRunners.Count < 5)
-        {
-            topRunners.Add(new KeyValuePair<AddRuners, int>(null, 0));
-        }
-        
-        ShowTop();
-        
-
-    }
-
-    public void CheckInTop(AddRuners runner)
-    {
-        int index = FindRunnerIndex(runner);
-        if (index > -1)
-        {
-            for(int i = index; i < topRunners.Count - 1; i++)
-            {
-                topRunners[i] = topRunners[i + 1];
-            }
-            topRunners[topRunners.Count - 1] = new KeyValuePair<AddRuners, int>(null, 0);
-        }
-        int indexintop=0;
-        for(int i = topRunners.Count-1; i >= 0; i--)
-        {
-            if(runner.transform.childCount < topRunners[i].Value)
-            {
-                indexintop = i+1;
-                break;
-            }
-        }
-
-        if (indexintop >= topRunners.Count)
-        {
-            ShowTop();
-            return;
-        }
-
-        for (int i = topRunners.Count - 1; i > indexintop; i--)
-        {
-            topRunners[i] = topRunners[i - 1];
-        }
-
-
-        topRunners[indexintop] = new KeyValuePair<AddRuners, int>(runner, runner.transform.childCount);
-
         ShowTop();
     }
 
@@ -252,10 +208,10 @@ public class GameController : MonoBehaviour
 
     private void ShowTop()
     {
-        for(int i = 0; i < topRunners.Count; i++)
+        for (int i = 0; i < _topSize; i++)
         {
-            TopPlaceData data = topParent.transform.GetChild(i).GetComponent<TopPlaceData>();
-            if (topRunners[i].Key == null)
+            TopPlaceData data = _topParent.transform.GetChild(i).GetComponent<TopPlaceData>();
+            if (_topRunners[i].Key == null)
             {
                 data.runnerName.fontStyle = FontStyle.Normal;
                 data.runnerCount.fontStyle = FontStyle.Normal;
@@ -265,13 +221,13 @@ public class GameController : MonoBehaviour
 
                 data.runnerCount.text = "0";
 
-                data.background.color = greenColor;
-                data.runnerCount.color = textGreenColor;
-                data.icon.sprite = alienIcon;
+                data.background.color = _greenColor;
+                data.runnerCount.color = _textGreenColor;
+                data.icon.sprite = _alienIcon;
             }
             else
             {
-                if (topRunners[i].Key.gameObject.GetComponent<Movement>())
+                if (_topRunners[i].Key.gameObject.GetComponent<Movement>())
                 {
                     data.runnerName.fontStyle = FontStyle.Bold;
                     data.runnerCount.fontStyle = FontStyle.Bold;
@@ -281,84 +237,49 @@ public class GameController : MonoBehaviour
                     data.runnerName.fontStyle = FontStyle.Normal;
                     data.runnerCount.fontStyle = FontStyle.Normal;
                 }
-                if (topRunners[i].Key.IsHuman)
+                if (_topRunners[i].Key.IsHuman)
                 {
-                    data.background.color = orangeColor;
-                    data.runnerCount.color = textOrangeColor;
-                    data.icon.sprite = humanIcon;
+                    data.background.color = _orangeColor;
+                    data.runnerCount.color = _textOrangeColor;
+                    data.icon.sprite = _humanIcon;
                 }
                 else
                 {
-                    data.background.color = greenColor;
-                    data.runnerCount.color = textGreenColor;
-                    data.icon.sprite = alienIcon;
+                    data.background.color = _greenColor;
+                    data.runnerCount.color = _textGreenColor;
+                    data.icon.sprite = _alienIcon;
                 }
 
-                data.runnerName.text = topRunners[i].Key.nameInTop;
-                data.runnerName.color = topRunners[i].Key._colorSquad;
-                data.runnerCount.text = topRunners[i].Value + "";
+                data.runnerName.text = _topRunners[i].Key.nameInTop;
+                data.runnerName.color = _topRunners[i].Key.ColorSquad;
+                data.runnerCount.text = _topRunners[i].Value + "";
             }
         }
     }
-
-    private int FindRunnerIndex(AddRuners runner)
+    
+    public void ShowCountAddedRunners(Vector3 pos, int count)
     {
-        for(int i = 0; i < topRunners.Count; i++)
-        {
-            if(runner == topRunners[i].Key)
-            {
-                return i;
-            }
-        }
+        Rect rect = _addedRunnersCountParent.GetComponent<RectTransform>().rect;
+        Vector3 position = Camera.main.WorldToViewportPoint(pos);
+        Vector2 screenPosition = new Vector2(rect.width * position.x - rect.width / 2, rect.height * position.y - rect.height / 2);
 
-        return -1;
+        GameObject countObj = Instantiate(_addedRunnersCountPrefab);
+        countObj.transform.parent = _addedRunnersCountParent.transform;
+        countObj.transform.localPosition = screenPosition;
+        Text textcount = countObj.GetComponentInChildren<Text>();
+        textcount.text = "+" + count;
+        textcount.color = _playerSquad.GetComponent<AddRuners>().ColorSquad;
+        StartCoroutine(ShowCountAddedRunnersCoroutine(countObj));
     }
 
-    private void ShowPointers()
+    private IEnumerator ShowCountAddedRunnersCoroutine(GameObject countObj)
     {
-        int cnt = Mathf.Min(topRunners.Count, pointersParent.childCount);
-        int pointescount = 0;
-        for (int i = 0; i < cnt; i++)
+        Text textcount = countObj.GetComponentInChildren<Text>();
+        while(textcount.fontSize > 1)
         {
-            if (topRunners[i].Key == null)
-            {
-                cnt = i;
-                break;
-            }
-
-            if (topRunners[i].Key.GetComponent<Player>())
-            {
-                cnt++;
-                continue;
-            }
-            if (topRunners[i].Key.isPointedNow)
-            {
-                continue;
-            }
-
-            while (pointersParent.GetChild(pointescount).GetComponent<Pointer>().Target != null)
-            {
-                pointescount++;
-            }
-
-            pointersParent.GetChild(pointescount).gameObject.SetActive(true);
-            pointersParent.GetChild(pointescount).GetComponent<Pointer>().SetTarget(topRunners[i].Key, topRunners[i].Value);
-            topRunners[i].Key.isPointedNow = true;
-            pointescount++;
+            textcount.fontSize -= 1;
+            yield return new WaitForSeconds(0.01f);
         }
-
-        for (int i = pointescount; i < pointersParent.childCount; i++)
-        {
-            pointersParent.GetChild(i).GetComponent<Pointer>().SetTarget(null, 0);
-            pointersParent.GetChild(i).gameObject.SetActive(false);
-        }
-
-        for (int i = cnt; i < topRunners.Count; i++)
-        {
-            if (topRunners[i].Key != null)
-            {
-                topRunners[i].Key.isPointedNow = false;
-            }
-        }
+        Destroy(countObj);
     }
 }

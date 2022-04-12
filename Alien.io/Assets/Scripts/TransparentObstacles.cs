@@ -4,17 +4,18 @@ using UnityEngine;
 
 public class TransparentObstacles : MonoBehaviour
 {
-    private List<GameObject> currentObstacles;
-    private List<GameObject> transparentObstacles;
+    [SerializeField] private Transform _playerContainer;
+    [SerializeField] private LayerMask _environmentLayer;
 
-    [SerializeField] private Transform playerContainer;
+    private List<GameObject> _currentObstacles;
+    private List<GameObject> _transparentObstacles;
+    
     private Transform cam;
-    [SerializeField] private LayerMask environmentLayer;
 
     private void Awake()
     {
-        currentObstacles = new List<GameObject>();
-        transparentObstacles = new List<GameObject>();
+        _currentObstacles = new List<GameObject>();
+        _transparentObstacles = new List<GameObject>();
 
         cam = Camera.main.transform;
     }
@@ -28,33 +29,33 @@ public class TransparentObstacles : MonoBehaviour
 
     private void GetCurrentObstacles()
     {
-        currentObstacles.Clear();
-        float cameraPlayerDistance = Vector3.Magnitude(cam.position - playerContainer.position);
+        _currentObstacles.Clear();
+        float cameraPlayerDistance = Vector3.Magnitude(cam.position - _playerContainer.position);
 
-        Ray rayForward = new Ray(cam.position, playerContainer.position-cam.position);
-        Ray rayBackward = new Ray(playerContainer.position, cam.position - playerContainer.position);
+        Ray rayForward = new Ray(cam.position, _playerContainer.position-cam.position);
+        Ray rayBackward = new Ray(_playerContainer.position, cam.position - _playerContainer.position);
 
         var hitsForward = Physics.RaycastAll(rayForward, cameraPlayerDistance);
         var hitsBackward = Physics.RaycastAll(rayBackward, cameraPlayerDistance);
 
         foreach (var hit in hitsForward)
         {
-            if(IsInLayerMask(hit.collider.gameObject, environmentLayer))
+            if(IsInLayerMask(hit.collider.gameObject, _environmentLayer))
             {
-                if (!currentObstacles.Contains(hit.collider.gameObject))
+                if (!_currentObstacles.Contains(hit.collider.gameObject))
                 {
-                    currentObstacles.Add(hit.collider.gameObject);
+                    _currentObstacles.Add(hit.collider.gameObject);
                 }
             }
         }
 
         foreach (var hit in hitsBackward)
         {
-            if (IsInLayerMask(hit.collider.gameObject, environmentLayer))
+            if (IsInLayerMask(hit.collider.gameObject, _environmentLayer))
             {
-                if (!currentObstacles.Contains(hit.collider.gameObject))
+                if (!_currentObstacles.Contains(hit.collider.gameObject))
                 {
-                    currentObstacles.Add(hit.collider.gameObject);
+                    _currentObstacles.Add(hit.collider.gameObject);
                 }
             }
         }
@@ -62,26 +63,26 @@ public class TransparentObstacles : MonoBehaviour
 
     private void SetCurrentObstaclesTransparent()
     {
-        for(int i = 0; i < currentObstacles.Count; i++)
+        for(int i = 0; i < _currentObstacles.Count; i++)
         {
-            GameObject obj = currentObstacles[i];
-            if (!transparentObstacles.Contains(obj))
+            GameObject obj = _currentObstacles[i];
+            if (!_transparentObstacles.Contains(obj))
             {
                 SetAlpha(obj, 0.3f);
-                transparentObstacles.Add(obj);
+                _transparentObstacles.Add(obj);
             }
         }
     }
 
     private void SetPreviousObstaclesNotTransparent()
     {
-        for(int i = 0; i < transparentObstacles.Count; i++)
+        for(int i = 0; i < _transparentObstacles.Count; i++)
         {
-            GameObject obj = transparentObstacles[i];
-            if (!currentObstacles.Contains(obj))
+            GameObject obj = _transparentObstacles[i];
+            if (!_currentObstacles.Contains(obj))
             {
                 SetAlpha(obj, 1f);
-                transparentObstacles.Remove(obj);
+                _transparentObstacles.Remove(obj);
             }
         }
     }
@@ -100,7 +101,7 @@ public class TransparentObstacles : MonoBehaviour
             col = renderer.material.color;
             col.a = alpha;
             renderer.material.color = col;
-            Debug.Log(renderer.gameObject.name+" "+ renderer.material.color);
+            
         }
     }
 

@@ -4,33 +4,38 @@ using UnityEngine;
 
 public class PointerToPlayers : MonoBehaviour
 {
-    [SerializeField] private GameObject pointersParent;
+    [SerializeField] private GameObject _pointersParent;
 
-    [SerializeField] private GameObject pointerPrefab;
+    [SerializeField] private GameObject _pointerPrefab;
 
-    [SerializeField] private int countShownPointers;
+    [SerializeField] private int _countShownPointers;
 
-    [SerializeField] private Transform squadsParent;
+    [SerializeField] private Transform _squadsParent;
 
-    [SerializeField] private float xMax;
-    [SerializeField] private float xMin;
-    [SerializeField] private float yMax;
-    [SerializeField] private float yMin;
+    [SerializeField] private Transform _playerContainter;
 
-    [SerializeField]  private Transform playerContainter;
+    private float _xMax;
+    private float _xMin;
+    private float _yMax;
+    private float _yMin;
+    
+    private Dictionary<Pointer, AddRuners> _squadsNear = new Dictionary<Pointer, AddRuners>();
+    private List<KeyValuePair<AddRuners, float>> _squadsNearTop = new List<KeyValuePair<AddRuners, float>>();
 
-    private Dictionary<Pointer, AddRuners> squadsNear = new Dictionary<Pointer, AddRuners>();
-    private List<KeyValuePair<AddRuners, float>> squadsNearTop = new List<KeyValuePair<AddRuners, float>>();
-
-    private GameController gameController;
+    private GameController _gameController;
 
     private void Awake()
     {
-        gameController = GameObject.FindObjectOfType<GameController>();
-        for (int i = 0; i < countShownPointers; i++)
+        _xMax = _pointersParent.GetComponent<RectTransform>().rect.width / 2 - _pointerPrefab.GetComponent<RectTransform>().rect.width/2 - 20;
+        _xMin = -_xMax;
+        _yMax = _pointersParent.GetComponent<RectTransform>().rect.height / 2 - _pointerPrefab.GetComponent<RectTransform>().rect.height / 2 - 20;
+        _yMin = -_yMax;
+
+        _gameController = GameObject.FindObjectOfType<GameController>() ;
+        for (int i = 0; i < _countShownPointers; i++)
         {
-            GameObject pointer = Instantiate(pointerPrefab, pointersParent.transform);
-            pointer.GetComponent<Pointer>().Initialize(playerContainter, xMax, xMin, yMax, yMin);
+            GameObject pointer = Instantiate(_pointerPrefab, _pointersParent.transform);
+            pointer.GetComponent<Pointer>().Initialize(_playerContainter, _xMax, _xMin, _yMax, _yMin);
         }
     }
 
@@ -42,57 +47,41 @@ public class PointerToPlayers : MonoBehaviour
 
     private void GetNearest()
     {
-        squadsNearTop.Clear();
-        for (int i = 0; i < squadsParent.childCount; i++)
+        _squadsNearTop.Clear();
+        for (int i = 0; i < _squadsParent.childCount; i++)
         {
-            float distance = Vector3.Distance(playerContainter.position, squadsParent.GetChild(i).position);
-            squadsNearTop.Add(new KeyValuePair<AddRuners, float>(squadsParent.GetChild(i).GetComponent<AddRuners>(), distance));
+            float distance = Vector3.Distance(_playerContainter.position, _squadsParent.GetChild(i).position);
+            _squadsNearTop.Add(new KeyValuePair<AddRuners, float>(_squadsParent.GetChild(i).GetComponent<AddRuners>(), distance));
         }
-        squadsNearTop.Sort((x, y) => (x.Value.CompareTo(y.Value)));
-        for(int i = 0; i< squadsNearTop.Count; i++)
-        {
-           // Debug.Log(squadsNearTop[i].Key.nameInTop + " " + squadsNearTop[i].Value);
-        }
-        /*for (int i = 0; i < squadsNearTop.Count - 1; i++)
-        {
-            for (int j = 0; j < squadsNearTop.Count - i - 1; j++)
-            {
-                if (squadsNearTop[j].Value < squadsNearTop[j + 1].Value)
-                {
-                    KeyValuePair<AddRuners, float> temp = squadsNearTop[j];
-                    squadsNearTop[j] = squadsNearTop[j + 1];
-                    squadsNearTop[j + 1] = temp;
-                }
-            }
-        }*/
+        _squadsNearTop.Sort((x, y) => (x.Value.CompareTo(y.Value)));
     }
 
     private void ShowPointers()
     {
-        for(int i = 0; i < pointersParent.transform.childCount; i++)
+        for(int i = 0; i < _pointersParent.transform.childCount; i++)
         {
-            Pointer pointer = pointersParent.transform.GetChild(i).GetComponent<Pointer>();
-            if(squadsNear.ContainsKey(pointer))
+            Pointer pointer = _pointersParent.transform.GetChild(i).GetComponent<Pointer>();
+            if(_squadsNear.ContainsKey(pointer))
             {
-                int index = FindIndexByKey(squadsNearTop, squadsNear[pointer]);
-                if (index == -1 || index >= countShownPointers)
+                int index = FindIndexByKey(_squadsNearTop, _squadsNear[pointer]);
+                if (index == -1 || index >= _countShownPointers)
                 {
-                    squadsNear[pointer].isPointedNow = false;
-                    pointer.SetTarget(null, 0);
-                    squadsNear.Remove(pointer);
+                    _squadsNear[pointer].isPointedNow = false;
+                    pointer.SetTarget(null);
+                    _squadsNear.Remove(pointer);
                 }
             }
         }
 
-        int cnt = Mathf.Min(squadsNearTop.Count, countShownPointers);
+        int cnt = Mathf.Min(_squadsNearTop.Count, _countShownPointers);
         for (int i = 0; i < cnt; i++)
         {
-            if (!squadsNearTop[i].Key.isPointedNow)
+            if (!_squadsNearTop[i].Key.isPointedNow)
             {
                 Pointer pointer = GetPointerWithoutTarget();
-                pointer.SetTarget(squadsNearTop[i].Key, squadsNearTop[i].Key.transform.childCount);
-                squadsNearTop[i].Key.isPointedNow = true;
-                squadsNear.Add(pointer, squadsNearTop[i].Key);
+                pointer.SetTarget(_squadsNearTop[i].Key);
+                _squadsNearTop[i].Key.isPointedNow = true;
+                _squadsNear.Add(pointer, _squadsNearTop[i].Key);
             }
         }
     }
@@ -111,11 +100,11 @@ public class PointerToPlayers : MonoBehaviour
 
     private Pointer GetPointerWithoutTarget()
     {
-        for(int i = 0; i < pointersParent.transform.childCount; i++)
+        for(int i = 0; i < _pointersParent.transform.childCount; i++)
         {
-            if (pointersParent.transform.GetChild(i).GetComponent<Pointer>().Target == null)
+            if (_pointersParent.transform.GetChild(i).GetComponent<Pointer>().Target == null)
             {
-                return pointersParent.transform.GetChild(i).GetComponent<Pointer>();
+                return _pointersParent.transform.GetChild(i).GetComponent<Pointer>();
             }
         }
         return null;

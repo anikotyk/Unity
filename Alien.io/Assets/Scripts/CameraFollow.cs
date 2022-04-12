@@ -8,8 +8,8 @@ public class CameraFollow : MonoBehaviour
     [SerializeField] private Vector3 _direction;
     [SerializeField] private Vector3 _offset;
 
-    private float smoothSpeed = 2f;
-    private Vector3 newPos;
+    private float _smoothSpeed = 2f;
+    private Vector3 _newPos;
 
     public float coefHowNeadCam=15f;
 
@@ -17,8 +17,8 @@ public class CameraFollow : MonoBehaviour
     {
         if (_target == null) return;
 
-        newPos = _target.transform.position + _direction + _offset;
-        transform.position = Vector3.Lerp(transform.position, newPos, smoothSpeed);
+        _newPos = _target.transform.position + _direction + _offset;
+        transform.position = Vector3.Lerp(transform.position, _newPos, _smoothSpeed);
     }
 
 

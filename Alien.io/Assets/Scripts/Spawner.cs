@@ -9,20 +9,22 @@ public class Spawner : MonoBehaviour
     [SerializeField] private Transform _usedSquadParent;
     [SerializeField] private Transform _bonusesParent;
     [SerializeField] private Transform _usedBonusesParent;
-
+    
     [SerializeField] private Transform _usedHumansParent;
     [SerializeField] private Transform _usedAliensParent;
 
-    [SerializeField] private GameObject humanRunnerPrefab;
-    [SerializeField] private GameObject alienRunnerPrefab;
+    [SerializeField] private GameObject _humanRunnerPrefab;
+    [SerializeField] private GameObject _alienRunnerPrefab;
 
     [SerializeField] private GameObject _squadPrefab;
 
-    public Vector3 _spawnPosCenter;
-    public float _maxSpawnPos = 75;
+    private Vector3 _spawnPosCenter;
+    public Vector3 SpawnPosCenter=> _spawnPosCenter;
+
+    [SerializeField] private float _maxSpawnPos = 75;
+    public float MaxSpawnPos => _maxSpawnPos;
 
     [SerializeField] private int _maxSquadsCount = 4;
-    //[SerializeField] private int _minSquadsCount = 2;
 
     [SerializeField] private int _maxBonusCount = 5;
     [SerializeField] private int _minBonusCount = 2;
@@ -30,16 +32,14 @@ public class Spawner : MonoBehaviour
     [SerializeField] private GameObject[] bonusesList;
 
     [SerializeField] private int _maxSquadsCountAtAll = 10;
-    [SerializeField] private int _maxBonusesCountAtAll = 20;
 
-    [SerializeField] private LayerMask runnersLayer;
-    [SerializeField] private float bonusRad = 2;
+    [SerializeField] private LayerMask _runnersLayer;
 
-    private float timerBonus = 0;
-    private float timeBeforeBonus;
+    private float _timerBonus = 0;
+    private float _timeBeforeBonus;
 
-    private float timerNewSquad = 0;
-    private float timeBeforeNewSquad;
+    private float _timerNewSquad = 0;
+    private float _timeBeforeNewSquad;
 
     public PersonNameGenerator pGen;
 
@@ -50,21 +50,21 @@ public class Spawner : MonoBehaviour
 
     public bool isStopped = false;
 
-    public int countHuman;
-    public int countAlien;
+    private int _countHuman;
+    private int _countAlien;
 
 
     private void Awake()
     {
-        countHuman = 0;
-        countAlien = 0;
+        _countHuman = 0;
+        _countAlien = 0;
         pGen = new RandomNameGeneratorLibrary.PersonNameGenerator();
     }
 
     public void StartGame()
     {
-        countHuman = 0;
-        countAlien = 0;
+        _countHuman = 0;
+        _countAlien = 0;
 
         _spawnPosCenter = new Vector3(Random.Range(_spawnPosCenterXMin, _spawnPosCenterXMax), 0, Random.Range(_spawnPosCenterZMin, _spawnPosCenterZMax));
 
@@ -85,8 +85,8 @@ public class Spawner : MonoBehaviour
         {
             SpawnBonus();
         }
-        timeBeforeBonus = Random.Range(50, 500) * 0.01f;
-        timeBeforeNewSquad = Random.Range(5, 15);
+        _timeBeforeBonus = Random.Range(50, 500) * 0.01f;
+        _timeBeforeNewSquad = Random.Range(5, 15);
         
     }
 
@@ -97,22 +97,22 @@ public class Spawner : MonoBehaviour
             return;
         }
 
-        timerBonus += Time.deltaTime;
-        if(timerBonus>= timeBeforeBonus)
+        _timerBonus += Time.deltaTime;
+        if(_timerBonus>= _timeBeforeBonus)
         {
             SpawnBonus();
-            timerBonus = 0;
-            timeBeforeBonus = Random.Range(50, 500) * 0.01f;
+            _timerBonus = 0;
+            _timeBeforeBonus = Random.Range(50, 500) * 0.01f;
         }
 
         if(_squadParent.childCount < _maxSquadsCountAtAll)
         {
-            timerNewSquad += Time.deltaTime;
-            if (timerNewSquad >= timeBeforeNewSquad)
+            _timerNewSquad += Time.deltaTime;
+            if (_timerNewSquad >= _timeBeforeNewSquad)
             {
                 SpawnSquad(1, 3, _squadParent.childCount % 2 == 0);
-                timerNewSquad = 0;
-                timeBeforeNewSquad = Random.Range(5, 15);
+                _timerNewSquad = 0;
+                _timeBeforeNewSquad = Random.Range(5, 15);
             }
         }
         
@@ -120,8 +120,6 @@ public class Spawner : MonoBehaviour
 
     public void EndGame()
     {
-        //ClearChildren(_squadParent);
-        //ClearChildren(_bonusesParent);
         foreach (AddRuners addRuners in _squadParent.GetComponentsInChildren<AddRuners>())
         {
             KillSquad(addRuners);
@@ -130,14 +128,6 @@ public class Spawner : MonoBehaviour
         foreach (BonusCollider bonus in _bonusesParent.GetComponentsInChildren<BonusCollider>())
         {
             RemoveBonus(bonus.ToDestroy);
-        }
-    }
-
-    public void ClearChildren(Transform obj)
-    {
-        for(int i=0; i< obj.childCount; i++)
-        {
-            Destroy(obj.GetChild(i).gameObject);
         }
     }
 
@@ -159,7 +149,7 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void SpawnSquad(int minRunners, int maxRunners, bool isHuman, int deep=0)
+    private void SpawnSquad(int minRunners, int maxRunners, bool isHuman, int deep=0)
     {
         if (_squadParent.childCount >= _maxSquadsCountAtAll || deep>=3)
         { return; }
@@ -168,19 +158,17 @@ public class Spawner : MonoBehaviour
         int toAdd = Random.Range(minRunners, maxRunners);
         float rad = 0.7f * Mathf.Sqrt(toAdd);
 
-        if (!Physics.CheckSphere(pos, rad+4, runnersLayer))
+        if (!Physics.CheckSphere(pos, rad+4, _runnersLayer))
         {
             GameObject squad;
             if (_usedSquadParent.childCount > 0)
             {
                 squad = _usedSquadParent.GetChild(0).gameObject;
                 squad.transform.SetParent(_squadParent);
-                //squad.GetComponent<AddRuners>().SetIsRun(true);
             }
             else
             {
                 squad = Instantiate(_squadPrefab, _squadParent);
-                //squad.GetComponent<AddRuners>().spawner = this;
             }
 
             squad.transform.localPosition = pos;
@@ -193,11 +181,11 @@ public class Spawner : MonoBehaviour
             squad.GetComponent<AddRuners>().AddRunners(toAdd);
             if (isHuman)
             {
-                countHuman++;
+                _countHuman++;
             }
             else
             {
-                countAlien++;
+                _countAlien++;
             }
 
             
@@ -211,8 +199,6 @@ public class Spawner : MonoBehaviour
 
     private void SpawnBonus(int deep=0)
     {
-        //if(_bonusesParent.transform.childCount >= _maxBonusesCountAtAll) { return; }
-        
         if (deep > 3)
         {
             return;
@@ -223,8 +209,7 @@ public class Spawner : MonoBehaviour
         GameObject bonusToSpawn = bonusesList[Random.Range(0, bonusesList.Length)];
         GameObject bonusToSpawnSize = bonusToSpawn.GetComponentInChildren<BonusCollider>().gameObject;
         
-        //Debug.Log(pos);
-        if (!Physics.CheckSphere(pos, bonusToSpawnSize.GetComponent<MeshRenderer>().bounds.size.x, runnersLayer))
+        if (!Physics.CheckSphere(pos, bonusToSpawnSize.GetComponent<MeshRenderer>().bounds.size.x, _runnersLayer))
         {
             GameObject bonus = null;
             for(int i=0; i< _usedBonusesParent.childCount; i++)
@@ -256,11 +241,11 @@ public class Spawner : MonoBehaviour
     {
         if (addRuners.IsHuman)
         {
-            countHuman -= 1;
+            _countHuman -= 1;
         }
         else
         {
-            countAlien -= 1;
+            _countAlien -= 1;
         }
         
         if (isWithAnimation)
@@ -301,7 +286,7 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public IEnumerator setActiveFalseAfterTime(GameObject obj)
+    private IEnumerator setActiveFalseAfterTime(GameObject obj)
     {
         yield return null;
         obj.SetActive(false);
@@ -322,7 +307,7 @@ public class Spawner : MonoBehaviour
             return _usedHumansParent.GetChild(0).gameObject;
         }
 
-        return Instantiate(humanRunnerPrefab);
+        return Instantiate(_humanRunnerPrefab);
     }
 
     public GameObject GetAlien()
@@ -333,7 +318,7 @@ public class Spawner : MonoBehaviour
             return _usedAliensParent.GetChild(0).gameObject;
         }
 
-        return Instantiate(alienRunnerPrefab);
+        return Instantiate(_alienRunnerPrefab);
     }
 
     public void RemoveRunner(GameObject runner, Transform parent)

@@ -4,22 +4,22 @@ using UnityEngine;
 
 public class RunnerData : MonoBehaviour
 {
-    [SerializeField] private Collider colliderRunner;
-    [SerializeField] private SkinnedMeshRenderer skin;
+    [SerializeField] private Collider _colliderRunner;
+    [SerializeField] private SkinnedMeshRenderer _skin;
 
-    public Collider ColliderRunner=> colliderRunner;
+    public Collider ColliderRunner=> _colliderRunner;
 
     public IEnumerator CallEnableRunner()
     {
-        skin.enabled = true;
+        _skin.enabled = true;
 
         yield return new WaitForSeconds(0.1f);
-        colliderRunner.enabled = true;
+        _colliderRunner.enabled = true;
     }
 
     public void DisableRunner()
     {
-        colliderRunner.enabled = false ;
-        skin.enabled = false;
+        _colliderRunner.enabled = false ;
+        _skin.enabled = false;
     }
 }

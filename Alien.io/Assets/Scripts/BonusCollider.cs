@@ -4,25 +4,29 @@ using UnityEngine;
 
 public class BonusCollider : MonoBehaviour
 {
-    [SerializeField] private int bonusCount;
-    [SerializeField] private bool isHuman;
-    [SerializeField] private string bonusName;
+    [SerializeField] private int _bonusCount;
+    [SerializeField] private bool _isHuman;
+    [SerializeField] private string _bonusName;
 
-    [SerializeField] private GameObject toDestroy;
+    [SerializeField] private GameObject _toDestroy;
 
-    public GameObject ToDestroy=> toDestroy;
-    public bool IsHuman=> isHuman;
-    public string BonusName => bonusName;
+    public GameObject ToDestroy=> _toDestroy;
+    public string BonusName => _bonusName;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.transform.parent.parent.TryGetComponent<AddRuners>(out AddRuners addRunners))
+        if (other.TryGetComponent<Runner>(out Runner runner))
         {
-            if (addRunners.IsHuman == isHuman)
+            AddRuners addRunners = runner.addRunnersComponent;
+
+            if (addRunners.IsHuman == _isHuman)
             {
-                addRunners.AddRunners(bonusCount);
-                GameObject.FindObjectOfType<Spawner>().RemoveBonus(toDestroy);
-               // Destroy(toDestroy);
+                addRunners.AddRunners(_bonusCount);
+                if (addRunners.GetComponent<Player>())
+                {
+                    GameObject.FindObjectOfType<GameController>().ShowCountAddedRunners(transform.position, _bonusCount);
+                }
+                GameObject.FindObjectOfType<Spawner>().RemoveBonus(_toDestroy);
             }
         }
     }
