@@ -66,7 +66,7 @@ public class AddRuners : MonoBehaviour
 
     private void Update()
     {
-        FermatSpiralPlacement();
+        //FermatSpiralPlacement();
     }
 
     private void FermatSpiralPlacement(float lerpcoef=0.1f)
@@ -159,6 +159,14 @@ public class AddRuners : MonoBehaviour
             GameObject.FindObjectOfType<CameraFollow>().SetOffsetX(0);
         }
         GameObject.FindObjectOfType<GameController>().GetTopPlayers();
+        FermatSpiralPlacement(1f);
+        if (transform.GetComponent<MovementNPC>())
+        {
+            transform.GetComponent<MovementNPC>().RotateAllPlayers();
+        }else if (transform.GetComponent<Movement>())
+        {
+            transform.GetComponent<Movement>().RotateAllPlayers();
+        }
     }
 
     public void SetIsRun(bool isRun)

@@ -20,6 +20,7 @@ public class MovementNPC : MonoBehaviour
     private float _dirX = 0;
     private float _dirZ = 0;
     private Vector3 _direction;
+    private Vector3 _dir;
 
     private Spawner _spawner;
 
@@ -45,9 +46,9 @@ public class MovementNPC : MonoBehaviour
             return;
         }
 
-        _direction = new Vector3(_dirX, 0, _dirZ).normalized * Time.deltaTime * _moveSpeed;
+        _direction = _dir * Time.deltaTime * _moveSpeed;
         transform.Translate(_direction.x, 0, _direction.z, Space.World);
-        RotatePlayer(new Vector3(_direction.x, 0, _direction.z));
+        //RotatePlayer(_direction);
 
         _timer += Time.deltaTime;
         if (_timer >= _timeToChangeDirection)
@@ -82,7 +83,9 @@ public class MovementNPC : MonoBehaviour
     {
         _dirX = Random.Range(-10, 11) * 0.1f;
         _dirZ = Random.Range(-10, 11) * 0.1f;
-        
+
+        _dir = new Vector3(_dirX, 0, _dirZ).normalized;
+        RotatePlayer(_dir);
         _timeToChangeDirection = Random.Range(100, 500) * 0.01f;
         _timer = 0;
     }
@@ -94,6 +97,17 @@ public class MovementNPC : MonoBehaviour
             foreach (Runner runner in transform.GetComponentsInChildren<Runner>())
             {
                 runner.RotateRunner(directionRotate, _rotationSpeed);
+            }
+        }
+    }
+
+    public void RotateAllPlayers()
+    {
+        if (_dir != Vector3.zero)
+        {
+            foreach (Runner runner in transform.GetComponentsInChildren<Runner>())
+            {
+                runner.RotateRunner(_dir, _rotationSpeed);
             }
         }
     }

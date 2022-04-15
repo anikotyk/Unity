@@ -26,10 +26,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d107107fc4f612d44821a40a9ef53279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonusCount: 5
-  isHuman: 1
-  bonusName: BonusHuman2
-  toDestroy: {fileID: 6147093314126609787}
+  _bonusCount: 5
+  _isHuman: 1
+  _bonusName: bonusHuman2
+  _toDestroy: {fileID: 6147093314126609787}
 --- !u!1 &6147093314126609787
 GameObject:
   m_ObjectHideFlags: 0

@@ -188,7 +188,7 @@ public class GameController : MonoBehaviour
             _topRunners.Add(new KeyValuePair<AddRuners, int>(addRunners, addRunners.transform.childCount));
         }
 
-        _topRunners.Sort((x, y) => (x.Value.CompareTo(y.Value)));
+        _topRunners.Sort((x, y) => (y.Value.CompareTo(x.Value)));
 
         while (_topRunners.Count < _topSize)
         {
@@ -264,7 +264,7 @@ public class GameController : MonoBehaviour
         Vector2 screenPosition = new Vector2(rect.width * position.x - rect.width / 2, rect.height * position.y - rect.height / 2);
 
         GameObject countObj = Instantiate(_addedRunnersCountPrefab);
-        countObj.transform.parent = _addedRunnersCountParent.transform;
+        countObj.transform.SetParent(_addedRunnersCountParent.transform);
         countObj.transform.localPosition = screenPosition;
         Text textcount = countObj.GetComponentInChildren<Text>();
         textcount.text = "+" + count;
@@ -275,10 +275,10 @@ public class GameController : MonoBehaviour
     private IEnumerator ShowCountAddedRunnersCoroutine(GameObject countObj)
     {
         Text textcount = countObj.GetComponentInChildren<Text>();
-        while(textcount.fontSize > 1)
+        
+        while (countObj.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("ShowCount"))
         {
-            textcount.fontSize -= 1;
-            yield return new WaitForSeconds(0.01f);
+            yield return null;
         }
         Destroy(countObj);
     }

@@ -14,6 +14,7 @@ public class Movement : MonoBehaviour
     private float _maxPosZ;
     private float _minPosZ;
     private Vector3 _direction;
+    private Vector3 _dir;
 
     private Vector2 _startPos;
     private Vector2 _directionSwipe;
@@ -24,6 +25,7 @@ public class Movement : MonoBehaviour
     {
         _spawner = GameObject.FindObjectOfType<Spawner>();
         _directionSwipe = new Vector3(0, 0.5f);
+        _dir = new Vector3(_directionSwipe.x, 0, _directionSwipe.y).normalized;
     }
 
     public void OnStartMoving()
@@ -53,6 +55,8 @@ public class Movement : MonoBehaviour
                     break;
                 case TouchPhase.Moved:
                     _directionSwipe = touch.position - _startPos;
+                    _dir = new Vector3(_directionSwipe.x, 0, _directionSwipe.y).normalized;
+                    RotatePlayer(_dir);
                     break;
 
                 case TouchPhase.Ended:
@@ -60,12 +64,9 @@ public class Movement : MonoBehaviour
             }
         }
         
-        _direction = new Vector3(_directionSwipe.x, 0, _directionSwipe.y).normalized * Time.deltaTime * _moveSpeed;
-
+        _direction = _dir * Time.deltaTime * _moveSpeed;
         transform.Translate(_direction.x, 0, _direction.z, Space.World);
         
-        RotatePlayer(_direction);
-
         if (transform.position.x > _maxPosX)
         {
             transform.position = new Vector3(_maxPosX, transform.position.y, transform.position.z);
@@ -92,6 +93,17 @@ public class Movement : MonoBehaviour
             foreach(Runner runner in transform.GetComponentsInChildren<Runner>())
             {
                 runner.RotateRunner(direction, _rotationSpeed);
+            }
+        }
+    }
+
+    public void RotateAllPlayers()
+    {
+        if (_dir != Vector3.zero)
+        {
+            foreach (Runner runner in transform.GetComponentsInChildren<Runner>())
+            {
+                runner.RotateRunner(_dir, _rotationSpeed);
             }
         }
     }

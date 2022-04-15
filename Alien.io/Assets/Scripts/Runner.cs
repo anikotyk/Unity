@@ -8,8 +8,10 @@ public class Runner : MonoBehaviour
     public Animator animator=>_animator;
 
     [SerializeField] private Vector3 _startPos;
+    private float _rotateTime=0.2f;
 
     public AddRuners addRunnersComponent;
+
 
     private void OnEnable()
     {
@@ -23,11 +25,12 @@ public class Runner : MonoBehaviour
 
     public void RotateRunner(Vector3 direction, float rotationSpeed)
     {
-        transform.parent.rotation = Quaternion.Slerp(
+        /*transform.parent.rotation = Quaternion.Slerp(
                 transform.parent.rotation,
                 Quaternion.LookRotation(direction),
                 Time.deltaTime * rotationSpeed
-        );
+        );*/
+        LeanTween.rotateLocal(transform.parent.gameObject, Quaternion.LookRotation(direction).eulerAngles, _rotateTime);
     }
 
     private void OnCollisionEnter(Collision collision)

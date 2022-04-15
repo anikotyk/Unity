@@ -77,10 +77,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d107107fc4f612d44821a40a9ef53279, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bonusCount: 5
-  isHuman: 0
-  bonusName: BonusAlien2
-  toDestroy: {fileID: 2473521079766151935}
+  _bonusCount: 5
+  _isHuman: 0
+  _bonusName: binusAlien2
+  _toDestroy: {fileID: 2473521079766151935}
 --- !u!1001 &9190624188889927294
 PrefabInstance:
   m_ObjectHideFlags: 0

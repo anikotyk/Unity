@@ -44,13 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 566115a12ed44684eb3910794586b202, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  radiusFactor: 0.7
-  angleFactor: 1
-  humanRunnerPrefab: {fileID: 5346001553257869224, guid: 338ab45d3f1e5b3429fdaed1b08c2ab7, type: 3}
-  alienRunnerPrefab: {fileID: 5048620644888548107, guid: 6964c57e4dc11dd478af3591309b728b, type: 3}
-  _colorSquad: {r: 0, g: 0, b: 0, a: 0}
-  IsHuman: 0
+  _radiusFactor: 0.7
+  _angleFactor: 1
+  isPointedNow: 0
   nameInTop: 
+  IsHuman: 0
 --- !u!114 &161479158653795775
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -63,5 +61,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40605112acb955142a957444d0119ac3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 10
-  rotationSpeed: 10
+  _moveSpeed: 8
+  _rotationSpeed: 10
+  isStopped: 0

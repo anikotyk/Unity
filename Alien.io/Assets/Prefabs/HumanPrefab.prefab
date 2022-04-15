@@ -44,8 +44,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6288a15de6e07714cb9eef4a07dfcfce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  colliderRunner: {fileID: 8268113395998669780}
-  skin: {fileID: 1239994899995391080}
+  _colliderRunner: {fileID: 8268113395998669780}
+  _skin: {fileID: 1239994899995391080}
 --- !u!54 &2635625196839015461
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -88,8 +88,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7ff4237b2f298af4f8308678df4ba57b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  animator: {fileID: 3787444739346386023}
-  startPos: {x: 0, y: -0.42, z: 0}
+  _animator: {fileID: 3787444739346386023}
+  _startPos: {x: 0, y: -0.42, z: 0}
+  addRunnersComponent: {fileID: 0}
 --- !u!1001 &7342311350098031094
 PrefabInstance:
   m_ObjectHideFlags: 0
