@@ -1,0 +1,11 @@
+{
+"runner0":{"imageName":"runners_0", "isBought":"true", "price":"50", "index":"0"},
+"runner1":{"imageName":"runners_1", "isBought":"false", "price":"100", "index":"1"},
+"runner2":{"imageName":"runners_2", "isBought":"false", "price":"100", "index":"2"},
+"runner3":{"imageName":"runners_3", "isBought":"false", "price":"300", "index":"3"},
+"runner4":{"imageName":"runners_4", "isBought":"false", "price":"300", "index":"4"},
+"runner5":{"imageName":"runners_5", "isBought":"false", "price":"300", "index":"5"},
+"runner6":{"imageName":"runners_6", "isBought":"false", "price":"500", "index":"6"},
+"runner7":{"imageName":"runners_7", "isBought":"false", "price":"500", "index":"7"},
+"runner8":{"imageName":"runners_8", "isBought":"false", "price":"500", "index":"8"}
+}
