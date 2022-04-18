@@ -20,8 +20,11 @@ public class PartOfBallData : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            transform.GetChild(i).GetComponent<Rigidbody>().useGravity = false;
-            transform.GetChild(i).GetComponent<Rigidbody>().isKinematic = true;
+            if(transform.GetChild(i).TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+            {
+                rigidbody.useGravity = false;
+                rigidbody.isKinematic = true;
+            }
             transform.GetChild(i).localPosition = partsPositions[i];
             transform.GetChild(i).localRotation = partsRotations[i];
         }

@@ -84,9 +84,12 @@ public class GameController : MonoBehaviour
 
     public GameObject buttonRestartSmall;
 
+    private Movement playerNew;
+
     public void Awake()
     {
-        //PlayerPrefs.SetInt("isFirstTime", 12);
+        playerNew = GameObject.FindObjectOfType<Movement>();
+        PlayerPrefs.SetInt("isFirstTime", 12);
         if (PlayerPrefs.GetInt("isFirstTime") != 18)
         {
             Debug.Log("FIRST TIME");
@@ -96,7 +99,7 @@ public class GameController : MonoBehaviour
             PlayerPrefs.SetInt("speederTime", 2);
             PlayerPrefs.SetInt("speederTimeCount", 1);
             PlayerPrefs.SetInt("speed", 20);
-            PlayerPrefs.SetInt("lives", 1);
+            PlayerPrefs.SetInt("lives", 3);
             PlayerPrefs.SetInt("level", 1);
         }
         adscount = 0;
@@ -106,7 +109,7 @@ public class GameController : MonoBehaviour
         ResetProgressBar();
         ShowHearts();
         health = PlayerPrefs.GetInt("lives");
-        lengthLevel = 20;
+        //lengthLevel = 20;
         counterGoldWindow = 0;
         moneyPanel.SetActive(false);
         speederBtn.SetActive(false);
@@ -195,15 +198,17 @@ public class GameController : MonoBehaviour
 
     public void RestartLevel()
     {
-        Destroy(destroyedPlayer);
-        player.gameObject.SetActive(true);
-        player.StartCoroutine(player.MoveToStart());
-        spawner.finishexists = false;
+        //Destroy(destroyedPlayer);
+        //player.gameObject.SetActive(true);
+       // player.StartCoroutine(player.MoveToStart());
+        //spawner.finishexists = false;
         adscount++;
-        ClearObstacles();
+        spawner.ClearObstacles();
+        playerNew.ResetPlayer();
+        //ClearObstacles();
         ResetProgressBar();
         ShowHearts();
-        spawner.counterObstacles = 0;
+        //spawner.counterObstacles = 0;
 
         levelEnd.SetActive(false);
         buttonNextLevel.SetActive(false);
@@ -214,21 +219,24 @@ public class GameController : MonoBehaviour
 
     public void LevelComplete()
     {
-        if(!isLevelEnded){
-            spawner.finishexists = false;
-            sounds.clip = win;
+        //if(!isLevelEnded){
+        //spawner.finishexists = false;
+        
+        sounds.clip = win;
             sounds.Play();
-            isLevelEnded = true;
+            //isLevelEnded = true;
             GameOver();
-            player.StartCoroutine(player.MoveToStart());
+            //player.StartCoroutine(player.MoveToStart());
             PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
             UpdateSpeed();
             levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-            spawner.counterObstacles = 0;
-            ClearObstacles();
+        //spawner.counterObstacles = 0;
+        // ClearObstacles();
+        playerNew.ResetPlayer();
+        spawner.ClearObstacles();
 
-            ShowEndLevel(true);
-        }
+        ShowEndLevel(true);
+        //}
     }
 
     public void AddMoney(int amount = 5)
@@ -272,12 +280,15 @@ public class GameController : MonoBehaviour
     public void ContinuePlaying()
     {
         levelEnd.SetActive(false);
-        Destroy(destroyedPlayer);
-        player.gameObject.SetActive(true);
-        player.StartCoroutine(player.MoveToStart());
+
+        playerNew.ContinueLevel();
+
+        //Destroy(destroyedPlayer);
+        //player.gameObject.SetActive(true);
+        //player.StartCoroutine(player.MoveToStart());
         buttonContinue.SetActive(false);
         
-        StartCoroutine(WaitingForTap());
+        StartCoroutine(WaitingForTap(true));
     }
 
     public void ShowLevel()
@@ -308,66 +319,84 @@ public class GameController : MonoBehaviour
         spawner.DeleteAllObstacles();
     }
 
-    public void StartRunning()
+    public void EndLevel()
     {
-        isLevelEnded = false;
-        speedMoveObstacles = PlayerPrefs.GetInt("speed");
-        player.OnGameStart();
-        player.indexShownBallState = 0;
-        player.SetBall(0);
-        player.soundball.Play();
+        spawner.ClearObstacles();
+        GameObject.FindObjectOfType<Movement>().StartLevel();
+        spawner.SpawnNewLevel();
+    }
+
+    public void StartRunning(bool isContinue=false)
+    {
+        if (!isContinue)
+        {
+            spawner.SpawnNewLevel();
+            playerNew.ResetPlayer();
+        }
+        else
+        {
+            playerNew.ResetPlayerAppearance();
+        }
+        
+        playerNew.StartLevel();
+       
+        
+        //isLevelEnded = false;
+        //speedMoveObstacles = PlayerPrefs.GetInt("speed");
+        //player.OnGameStart();
+        //player.indexShownBallState = 0;
+        //player.SetBall(0);
+        //player.soundball.Play();
         ShowHearts();
-        player.isSpeeder = false;
-        spawner.isSpawn = true;
-        player.indexShownBallState = 0;
-
-
+        //player.isSpeeder = false;
+        //spawner.isSpawn = true;
+        
         tapText.SetActive(false);
 
         shopBtn.GetComponent<AnimController>().Hide();
         adsBtn.GetComponent<AnimController>().Hide();
         speederBtn.GetComponent<AnimController>().Show();
         
-        player.StopAllCoroutines();
-        player.isPlaying = true;
+        //player.StopAllCoroutines();
+        //player.isPlaying = true;
         
-        player.StartCoroutine(player.MovingPlayer());
-
-        spawner.StartAllObstacles();
-        spawner.spawner = spawner.StartCoroutine(spawner.Spawner());
+        //player.StartCoroutine(player.MovingPlayer());
+        
+        //spawner.StartAllObstacles();
+        //spawner.spawner = spawner.StartCoroutine(spawner.Spawner());
         StartCoroutine(ProgressManager(levelBar, levelBarContainer));
     }
 
     public void GameOver()
     {
-        player.isPlaying = false;
+        //player.isPlaying = false;
         StopAllCoroutines();
 
-        player.StopAllCoroutines();
-        player.myRb.velocity = Vector3.zero;
-        player.myRb.angularVelocity = Vector3.zero;
-        player.soundball.Stop();
-        player.isSpeeder = false;
-        player.fire.SetActive(false);
+        //player.StopAllCoroutines();
+        //player.myRb.velocity = Vector3.zero;
+        //player.myRb.angularVelocity = Vector3.zero;
+        // player.soundball.Stop();
+        // player.isSpeeder = false;
+        // player.fire.SetActive(false);
 
+        playerNew.OnGameOver();
         speedMoveObstacles = PlayerPrefs.GetInt("speed");
         ShowSpeed(speedMoveObstacles);
-
-        //player.SetBall(0);
-        Material[] mats = new Material[2];
+        
+        /*Material[] mats = new Material[2];
         mats[0] = player.gameObject.GetComponent<MeshRenderer>().materials[0];
         mats[1] = crackedMaterials[4];
-        player.gameObject.GetComponent<MeshRenderer>().materials = mats;
+        player.gameObject.GetComponent<MeshRenderer>().materials = mats;*/
         
-        GameObject.FindObjectOfType<SpawnObstacles>().StopAllCoroutines();
-        GameObject.FindObjectOfType<SpawnObstacles>().StopAllObstacles();
+        //GameObject.FindObjectOfType<SpawnObstacles>().StopAllCoroutines();
+        //GameObject.FindObjectOfType<SpawnObstacles>().StopAllObstacles();
         
         shopBtn.GetComponent<AnimController>().Show();
         adsBtn.GetComponent<AnimController>().Show();
         speederBtn.GetComponent<AnimController>().Hide();
     }
 
-    public IEnumerator WaitingForTap()
+    public IEnumerator WaitingForTap(bool isContinue=false)
     {
         if (adscount != 0 && adscount % 3 == 0 && Advertisement.IsReady())
         {
@@ -401,13 +430,13 @@ public class GameController : MonoBehaviour
                 {
                     if (!EventSystem.current.currentSelectedGameObject.CompareTag("Button"))
                     {
-                        StartRunning();
+                        StartRunning(isContinue);
                         yield break;
                     }
                 }
                 else
                 {
-                    StartRunning();
+                    StartRunning(isContinue);
                     yield break;
                 }
                 
@@ -433,12 +462,13 @@ public class GameController : MonoBehaviour
         }
         else
         {
-            player.indexShownBallState += 1;
+            playerNew.MinusHealth();
+            /*player.indexShownBallState += 1;
             player.SetBall(player.indexShownBallState);
             Material[] mats = new Material[2];
             mats[0] = player.gameObject.GetComponent<MeshRenderer>().materials[0];
             mats[1] = crackedMaterials[health - 1];
-            player.gameObject.GetComponent<MeshRenderer>().materials = mats;
+            player.gameObject.GetComponent<MeshRenderer>().materials = mats;*/
         }
     }
 
@@ -542,7 +572,8 @@ public class GameController : MonoBehaviour
     {
         sounds.clip=breakball;
         sounds.Play();
-        player.ShowDieAnim();
+        playerNew.ShowDieAnim();
+        //player.ShowDieAnim();
         //player.gameObject.SetActive(false);
        // destroyedPlayer = Instantiate(diePrefab) as GameObject;
        // destroyedPlayer.transform.localPosition = new Vector3(destroyedPlayer.transform.localPosition.x, destroyedPlayer.transform.localPosition.y, player.transform.localPosition.z);

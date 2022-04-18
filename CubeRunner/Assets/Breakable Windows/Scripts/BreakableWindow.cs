@@ -204,6 +204,7 @@ public class BreakableWindow : MonoBehaviour {
     {
         if (destroyPhysicsTime > 0)
         {
+            /*
             if (!transform.parent.GetComponent<SpawnObstacles>())
             {
                 Destroy(transform.parent.gameObject, destroyPhysicsTime);
@@ -211,7 +212,7 @@ public class BreakableWindow : MonoBehaviour {
             else
             {
                 Destroy(gameObject, destroyPhysicsTime);
-            }
+            }*/
         }
         
         if (isBroken == false)
@@ -224,7 +225,6 @@ public class BreakableWindow : MonoBehaviour {
                     for (int i = 0; i < splinters.Count; i++)
                     {
                         splinters[i].GetComponent<Rigidbody>().AddTorque(new Vector3(Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50));
-                        
                     }
                 }
             }
@@ -270,7 +270,7 @@ public class BreakableWindow : MonoBehaviour {
                 GameObject.FindObjectOfType<GameController>().moneyPanel.GetComponent<Animation>().Play();
             }
 
-            SetDeath();
+            //SetDeath();
             breakWindow();
         }        
     }
