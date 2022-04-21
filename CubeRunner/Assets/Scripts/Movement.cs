@@ -1,11 +1,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
 {
-    [SerializeField] private float speed=20f;
+    private float speed=20f;
     [SerializeField] private float speedHorizontal = 20f;
     [SerializeField] private Vector3 direction;
     [SerializeField] private Transform finish;
@@ -19,9 +20,19 @@ public class Movement : MonoBehaviour
     private int indexShownBallState;
     private bool isSpeeder;
 
+    public int health;
+
+    [SerializeField] private GameObject fire;
+
+    private GameController gameController;
+    
+
     private void Awake()
     {
-        //speed = PlayerPrefs.GetInt("speed");
+        isSpeeder = false;
+        gameController = GameObject.FindObjectOfType<GameController>();
+        health = PlayerPrefs.GetInt("lives");
+        speed = PlayerPrefs.GetInt("speed");
         indexShownBallState = 0;
         xPosFinish = finish.position.x;
         posStart = transform.localPosition;
@@ -55,18 +66,23 @@ public class Movement : MonoBehaviour
 
         Vector3 forwardMove = direction * speed * Time.fixedDeltaTime;
         Vector3 horizontalMove = new Vector3(0, 0, touchPos.x)* speedHorizontal * Time.fixedDeltaTime;
-        //rb.AddForce((forwardMove + horizontalMove), ForceMode.VelocityChange);
         rb.velocity = (forwardMove + horizontalMove)*40;
+
+        gameController.SetProgress((posStart.x - transform.localPosition.x) / (posStart.x - xPosFinish));
+        // gameController.progresspercentfloat = 100* (posStart.x - transform.localPosition.x) / (posStart.x - xPosFinish);
     }
-    
+
     public void StartLevel()
     {
         //ResetPlayer();
+        Camera.main.GetComponent<CameraController>().player = this.gameObject;
+        speed = PlayerPrefs.GetInt("speed");
         isRunning = true;
     }
 
     public void ResetPlayer()
     {
+        Camera.main.GetComponent<CameraController>().player = this.gameObject;
         ResetPlayerAppearance();
         transform.localPosition = posStart;
     }
@@ -80,14 +96,25 @@ public class Movement : MonoBehaviour
 
     public void ContinueLevel()
     {
+        health = PlayerPrefs.GetInt("lives");
+        ResetPlayerAppearance();
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.Sleep();
+        transform.localPosition = new Vector3(transform.localPosition.x, posStart.y, posStart.z);
+        
         OnGameStart();
-       // isRunning = true;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.Sleep();
+        // isRunning = true;
     }
 
-    private void OnCollisionEnter(Collision collision)
+    public void OnObstacleCollid()
     {
-        if (collision.gameObject.tag == "Obstacle" && !isSpeeder)
+        if (!isSpeeder)
         {
+            health -= 1;
             GameObject.FindObjectOfType<GameController>().MinusHealth();
         }
     }
@@ -103,6 +130,7 @@ public class Movement : MonoBehaviour
 
     public void OnGameStart()
     {
+        Camera.main.GetComponent<CameraController>().player = this.gameObject;
         foreach (GameObject obj in brokenBalls)
         {
             obj.GetComponent<PartOfBallData>().SetAwakeState();
@@ -111,20 +139,56 @@ public class Movement : MonoBehaviour
 
     public void ShowDieAnim()
     {
+        if (indexShownBallState == 0)
+        {
+            indexShownBallState = 1;
+            SetBall(indexShownBallState);
+        }
+
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
-        for (int i = 0; i < brokenBalls[indexShownBallState].transform.childCount; i++)
+        brokenBalls[indexShownBallState].GetComponent<PartOfBallData>().SetDieState();
+    }
+
+
+    public void OnSpeeder()
+    {
+        if (PlayerPrefs.GetInt("speeder") > 0 && !isSpeeder)
         {
-            if(brokenBalls[indexShownBallState].transform.GetChild(i).TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
-            {
-                rigidbody.isKinematic = false;
-                rigidbody.useGravity = true;
-            }
+            isSpeeder = true;
+            speed = PlayerPrefs.GetInt("speed") + 10f;
+            fire.SetActive(true);
+            gameController.ShowSpeed(speed);
+            PlayerPrefs.SetInt("speeder", PlayerPrefs.GetInt("speeder") - 1);
+            gameController.speederText.text = "x" + PlayerPrefs.GetInt("speeder");
+            StartCoroutine(speederwait(PlayerPrefs.GetInt("speederTime")));
         }
+    }
+
+    public IEnumerator speederwait(float time)
+    {
+        yield return new WaitForSeconds(time);
+        DecreaseSpeedAfterSpeeder();
+        yield return new WaitForSeconds(2f);
+
+        OnEndSpeeder();
+    }
+
+    private void DecreaseSpeedAfterSpeeder()
+    {
+        speed = PlayerPrefs.GetInt("speed");
+        gameController.ShowSpeed(speed);
+    }
+
+    private void OnEndSpeeder()
+    {
+        isSpeeder = false;
+        fire.SetActive(false);
     }
 
     public void MinusHealth()
     {
+       
         indexShownBallState += 1;
         SetBall(indexShownBallState);
     }
@@ -132,6 +196,8 @@ public class Movement : MonoBehaviour
     public void OnGameOver()
     {
         isRunning = false;
+        DecreaseSpeedAfterSpeeder();
+        OnEndSpeeder();
 
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;

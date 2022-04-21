@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4304962695682913853}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -0.13}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6885631445652678042}
@@ -157,6 +157,7 @@ MonoBehaviour:
   breakingSound: {fileID: 8300000, guid: 5c2f5ca33485fbd42a9e7af0cf292651, type: 3}
   isBroken: 0
   splinters: []
+  parentToDestroy: {fileID: 4304962695682913853}
 --- !u!82 &5357908654656743416
 AudioSource:
   m_ObjectHideFlags: 0
@@ -378,6 +379,7 @@ MonoBehaviour:
   breakingSound: {fileID: 8300000, guid: 5c2f5ca33485fbd42a9e7af0cf292651, type: 3}
   isBroken: 0
   splinters: []
+  parentToDestroy: {fileID: 4304962695682913853}
 --- !u!82 &6820272984664012852
 AudioSource:
   m_ObjectHideFlags: 0

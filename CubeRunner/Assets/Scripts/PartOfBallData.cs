@@ -20,13 +20,33 @@ public class PartOfBallData : MonoBehaviour
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            if(transform.GetChild(i).TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+            if (transform.GetChild(i).TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
             {
                 rigidbody.useGravity = false;
                 rigidbody.isKinematic = true;
             }
+            if (transform.GetChild(i).TryGetComponent<MeshCollider>(out MeshCollider meshCollider))
+            {
+                meshCollider.enabled = false;
+            }
             transform.GetChild(i).localPosition = partsPositions[i];
             transform.GetChild(i).localRotation = partsRotations[i];
+        }
+    }
+
+    public void SetDieState()
+    {
+        for (int i = 0; i < transform.childCount; i++)
+        {
+            if (transform.GetChild(i).TryGetComponent<MeshCollider>(out MeshCollider meshCollider))
+            {
+                meshCollider.enabled = true;
+            }
+            if (transform.GetChild(i).TryGetComponent<Rigidbody>(out Rigidbody rigidbody))
+            {
+                rigidbody.isKinematic = false;
+                rigidbody.useGravity = true;
+            }
         }
     }
 }

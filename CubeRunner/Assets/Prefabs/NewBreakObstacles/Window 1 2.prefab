@@ -125,6 +125,7 @@ MonoBehaviour:
   breakingSound: {fileID: 8300000, guid: 5c2f5ca33485fbd42a9e7af0cf292651, type: 3}
   isBroken: 0
   splinters: []
+  parentToDestroy: {fileID: 749642425246806832}
 --- !u!82 &811964182473131376
 AudioSource:
   m_ObjectHideFlags: 0

@@ -47,6 +47,8 @@ public class BreakableWindow : MonoBehaviour {
     private GameObject splinterParent;
     int[] tris;
 
+    [SerializeField] private GameObject parentToDestroy;
+
     void Start()
     {
         if (preCalculate == true && allreadyCalculated == false)
@@ -259,6 +261,7 @@ public class BreakableWindow : MonoBehaviour {
     }
 
 
+
     void OnCollisionEnter(Collision col)
     {
         if (useCollision == true && col.gameObject.tag=="Player")
@@ -269,9 +272,22 @@ public class BreakableWindow : MonoBehaviour {
                 GameObject.FindObjectOfType<GameController>().moneyPanel.SetActive(true);
                 GameObject.FindObjectOfType<GameController>().moneyPanel.GetComponent<Animation>().Play();
             }
+            else
+            {
+                GameObject.FindObjectOfType<Movement>().OnObstacleCollid();
+            }
+            
+            if (GameObject.FindObjectOfType<Movement>().health > 0)
+            {
+                breakWindow();
+            }
+            else
+            {
+                GameObject.FindObjectOfType<GameController>().toDestroyIfContinueRunning = parentToDestroy;
+                Destroy(GetComponent<Collider>());
+            }
 
             //SetDeath();
-            breakWindow();
         }        
     }
 

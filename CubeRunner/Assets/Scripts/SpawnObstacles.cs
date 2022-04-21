@@ -19,11 +19,13 @@ public class SpawnObstacles : MonoBehaviour
     [SerializeField] private GameObject[] obstaclesPrefabs;
     [SerializeField] private Transform obstaclesParent;
     [SerializeField] private Vector3 startPosSpawn;
-    [SerializeField] private float endPosSpawnX;
+    [SerializeField] private Transform finish;
+    private float endPosSpawnX;
     [SerializeField] private float differenceBetweenPosSpawn;
 
     public void Start()
     {
+        endPosSpawnX = obstaclesParent.InverseTransformPoint(finish.position).x;
         counterObstacles = 0;
         gameController = GameObject.FindObjectOfType<GameController>();
         random = new System.Random();
@@ -31,6 +33,7 @@ public class SpawnObstacles : MonoBehaviour
     
     public void SpawnNewLevel()
     {
+        
         Vector3 positionToSpawn = startPosSpawn;
         while ((differenceBetweenPosSpawn < 0 && (endPosSpawnX - positionToSpawn.x) <= differenceBetweenPosSpawn) || (differenceBetweenPosSpawn >= 0 && (endPosSpawnX - positionToSpawn.x) >= differenceBetweenPosSpawn))
             {

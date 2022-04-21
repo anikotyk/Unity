@@ -86,6 +86,9 @@ public class GameController : MonoBehaviour
 
     private Movement playerNew;
 
+    public GameObject toDestroyIfContinueRunning;
+    
+
     public void Awake()
     {
         playerNew = GameObject.FindObjectOfType<Movement>();
@@ -98,8 +101,8 @@ public class GameController : MonoBehaviour
             PlayerPrefs.SetInt("speeder", 3);
             PlayerPrefs.SetInt("speederTime", 2);
             PlayerPrefs.SetInt("speederTimeCount", 1);
-            PlayerPrefs.SetInt("speed", 20);
-            PlayerPrefs.SetInt("lives", 3);
+            PlayerPrefs.SetInt("speed", 15);
+            PlayerPrefs.SetInt("lives", 5);
             PlayerPrefs.SetInt("level", 1);
         }
         adscount = 0;
@@ -241,6 +244,7 @@ public class GameController : MonoBehaviour
 
     public void AddMoney(int amount = 5)
     {
+        counterGoldWindow += 1;
         PlayerPrefs.SetInt("money", PlayerPrefs.GetInt("money")+amount);
     }
 
@@ -279,9 +283,11 @@ public class GameController : MonoBehaviour
 
     public void ContinuePlaying()
     {
+        Destroy(toDestroyIfContinueRunning);
         levelEnd.SetActive(false);
 
         playerNew.ContinueLevel();
+        ShowHearts();
 
         //Destroy(destroyedPlayer);
         //player.gameObject.SetActive(true);
@@ -300,6 +306,7 @@ public class GameController : MonoBehaviour
     public void ShowHearts()
     {
         health = PlayerPrefs.GetInt("lives");
+        playerNew.health = health;
         for (int i = 0; i < 5; i++)
         {
             hearts[i].SetActive(false);
@@ -548,10 +555,23 @@ public class GameController : MonoBehaviour
                 {
                     yield break;
                 }
+
+                yield return new WaitForSeconds(2f);
+            }
+            else
+            {
+                yield return null;
             }
 
-            yield return new WaitForSeconds(1f);
+            
         }
+    }
+
+    public void SetProgress(float progress)
+    {
+        float width = levelBarContainer.GetComponent<RectTransform>().rect.width * progress;
+        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(width, levelBar.GetComponent<RectTransform>().sizeDelta.y);
+
     }
 
     public IEnumerator ProgressBarFillCoroutine(GameObject progressbar, GameObject parentprogressbar, float progress)
@@ -572,7 +592,9 @@ public class GameController : MonoBehaviour
     {
         sounds.clip=breakball;
         sounds.Play();
+        Camera.main.GetComponent<CameraController>().player = null;
         playerNew.ShowDieAnim();
+        
         //player.ShowDieAnim();
         //player.gameObject.SetActive(false);
        // destroyedPlayer = Instantiate(diePrefab) as GameObject;

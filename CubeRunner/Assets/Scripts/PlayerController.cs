@@ -24,8 +24,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject newPlayer;
     public int indexShownBallState;
 
+    
+
     private void Start()
     {
+        
         indexShownBallState = 0;
         SetBall(0);
         fire.SetActive(false);
