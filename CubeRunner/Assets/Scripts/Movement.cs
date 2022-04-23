@@ -6,7 +6,7 @@ using UnityEngine.UI;
 [RequireComponent(typeof(Rigidbody))]
 public class Movement : MonoBehaviour
 {
-    private float speed=20f;
+    private float speed = 20f;
     [SerializeField] private float speedHorizontal = 20f;
     [SerializeField] private Vector3 direction;
     [SerializeField] private Transform finish;
@@ -25,10 +25,15 @@ public class Movement : MonoBehaviour
     [SerializeField] private GameObject fire;
 
     private GameController gameController;
-    
+
+    public AudioSource soundball;
+
+    private Vector3 forwardMove;
+    private Vector3 horizontalMove;
 
     private void Awake()
     {
+        touchPos = Vector2.zero;
         isSpeeder = false;
         gameController = GameObject.FindObjectOfType<GameController>();
         health = PlayerPrefs.GetInt("lives");
@@ -54,35 +59,34 @@ public class Movement : MonoBehaviour
             GameObject.FindObjectOfType<GameController>().LevelComplete();
             return;
         }
+        if (Input.touchCount > 0)
+        {
+            touchPos = Input.GetTouch(0).position;
+            touchPos -= new Vector2(Screen.width / 2, Screen.height / 2);
+            touchPos = touchPos.normalized;
+        }
 
-#if UNITY_EDITOR
-        touchPos = Input.mousePosition;
-#elif UNITY_ANDROID
-        touchPos = Input.touchCount > 0 ? Input.GetTouch(0).position : (Vector2)touchPos;
-#endif
-        touchPos -= new Vector2(Screen.width / 2, Screen.height / 2);
-        
-        touchPos = touchPos.normalized;
 
-        Vector3 forwardMove = direction * speed * Time.fixedDeltaTime;
-        Vector3 horizontalMove = new Vector3(0, 0, touchPos.x)* speedHorizontal * Time.fixedDeltaTime;
+        forwardMove = direction * speed * Time.fixedDeltaTime;
+        horizontalMove = new Vector3(0, 0, touchPos.x)* speedHorizontal * Time.fixedDeltaTime;
         rb.velocity = (forwardMove + horizontalMove)*40;
 
         gameController.SetProgress((posStart.x - transform.localPosition.x) / (posStart.x - xPosFinish));
-        // gameController.progresspercentfloat = 100* (posStart.x - transform.localPosition.x) / (posStart.x - xPosFinish);
     }
 
     public void StartLevel()
     {
-        //ResetPlayer();
-        Camera.main.GetComponent<CameraController>().player = this.gameObject;
+        touchPos = Vector2.zero;
+        Camera.main.GetComponent<FollowTarget>().target = this.gameObject;
         speed = PlayerPrefs.GetInt("speed");
+        rb.isKinematic = false;
+        rb.useGravity = true;
         isRunning = true;
     }
 
     public void ResetPlayer()
     {
-        Camera.main.GetComponent<CameraController>().player = this.gameObject;
+        Camera.main.GetComponent<FollowTarget>().target = this.gameObject;
         ResetPlayerAppearance();
         transform.localPosition = posStart;
     }
@@ -107,7 +111,6 @@ public class Movement : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.Sleep();
-        // isRunning = true;
     }
 
     public void OnObstacleCollid()
@@ -130,7 +133,7 @@ public class Movement : MonoBehaviour
 
     public void OnGameStart()
     {
-        Camera.main.GetComponent<CameraController>().player = this.gameObject;
+        Camera.main.GetComponent<FollowTarget>().target = this.gameObject;
         foreach (GameObject obj in brokenBalls)
         {
             obj.GetComponent<PartOfBallData>().SetAwakeState();
@@ -202,5 +205,8 @@ public class Movement : MonoBehaviour
         rb.velocity = Vector3.zero;
         rb.angularVelocity = Vector3.zero;
         rb.Sleep();
+
+        rb.isKinematic = true;
+        rb.useGravity = false;
     }
 }

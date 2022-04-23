@@ -136,7 +136,7 @@ public class BreakableWindow : MonoBehaviour {
         obj.transform.position = new Vector3(vertices[tris[0]].x * transform.localScale.x + transform.position.x, vertices[tris[0]].y * transform.localScale.y + transform.position.y, transform.position.z);
         obj.transform.RotateAround(transform.position, transform.up, transform.rotation.eulerAngles.y);
         obj.transform.localScale = transform.localScale;
-        //obj.transform.SetParent(transform);
+        
         obj.transform.rotation = transform.rotation;
         obj.layer = layer.value;
         obj.name = "Glass Splinter";
@@ -158,12 +158,10 @@ public class BreakableWindow : MonoBehaviour {
         MeshCollider col = obj.AddComponent<MeshCollider>();
         col.inflateMesh = true;
         col.convex = true;
-        //if (destroyPhysicsTime > 0 && destroyColliderWithPhysics) Destroy(col, destroyPhysicsTime);
         
         Rigidbody rigid = obj.AddComponent<Rigidbody>();
         rigid.centerOfMass = (v[0] + v[1] + v[2]) / 3f;
         if (addTorques && preCalculate == false) rigid.AddTorque(new Vector3(Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50, Random.value > 0.5f ? Random.value * 50 : -Random.value * 50));
-        //if (destroyPhysicsTime > 0) Destroy(rigid, destroyPhysicsTime);
         
 
         MeshRenderer mr = obj.AddComponent<MeshRenderer>();
@@ -204,19 +202,6 @@ public class BreakableWindow : MonoBehaviour {
     /// <returns>Returns an array of all splinter gameobjects.</returns>
     public GameObject[] breakWindow()
     {
-        if (destroyPhysicsTime > 0)
-        {
-            /*
-            if (!transform.parent.GetComponent<SpawnObstacles>())
-            {
-                Destroy(transform.parent.gameObject, destroyPhysicsTime);
-            }
-            else
-            {
-                Destroy(gameObject, destroyPhysicsTime);
-            }*/
-        }
-        
         if (isBroken == false)
         {
             if (allreadyCalculated == true)
@@ -246,8 +231,8 @@ public class BreakableWindow : MonoBehaviour {
 
         if (breakingSound != null)
         {
-            GameObject.FindObjectOfType<GameController>().AudioController.GetComponent<AudioSource>().clip = breakingSound;
-            GameObject.FindObjectOfType<GameController>().AudioController.GetComponent<AudioSource>().Play();
+            GameObject.FindObjectOfType<AudioController>().audioSource.clip = breakingSound;
+            GameObject.FindObjectOfType<AudioController>().audioSource.Play();
 
             if(gameObject.tag != "Obstacle")
             {
@@ -266,6 +251,10 @@ public class BreakableWindow : MonoBehaviour {
     {
         if (useCollision == true && col.gameObject.tag=="Player")
         {
+            if (GameObject.FindObjectOfType<Movement>().health <= 0)
+            {
+                return;
+            }
             if (gameObject.tag != "Obstacle")
             {
                 GameObject.FindObjectOfType<GameController>().AddMoney();
@@ -275,6 +264,7 @@ public class BreakableWindow : MonoBehaviour {
             else
             {
                 GameObject.FindObjectOfType<Movement>().OnObstacleCollid();
+                
             }
             
             if (GameObject.FindObjectOfType<Movement>().health > 0)
@@ -286,19 +276,7 @@ public class BreakableWindow : MonoBehaviour {
                 GameObject.FindObjectOfType<GameController>().toDestroyIfContinueRunning = parentToDestroy;
                 Destroy(GetComponent<Collider>());
             }
-
-            //SetDeath();
         }        
     }
-
-    public void SetDeath()
-    {
-        if (!transform.parent.GetComponent<SpawnObstacles>())
-        {
-            for(int i=0; i< transform.parent.childCount; i++)
-            {
-                transform.parent.GetChild(i).GetComponent<ObstacleController>().isDead = true;
-            }
-        }
-    }
+    
 }

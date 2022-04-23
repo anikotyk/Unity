@@ -9,10 +9,6 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public GameObject AudioController;
-    public PlayerController player;
-   
-    public float speedMoveObstacles;
     public int health;
     public int counterGoldWindow;
 
@@ -25,8 +21,6 @@ public class GameController : MonoBehaviour
     public GameObject LoadingCanvas;
     public Text levelNow;
     public Text levelNext;
-
-    public int lengthLevel;
 
     public GameObject levelEnd;
 
@@ -42,21 +36,11 @@ public class GameController : MonoBehaviour
     public GameObject endMoneyContainer;
     public Text endMoneyText;
 
-    public float progresspercentfloat;
-    public float percentsnow;
-
     public GameObject levelBarContainer;
     public GameObject levelBar;
 
     public GameObject timer;
-    public bool isLevelEnded;
-
-    public GameObject diePrefab;
-
-    public GameObject destroyedPlayer;
-
-    public Material[] crackedMaterials;
-
+   
     public GameObject shopButton;
 
     public Text speederText;
@@ -92,27 +76,26 @@ public class GameController : MonoBehaviour
     public void Awake()
     {
         playerNew = GameObject.FindObjectOfType<Movement>();
-        PlayerPrefs.SetInt("isFirstTime", 12);
+        //PlayerPrefs.SetInt("isFirstTime", 12);
         if (PlayerPrefs.GetInt("isFirstTime") != 18)
         {
             Debug.Log("FIRST TIME");
-            PlayerPrefs.SetInt("money", 100);
+            PlayerPrefs.SetInt("money", 10000);
             PlayerPrefs.SetInt("isFirstTime", 18);
             PlayerPrefs.SetInt("speeder", 3);
             PlayerPrefs.SetInt("speederTime", 2);
             PlayerPrefs.SetInt("speederTimeCount", 1);
             PlayerPrefs.SetInt("speed", 15);
-            PlayerPrefs.SetInt("lives", 5);
+            PlayerPrefs.SetInt("lives", 1);
             PlayerPrefs.SetInt("level", 1);
         }
+
         adscount = 0;
         isLocked = false;
         ShowLevel();
         ShowSpeed(PlayerPrefs.GetInt("speed"));
         ResetProgressBar();
         ShowHearts();
-        health = PlayerPrefs.GetInt("lives");
-        //lengthLevel = 20;
         counterGoldWindow = 0;
         moneyPanel.SetActive(false);
         speederBtn.SetActive(false);
@@ -201,17 +184,11 @@ public class GameController : MonoBehaviour
 
     public void RestartLevel()
     {
-        //Destroy(destroyedPlayer);
-        //player.gameObject.SetActive(true);
-       // player.StartCoroutine(player.MoveToStart());
-        //spawner.finishexists = false;
         adscount++;
         spawner.ClearObstacles();
         playerNew.ResetPlayer();
-        //ClearObstacles();
         ResetProgressBar();
         ShowHearts();
-        //spawner.counterObstacles = 0;
 
         levelEnd.SetActive(false);
         buttonNextLevel.SetActive(false);
@@ -222,42 +199,22 @@ public class GameController : MonoBehaviour
 
     public void LevelComplete()
     {
-        //if(!isLevelEnded){
-        //spawner.finishexists = false;
-        
         sounds.clip = win;
-            sounds.Play();
-            //isLevelEnded = true;
-            GameOver();
-            //player.StartCoroutine(player.MoveToStart());
-            PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
-            UpdateSpeed();
-            levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-        //spawner.counterObstacles = 0;
-        // ClearObstacles();
+        sounds.Play();
+        GameOver();
+        PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
+        UpdateSpeed();
+        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width, levelBar.GetComponent<RectTransform>().sizeDelta.y);
         playerNew.ResetPlayer();
         spawner.ClearObstacles();
 
         ShowEndLevel(true);
-        //}
     }
 
     public void AddMoney(int amount = 5)
     {
         counterGoldWindow += 1;
         PlayerPrefs.SetInt("money", PlayerPrefs.GetInt("money")+amount);
-    }
-
-    public void NextLevel()
-    {
-        adscount++;
-        ResetProgressBar();
-        ShowLevel();
-        ShowHearts();
-        levelEnd.SetActive(false);
-        buttonNextLevel.SetActive(false);
-
-        StartCoroutine(WaitingForTap());
     }
 
     public void LevelLoose()
@@ -275,23 +232,13 @@ public class GameController : MonoBehaviour
             ShowEndLevel(false);
         }
     }
-
-    public void LevelLooseToFast()
-    {
-        ShowEndLevel(false);
-    }
-
+    
     public void ContinuePlaying()
     {
         Destroy(toDestroyIfContinueRunning);
         levelEnd.SetActive(false);
-
         playerNew.ContinueLevel();
         ShowHearts();
-
-        //Destroy(destroyedPlayer);
-        //player.gameObject.SetActive(true);
-        //player.StartCoroutine(player.MoveToStart());
         buttonContinue.SetActive(false);
         
         StartCoroutine(WaitingForTap(true));
@@ -314,25 +261,14 @@ public class GameController : MonoBehaviour
         for (int i = 0; i < PlayerPrefs.GetInt("lives"); i++)
         {
             hearts[i].SetActive(true);
-            if (hearts[i].transform.localScale.x < 1)
+            hearts[i].GetComponent<Animation>().Play("HeartReturn");
+            /*if (hearts[i].transform.localScale.x < 1)
             {
                 hearts[i].GetComponent<Animation>().Play("HeartReturn");
-            }
+            }*/
         }
     }
-
-    public void ClearObstacles()
-    {
-        spawner.DeleteAllObstacles();
-    }
-
-    public void EndLevel()
-    {
-        spawner.ClearObstacles();
-        GameObject.FindObjectOfType<Movement>().StartLevel();
-        spawner.SpawnNewLevel();
-    }
-
+    
     public void StartRunning(bool isContinue=false)
     {
         if (!isContinue)
@@ -346,57 +282,21 @@ public class GameController : MonoBehaviour
         }
         
         playerNew.StartLevel();
-       
-        
-        //isLevelEnded = false;
-        //speedMoveObstacles = PlayerPrefs.GetInt("speed");
-        //player.OnGameStart();
-        //player.indexShownBallState = 0;
-        //player.SetBall(0);
-        //player.soundball.Play();
+        playerNew.soundball.Play();
         ShowHearts();
-        //player.isSpeeder = false;
-        //spawner.isSpawn = true;
         
         tapText.SetActive(false);
 
         shopBtn.GetComponent<AnimController>().Hide();
         adsBtn.GetComponent<AnimController>().Hide();
         speederBtn.GetComponent<AnimController>().Show();
-        
-        //player.StopAllCoroutines();
-        //player.isPlaying = true;
-        
-        //player.StartCoroutine(player.MovingPlayer());
-        
-        //spawner.StartAllObstacles();
-        //spawner.spawner = spawner.StartCoroutine(spawner.Spawner());
-        StartCoroutine(ProgressManager(levelBar, levelBarContainer));
     }
 
     public void GameOver()
     {
-        //player.isPlaying = false;
-        StopAllCoroutines();
-
-        //player.StopAllCoroutines();
-        //player.myRb.velocity = Vector3.zero;
-        //player.myRb.angularVelocity = Vector3.zero;
-        // player.soundball.Stop();
-        // player.isSpeeder = false;
-        // player.fire.SetActive(false);
-
+        //StopAllCoroutines();
+        playerNew.soundball.Stop();
         playerNew.OnGameOver();
-        speedMoveObstacles = PlayerPrefs.GetInt("speed");
-        ShowSpeed(speedMoveObstacles);
-        
-        /*Material[] mats = new Material[2];
-        mats[0] = player.gameObject.GetComponent<MeshRenderer>().materials[0];
-        mats[1] = crackedMaterials[4];
-        player.gameObject.GetComponent<MeshRenderer>().materials = mats;*/
-        
-        //GameObject.FindObjectOfType<SpawnObstacles>().StopAllCoroutines();
-        //GameObject.FindObjectOfType<SpawnObstacles>().StopAllObstacles();
         
         shopBtn.GetComponent<AnimController>().Show();
         adsBtn.GetComponent<AnimController>().Show();
@@ -470,12 +370,6 @@ public class GameController : MonoBehaviour
         else
         {
             playerNew.MinusHealth();
-            /*player.indexShownBallState += 1;
-            player.SetBall(player.indexShownBallState);
-            Material[] mats = new Material[2];
-            mats[0] = player.gameObject.GetComponent<MeshRenderer>().materials[0];
-            mats[1] = crackedMaterials[health - 1];
-            player.gameObject.GetComponent<MeshRenderer>().materials = mats;*/
         }
     }
 
@@ -531,78 +425,19 @@ public class GameController : MonoBehaviour
     
     public void ResetProgressBar()
     {
-        progresspercentfloat = 0;
-        percentsnow = 0;
         levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(0, levelBar.GetComponent<RectTransform>().sizeDelta.y);
     }
-
-    public IEnumerator ProgressManager(GameObject progressbar, GameObject parentprogressbar)
-    {
-        float newpercents = 0;
-
-        while (true)
-        {
-            if (progresspercentfloat > percentsnow)
-            {
-                newpercents = progresspercentfloat;
-
-                while (percentsnow < newpercents)
-                {
-                    percentsnow += 1;
-                    yield return ProgressBarFillCoroutine(progressbar, parentprogressbar, percentsnow / 100f);
-                }
-                if (newpercents >= 100)
-                {
-                    yield break;
-                }
-
-                yield return new WaitForSeconds(2f);
-            }
-            else
-            {
-                yield return null;
-            }
-
-            
-        }
-    }
-
+    
     public void SetProgress(float progress)
     {
-        float width = levelBarContainer.GetComponent<RectTransform>().rect.width * progress;
-        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(width, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-
+        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width * progress, levelBar.GetComponent<RectTransform>().sizeDelta.y);
     }
-
-    public IEnumerator ProgressBarFillCoroutine(GameObject progressbar, GameObject parentprogressbar, float progress)
-    {
-        float width = parentprogressbar.GetComponent<RectTransform>().rect.width * progress;
-        float widthdif = width - progressbar.GetComponent<RectTransform>().rect.width;
-
-        while (progressbar.GetComponent<RectTransform>().rect.width < width)
-        {
-            progressbar.GetComponent<RectTransform>().sizeDelta = new Vector2(progressbar.GetComponent<RectTransform>().sizeDelta.x + 1, progressbar.GetComponent<RectTransform>().sizeDelta.y);
-
-            yield return new WaitForSeconds(0.01f);
-        }
-        progressbar.GetComponent<RectTransform>().sizeDelta = new Vector2(width, progressbar.GetComponent<RectTransform>().sizeDelta.y);
-    }
-
+    
     public void DieAnim()
     {
         sounds.clip=breakball;
         sounds.Play();
-        Camera.main.GetComponent<CameraController>().player = null;
+        Camera.main.GetComponent<FollowTarget>().target = null;
         playerNew.ShowDieAnim();
-        
-        //player.ShowDieAnim();
-        //player.gameObject.SetActive(false);
-       // destroyedPlayer = Instantiate(diePrefab) as GameObject;
-       // destroyedPlayer.transform.localPosition = new Vector3(destroyedPlayer.transform.localPosition.x, destroyedPlayer.transform.localPosition.y, player.transform.localPosition.z);
     }
-
 }
-
-
-
-

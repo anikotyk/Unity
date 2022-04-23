@@ -25,7 +25,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
         Advertisement.RemoveListener(this);
     }
 
-    public static void ShowAdsVideo(string placementId) //инициализация рекламы по типу
+    public static void ShowAdsVideo(string placementId)
     {
         if (Advertisement.IsReady())
         {
@@ -33,27 +33,26 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
         }
         else
         {
-            Debug.Log("Advertisement not ready!");
+            //Debug.Log("Advertisement not ready!");
         }
     }
 
     public void OnUnityAdsReady(string placementId)
     {
-        //
+        
     }
 
     public void OnUnityAdsDidError(string message)
     {
         GameObject.FindObjectOfType<GameController>().isLocked = false;
-        //ошибка рекламы
     }
 
     public void OnUnityAdsDidStart(string placementId)
     {
-        // только запустили рекламу
+
     }
 
-    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult) //обработка рекламы (тут определеяем вознаграждение)
+    public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
         GameObject.FindObjectOfType<GameController>().isLocked = false;
         
@@ -78,6 +77,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
         }
         else if (showResult == ShowResult.Failed)
         {
+
         }
     }
 }
