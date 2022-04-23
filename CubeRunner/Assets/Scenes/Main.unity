@@ -571,12 +571,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03a65cd633848b4cb4263496d3cb885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  AudioController: {fileID: 1823807058}
-  player: {fileID: 0}
-  speedMoveObstacles: 1
-  health: 0
-  counterGoldWindow: 0
-  spawner: {fileID: 1025571284}
   hearts:
   - {fileID: 1659506360}
   - {fileID: 471979701}
@@ -587,7 +581,6 @@ MonoBehaviour:
   LoadingCanvas: {fileID: 702997509}
   levelNow: {fileID: 2112099299}
   levelNext: {fileID: 1087223367}
-  lengthLevel: 0
   levelEnd: {fileID: 1417056135}
   buttonContinue: {fileID: 1402124280}
   buttonNextLevel: {fileID: 1562582358}
@@ -598,37 +591,18 @@ MonoBehaviour:
   LevelFailedText: {fileID: 914285044}
   endMoneyContainer: {fileID: 7012745}
   endMoneyText: {fileID: 1090745808}
-  progresspercentfloat: 0
-  percentsnow: 0
-  levelBarContainer: {fileID: 1920839672}
-  levelBar: {fileID: 201458377}
   timer: {fileID: 1259344668}
-  isLevelEnded: 0
-  diePrefab: {fileID: 3553247608413714586, guid: a0eb5b8f4a9544143bed7b6a52128f98, type: 3}
-  destroyedPlayer: {fileID: 0}
-  crackedMaterials:
-  - {fileID: 2100000, guid: 6788b15b7fd9da64086390e43ac91e1f, type: 2}
-  - {fileID: 2100000, guid: 00ed4f77fdfaa9149ba606bec05e683c, type: 2}
-  - {fileID: 2100000, guid: 23fda8390f09af34a9b8605e0e2a8798, type: 2}
-  - {fileID: 2100000, guid: b51e75d755a701f478e99aafc4df029b, type: 2}
-  - {fileID: 2100000, guid: a904423952d38784e8153c1a7cf2b5fc, type: 2}
   shopButton: {fileID: 873074915}
   speederText: {fileID: 689845469}
   speedText: {fileID: 540376290}
   speederBtn: {fileID: 2102431907}
   adsBtn: {fileID: 239523502}
   shopBtn: {fileID: 486116110}
-  win: {fileID: 8300000, guid: 7ec0e9a6ce6d53243a4d87eb45a42446, type: 3}
-  gameover: {fileID: 8300000, guid: 920a8f5c36627da44bb93632868cc688, type: 3}
-  getcoin: {fileID: 8300000, guid: b6e6b42068bf7a1449617fa52f4388cc, type: 3}
-  breakball: {fileID: 8300000, guid: 261c2deb14507a040963a6f154a030ba, type: 3}
   moneyPanel: {fileID: 1896898580}
-  sounds: {fileID: 624851402}
   panelTooFast: {fileID: 129294600}
   panelTooFastImage: {fileID: 722353451}
-  isLocked: 0
-  adscount: 0
   buttonRestartSmall: {fileID: 1366903827}
+  isLocked: 0
   toDestroyIfContinueRunning: {fileID: 0}
 --- !u!4 &174364717
 Transform:
@@ -1240,7 +1214,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _testMode: 0
-  isContinue: 0
 --- !u!4 &348056132
 Transform:
   m_ObjectHideFlags: 0
@@ -2713,7 +2686,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8117f053dcdbe4eacea9f51823c701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2046023988}
   offset: {x: 0, y: 0.6, z: 0}
   smoothSpeed: 1
 --- !u!1 &852076873
@@ -3243,7 +3215,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8117f053dcdbe4eacea9f51823c701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2046023988}
   offset: {x: 5, y: 3, z: 0}
   smoothSpeed: 1
 --- !u!1 &1020242362
@@ -3258,7 +3229,6 @@ GameObject:
   - component: {fileID: 1020242366}
   - component: {fileID: 1020242365}
   - component: {fileID: 1020242364}
-  - component: {fileID: 1020242363}
   m_Layer: 0
   m_Name: Border1
   m_TagString: Untagged
@@ -3266,22 +3236,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!54 &1020242363
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1020242362}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!65 &1020242364
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -3401,20 +3355,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c31744778c909e4a9431890f2fa4656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstacles:
-  - {fileID: 6901369169642157385, guid: d85151d3b4547f64782b883c6ecc3420, type: 3}
-  - {fileID: 896408996134382744, guid: ea02770821596624d8a7bb35dad68ad6, type: 3}
-  - {fileID: 318704644804051873, guid: 8348b341afe720146997a1aad6c2f273, type: 3}
-  - {fileID: 331945876648894179, guid: b91f33ca8a7f84a4286e203635c8c4bd, type: 3}
-  - {fileID: 391360280504075486, guid: 3017d0a343ede0a4195ef9c65053aa79, type: 3}
-  - {fileID: 5382680229215346274, guid: a8a64240b9e1cd649954897bd50406cd, type: 3}
-  - {fileID: 6205434200910682734, guid: 2bf2a8e4077956d468522feb4b9d52b8, type: 3}
-  - {fileID: 3360018572936354925, guid: 1024db6b5e5a2db42956806517c689e4, type: 3}
-  timePause: 0.75
-  counterObstacles: 0
-  finishPrefab: {fileID: 8975803882562073688, guid: d8d3d5eb965d3e24b985ee8529694b35, type: 3}
-  isSpawn: 1
-  finishexists: 0
   obstaclesPrefabs:
   - {fileID: 2340469019102836415, guid: 6ccdbf471ec7ed541b1829c6fbcfb91c, type: 3}
   - {fileID: 749642425246806832, guid: 71c55c53355b5e441a6308d9705490dc, type: 3}
@@ -6017,8 +5957,6 @@ GameObject:
   - component: {fileID: 1695163552}
   - component: {fileID: 1695163551}
   - component: {fileID: 1695163550}
-  - component: {fileID: 1695163549}
-  - component: {fileID: 1695163554}
   m_Layer: 0
   m_Name: Border2
   m_TagString: Untagged
@@ -6026,22 +5964,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!54 &1695163549
-Rigidbody:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695163548}
-  serializedVersion: 2
-  m_Mass: 1
-  m_Drag: 0
-  m_AngularDrag: 0.05
-  m_UseGravity: 0
-  m_IsKinematic: 1
-  m_Interpolate: 0
-  m_Constraints: 0
-  m_CollisionDetection: 0
 --- !u!65 &1695163550
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -6118,19 +6040,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1695163554
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1695163548}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab3edbae000708543a6687b6314e2d7c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  isDead: 0
 --- !u!1 &1707136174
 GameObject:
   m_ObjectHideFlags: 0
@@ -6330,6 +6239,7 @@ GameObject:
   - component: {fileID: 1823807060}
   - component: {fileID: 1823807059}
   - component: {fileID: 1823807061}
+  - component: {fileID: 1823807062}
   m_Layer: 0
   m_Name: AudioController
   m_TagString: Untagged
@@ -6460,6 +6370,108 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   audioSource: {fileID: 1823807059}
+  audioSource2: {fileID: 1823807062}
+  win: {fileID: 8300000, guid: 7ec0e9a6ce6d53243a4d87eb45a42446, type: 3}
+  gameover: {fileID: 8300000, guid: 920a8f5c36627da44bb93632868cc688, type: 3}
+  getcoin: {fileID: 8300000, guid: b6e6b42068bf7a1449617fa52f4388cc, type: 3}
+  breakball: {fileID: 8300000, guid: 261c2deb14507a040963a6f154a030ba, type: 3}
+  breakingSound: {fileID: 8300000, guid: 5c2f5ca33485fbd42a9e7af0cf292651, type: 3}
+--- !u!82 &1823807062
+AudioSource:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1823807058}
+  m_Enabled: 1
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_PlayOnAwake: 1
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1
+  MaxDistance: 500
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!1 &1849065134
 GameObject:
   m_ObjectHideFlags: 0
@@ -7238,9 +7250,10 @@ MonoBehaviour:
   - {fileID: 1085511696363916631}
   - {fileID: 4166299825015154618}
   - {fileID: 1445479706680740695}
-  health: 0
-  fire: {fileID: 783877475}
   soundball: {fileID: 2046023989}
+  fire: {fileID: 783877475}
+  levelBarContainer: {fileID: 1920839672}
+  levelBar: {fileID: 201458377}
 --- !u!54 &2046023991
 Rigidbody:
   m_ObjectHideFlags: 0

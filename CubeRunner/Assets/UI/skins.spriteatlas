@@ -30,33 +30,14 @@ SpriteAtlas:
       enableTightPacking: 1
     secondaryTextureSettings: {}
     variantMultiplier: 1
-    packables:
-    - {fileID: 2800000, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-    totalSpriteSurfaceArea: 1871424
+    packables: []
+    totalSpriteSurfaceArea: 0
     bindAsDefault: 1
     isAtlasV2: 0
     cachedData: {fileID: 0}
   m_MasterAtlas: {fileID: 0}
-  m_PackedSprites:
-  - {fileID: 7549911581583805019, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: 6080127873547689343, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: -2025505853957122807, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: -4817750119922725448, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: 5782233212844520802, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: 3642977461543627103, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: 6882425685328026867, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: 5603453663754294049, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  - {fileID: 3993916480404337899, guid: 56d8b6d0233980d428cef49b1067cdd1, type: 3}
-  m_PackedSpriteNamesToIndex:
-  - runners_5
-  - runners_4
-  - runners_7
-  - runners_6
-  - runners_1
-  - runners_0
-  - runners_3
-  - runners_2
-  - runners_8
+  m_PackedSprites: []
+  m_PackedSpriteNamesToIndex: []
   m_RenderDataMap: {}
   m_Tag: skins
   m_IsVariant: 0

@@ -3,79 +3,74 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Events;
 using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    public int health;
-    public int counterGoldWindow;
+    [SerializeField] private GameObject[] hearts;
+    [SerializeField] private GameObject tapText;
 
-    public SpawnObstacles spawner;
+    [SerializeField] private GameObject LoadingCanvas;
+    [SerializeField] private Text levelNow;
+    [SerializeField] private Text levelNext;
+
+    [SerializeField] private GameObject levelEnd;
+
+    [SerializeField] private GameObject buttonContinue;
+    [SerializeField] private GameObject buttonNextLevel;
+    [SerializeField] private GameObject buttonRestart;
+
+    [SerializeField] private GameObject LevelCompletedContainer;
+    [SerializeField] private GameObject LevelFailedContainer;
+    [SerializeField] private Text LevelCompletedText;
+    [SerializeField] private Text LevelFailedText;
+
+    [SerializeField] private GameObject endMoneyContainer;
+    [SerializeField] private Text endMoneyText;
+
+    [SerializeField] private GameObject timer;
+
+    [SerializeField] private GameObject shopButton;
+
+    [SerializeField] private Text speederText;
+    [SerializeField] private Text speedText;
+
+    [SerializeField] private GameObject speederBtn;
+    [SerializeField] private GameObject adsBtn;
+    [SerializeField] private GameObject shopBtn;
     
-    public GameObject[] hearts;
-    
-    public GameObject tapText;
-    
-    public GameObject LoadingCanvas;
-    public Text levelNow;
-    public Text levelNext;
+    [SerializeField] private GameObject moneyPanel;
 
-    public GameObject levelEnd;
+    [SerializeField] private GameObject panelTooFast;
+    [SerializeField] private GameObject panelTooFastImage;
 
-    public GameObject buttonContinue;
-    public GameObject buttonNextLevel;
-    public GameObject buttonRestart;
-
-    public GameObject LevelCompletedContainer;
-    public GameObject LevelFailedContainer;
-    public Text LevelCompletedText;
-    public Text LevelFailedText;
-
-    public GameObject endMoneyContainer;
-    public Text endMoneyText;
-
-    public GameObject levelBarContainer;
-    public GameObject levelBar;
-
-    public GameObject timer;
-   
-    public GameObject shopButton;
-
-    public Text speederText;
-    public Text speedText;
-
-    public GameObject speederBtn;
-    public GameObject adsBtn;
-    public GameObject shopBtn;
-
-    public AudioClip win;
-    public AudioClip gameover;
-    public AudioClip getcoin;
-    public AudioClip breakball;
-
-    public GameObject moneyPanel;
-
-    public AudioSource sounds;
-
-    public GameObject panelTooFast;
-    public GameObject panelTooFastImage;
+    [SerializeField] private GameObject buttonRestartSmall;
 
     public bool isLocked;
 
-    public int adscount;
-
-    public GameObject buttonRestartSmall;
-
-    private Movement playerNew;
+    private int adscount;
+    private int health;
+    private int counterGoldWindow;
+    
+    private PlayerController playerNew;
+    private AdsController adsController;
 
     public GameObject toDestroyIfContinueRunning;
-    
 
-    public void Awake()
+    public event UnityAction LevelStarted;
+    public event UnityAction LevelContinued;
+    public event UnityAction LevelEnded;
+    public event UnityAction AddedMoney;
+    public event UnityAction NextLevelClicked;
+    public event UnityAction LevelLooseScreen;
+
+    private void Awake()
     {
-        playerNew = GameObject.FindObjectOfType<Movement>();
+        playerNew = GameObject.FindObjectOfType<PlayerController>();
+        adsController = GameObject.FindObjectOfType<AdsController>();
         //PlayerPrefs.SetInt("isFirstTime", 12);
         if (PlayerPrefs.GetInt("isFirstTime") != 18)
         {
@@ -94,7 +89,7 @@ public class GameController : MonoBehaviour
         isLocked = false;
         ShowLevel();
         ShowSpeed(PlayerPrefs.GetInt("speed"));
-        ResetProgressBar();
+        
         ShowHearts();
         counterGoldWindow = 0;
         moneyPanel.SetActive(false);
@@ -103,12 +98,33 @@ public class GameController : MonoBehaviour
         levelEnd.SetActive(false);
     }
 
-    public void Start()
+    private void Start()
     {
         shopBtn.GetComponent<AnimController>().Show();
         adsBtn.GetComponent<AnimController>().Show();
 
         StartCoroutine(WaitingForTap());
+    }
+
+    private void OnEnable()
+    {
+        playerNew.LevelLoose += OnLevelLoose;
+        playerNew.SpeedChanged += ShowSpeed;
+        playerNew.LevelComplete += LevelComplete;
+        playerNew.SpeederCountChanged += UpdateSpeederCount;
+        playerNew.GetDamage += MinusHealth;
+
+        adsController.ContinueButtonClicked += ContinuePlaying;
+    }
+
+    private void OnDisable()
+    {
+        playerNew.LevelLoose -= OnLevelLoose;
+        playerNew.SpeedChanged -= ShowSpeed;
+        playerNew.LevelComplete -= LevelComplete;
+        playerNew.SpeederCountChanged -= UpdateSpeederCount;
+        playerNew.GetDamage -= MinusHealth;
+        adsController.ContinueButtonClicked -= ContinuePlaying;
     }
 
     public void UpdateSpeed()
@@ -118,6 +134,11 @@ public class GameController : MonoBehaviour
             PlayerPrefs.SetInt("speed", PlayerPrefs.GetInt("speed")+1);
             ShowSpeed(PlayerPrefs.GetInt("speed"));
         }
+    }
+
+    private void UpdateSpeederCount()
+    {
+        speederText.text = "x" + PlayerPrefs.GetInt("speeder");
     }
 
     public void ShowEndLevel(bool isLevelCompleted=true)
@@ -185,11 +206,8 @@ public class GameController : MonoBehaviour
     public void RestartLevel()
     {
         adscount++;
-        spawner.ClearObstacles();
-        playerNew.ResetPlayer();
-        ResetProgressBar();
+        LevelEnded?.Invoke();
         ShowHearts();
-
         levelEnd.SetActive(false);
         buttonNextLevel.SetActive(false);
         shopButton.SetActive(false);
@@ -199,14 +217,10 @@ public class GameController : MonoBehaviour
 
     public void LevelComplete()
     {
-        sounds.clip = win;
-        sounds.Play();
         GameOver();
         PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
         UpdateSpeed();
-        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-        playerNew.ResetPlayer();
-        spawner.ClearObstacles();
+        LevelEnded?.Invoke();
 
         ShowEndLevel(true);
     }
@@ -215,13 +229,14 @@ public class GameController : MonoBehaviour
     {
         counterGoldWindow += 1;
         PlayerPrefs.SetInt("money", PlayerPrefs.GetInt("money")+amount);
+        moneyPanel.SetActive(true);
+        moneyPanel.GetComponent<Animation>().Play();
+        AddedMoney?.Invoke();
     }
 
     public void LevelLoose()
     {
-        sounds.clip = gameover;
-        sounds.Play();
-
+        LevelLooseScreen?.Invoke();
         if (PlayerPrefs.GetInt("speed")>=45)
         {
             panelTooFast.SetActive(true);
@@ -237,7 +252,6 @@ public class GameController : MonoBehaviour
     {
         Destroy(toDestroyIfContinueRunning);
         levelEnd.SetActive(false);
-        playerNew.ContinueLevel();
         ShowHearts();
         buttonContinue.SetActive(false);
         
@@ -253,7 +267,6 @@ public class GameController : MonoBehaviour
     public void ShowHearts()
     {
         health = PlayerPrefs.GetInt("lives");
-        playerNew.health = health;
         for (int i = 0; i < 5; i++)
         {
             hearts[i].SetActive(false);
@@ -268,21 +281,30 @@ public class GameController : MonoBehaviour
             }*/
         }
     }
+
+    public void NextLevel()
+    {
+        adscount++;
+        NextLevelClicked?.Invoke();
+        ShowLevel();
+        ShowHearts();
+        levelEnd.SetActive(false);
+        buttonNextLevel.SetActive(false);
+
+        StartCoroutine(WaitingForTap());
+    }
     
     public void StartRunning(bool isContinue=false)
     {
         if (!isContinue)
         {
-            spawner.SpawnNewLevel();
-            playerNew.ResetPlayer();
+            LevelStarted?.Invoke();
         }
         else
         {
-            playerNew.ResetPlayerAppearance();
+            LevelContinued?.Invoke();
         }
-        
-        playerNew.StartLevel();
-        playerNew.soundball.Play();
+
         ShowHearts();
         
         tapText.SetActive(false);
@@ -294,10 +316,6 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
-        //StopAllCoroutines();
-        playerNew.soundball.Stop();
-        playerNew.OnGameOver();
-        
         shopBtn.GetComponent<AnimController>().Show();
         adsBtn.GetComponent<AnimController>().Show();
         speederBtn.GetComponent<AnimController>().Hide();
@@ -309,7 +327,7 @@ public class GameController : MonoBehaviour
         {
             isLocked = true;
             adscount = 0;
-            AdsController.ShowAdsVideo(AdsController._video);
+            adsController.ShowAdsVideo(AdsController._video, false);
         }
 
         tapText.SetActive(true);
@@ -352,30 +370,25 @@ public class GameController : MonoBehaviour
         }
     }
 
-    public void ShowSpeed(float speed)
+    private void ShowSpeed(int speed)
     {
-        speedText.text = "Speed: " + Math.Round(speed, 1);
+        speedText.text = "Speed: " + speed;
+    }
+
+    private void OnLevelLoose()
+    {
+        GameOver();
+        StartCoroutine(gameovercoroutine());
     }
 
     public void MinusHealth()
     {
         hearts[health - 1].GetComponent<Animation>().Play("Heart");
         health -= 1;
-        
-        if (health <= 0)
-        {
-            GameOver();
-            StartCoroutine(gameovercoroutine());
-        }
-        else
-        {
-            playerNew.MinusHealth();
-        }
     }
 
     public IEnumerator gameovercoroutine()
     {
-        DieAnim();
         yield return new WaitForSeconds(1f);
         LevelLoose();
     }
@@ -423,21 +436,4 @@ public class GameController : MonoBehaviour
         }
     }
     
-    public void ResetProgressBar()
-    {
-        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(0, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-    }
-    
-    public void SetProgress(float progress)
-    {
-        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width * progress, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-    }
-    
-    public void DieAnim()
-    {
-        sounds.clip=breakball;
-        sounds.Play();
-        Camera.main.GetComponent<FollowTarget>().target = null;
-        playerNew.ShowDieAnim();
-    }
 }

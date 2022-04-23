@@ -6,10 +6,10 @@ public class PartOfBallData : MonoBehaviour
 {
     private List<Vector3> partsPositions = new List<Vector3>();
     private List<Quaternion> partsRotations = new List<Quaternion>();
-
-    private void Awake()
+    
+    public void GetAwakeState()
     {
-        for(int i=0; i<transform.childCount; i++)
+        for (int i = 0; i < transform.childCount; i++)
         {
             partsPositions.Add(transform.GetChild(i).localPosition);
             partsRotations.Add(transform.GetChild(i).localRotation);

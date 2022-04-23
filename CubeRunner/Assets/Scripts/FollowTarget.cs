@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class FollowTarget : MonoBehaviour
 {
-    public GameObject target;
     [SerializeField] private Vector3 offset;
     [SerializeField] private float smoothSpeed = 1f;
 
+    private GameObject target;
     private Vector3 newPos;
     private Vector3 smoothFollow;
 
-    void LateUpdate()
+    private void LateUpdate()
     {
         if (target == null)
         {
@@ -24,5 +24,15 @@ public class FollowTarget : MonoBehaviour
 
         smoothFollow = Vector3.Lerp(transform.position, newPos, smoothSpeed);
         transform.position = smoothFollow;
+    }
+
+    public void RemoveTarget()
+    {
+        target = null;
+    }
+
+    public void SetTarget(GameObject newTarget)
+    {
+        target = newTarget;
     }
 }

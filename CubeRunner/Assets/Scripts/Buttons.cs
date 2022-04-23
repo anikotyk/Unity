@@ -25,9 +25,8 @@ public class Buttons : MonoBehaviour
     {
         if(Advertisement.IsReady())
         {
-            GameObject.FindObjectOfType<AdsController>().isContinue = false;
             GameObject.FindObjectOfType<GameController>().isLocked = true;
-            AdsController.ShowAdsVideo(AdsController._rewardedVideo);
+            GameObject.FindObjectOfType<AdsController>().ShowAdsVideo(AdsController._rewardedVideo, false);
         }
     }
     
@@ -35,9 +34,8 @@ public class Buttons : MonoBehaviour
     {
         if (Advertisement.IsReady())
         {
-            GameObject.FindObjectOfType<AdsController>().isContinue = true;
             GameObject.FindObjectOfType<GameController>().isLocked = true;
-            AdsController.ShowAdsVideo(AdsController._rewardedVideo);
+            GameObject.FindObjectOfType<AdsController>().ShowAdsVideo(AdsController._rewardedVideo, true);
         }
     }
 

@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Advertisements;
+using UnityEngine.Events;
 
 public class AdsController : MonoBehaviour, IUnityAdsListener
 {
@@ -12,7 +13,9 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
     public static string _video = "Interstitial_Android";
     public static string _rewardedVideo = "Rewarded_Android";
 
-    public bool isContinue=false;
+    private bool isContinue=false;
+
+    public event UnityAction ContinueButtonClicked;
 
     void Start() 
     {
@@ -25,15 +28,12 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
         Advertisement.RemoveListener(this);
     }
 
-    public static void ShowAdsVideo(string placementId)
+    public void ShowAdsVideo(string placementId, bool isForContinue)
     {
+        isContinue = isForContinue;
         if (Advertisement.IsReady())
         {
             Advertisement.Show(placementId);
-        }
-        else
-        {
-            //Debug.Log("Advertisement not ready!");
         }
     }
 
@@ -62,7 +62,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
             {
                 if (isContinue)
                 {
-                    GameObject.FindObjectOfType<GameController>().ContinuePlaying();
+                    ContinueButtonClicked?.Invoke();
                 }
                 else
                 {

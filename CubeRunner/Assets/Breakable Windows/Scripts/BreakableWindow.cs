@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [AddComponentMenu("Breakable Windows/Breakable Window")]
-//[RequireComponent(typeof(AudioSource))]
 public class BreakableWindow : MonoBehaviour {
-
     
     [Tooltip("Layer should be TransparentFX or your own layer for breakable windows.")]
     public LayerMask layer;
@@ -34,8 +32,7 @@ public class BreakableWindow : MonoBehaviour {
 
     [Space]
     public AudioClip breakingSound;
-
-
+    
     [HideInInspector]
     public bool isBroken = false;
     [HideInInspector]
@@ -231,43 +228,32 @@ public class BreakableWindow : MonoBehaviour {
 
         if (breakingSound != null)
         {
-            GameObject.FindObjectOfType<AudioController>().audioSource.clip = breakingSound;
-            GameObject.FindObjectOfType<AudioController>().audioSource.Play();
-
-            if(gameObject.tag != "Obstacle")
-            {
-                GameObject.FindObjectOfType<GameController>().sounds.clip = GameObject.FindObjectOfType<GameController>().getcoin;
-                GameObject.FindObjectOfType<GameController>().sounds.Play();
-                
-            }
+            GameObject.FindObjectOfType<AudioController>().BreakingSound();
         }
 
         return splinters.ToArray();
     }
-
-
-
+    
     void OnCollisionEnter(Collision col)
     {
         if (useCollision == true && col.gameObject.tag=="Player")
         {
-            if (GameObject.FindObjectOfType<Movement>().health <= 0)
+            if (GameObject.FindObjectOfType<PlayerController>().CheckIsDead())
             {
                 return;
             }
+
             if (gameObject.tag != "Obstacle")
             {
                 GameObject.FindObjectOfType<GameController>().AddMoney();
-                GameObject.FindObjectOfType<GameController>().moneyPanel.SetActive(true);
-                GameObject.FindObjectOfType<GameController>().moneyPanel.GetComponent<Animation>().Play();
             }
             else
             {
-                GameObject.FindObjectOfType<Movement>().OnObstacleCollid();
+                GameObject.FindObjectOfType<PlayerController>().OnObstacleCollid();
                 
             }
             
-            if (GameObject.FindObjectOfType<Movement>().health > 0)
+            if (!GameObject.FindObjectOfType<PlayerController>().CheckIsDead())
             {
                 breakWindow();
             }
