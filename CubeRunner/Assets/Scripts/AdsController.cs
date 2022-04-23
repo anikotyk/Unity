@@ -15,9 +15,20 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     private bool isContinue=false;
 
+    public static AdsController Instance { get; private set; }
     public event UnityAction ContinueButtonClicked;
 
-    void Start() 
+    private void Awake()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+    }
+
+    private void Start() 
     {
         Advertisement.AddListener(this);
         Advertisement.Initialize(_gameId, _testMode);
@@ -44,7 +55,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsDidError(string message)
     {
-        GameObject.FindObjectOfType<GameController>().isLocked = false;
+        GameController.Instance.isLocked = false;
     }
 
     public void OnUnityAdsDidStart(string placementId)
@@ -54,7 +65,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
-        GameObject.FindObjectOfType<GameController>().isLocked = false;
+        GameController.Instance.isLocked = false;
         
         if (showResult == ShowResult.Finished)
         {

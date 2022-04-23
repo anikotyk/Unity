@@ -10,7 +10,7 @@ public class Buttons : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<AdsController>())
         {
-            GameObject.FindObjectOfType<AdsController>().DeleteListener();
+            AdsController.Instance.DeleteListener();
         }
         
         SceneManager.LoadScene(scene);
@@ -25,8 +25,8 @@ public class Buttons : MonoBehaviour
     {
         if(Advertisement.IsReady())
         {
-            GameObject.FindObjectOfType<GameController>().isLocked = true;
-            GameObject.FindObjectOfType<AdsController>().ShowAdsVideo(AdsController._rewardedVideo, false);
+            GameController.Instance.isLocked = true;
+            AdsController.Instance.ShowAdsVideo(AdsController._rewardedVideo, false);
         }
     }
     
@@ -34,8 +34,8 @@ public class Buttons : MonoBehaviour
     {
         if (Advertisement.IsReady())
         {
-            GameObject.FindObjectOfType<GameController>().isLocked = true;
-            GameObject.FindObjectOfType<AdsController>().ShowAdsVideo(AdsController._rewardedVideo, true);
+            GameController.Instance.isLocked = true;
+            AdsController.Instance.ShowAdsVideo(AdsController._rewardedVideo, true);
         }
     }
 

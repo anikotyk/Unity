@@ -11,24 +11,22 @@ public class SpawnObstacles : MonoBehaviour
     [SerializeField] private float differenceBetweenPosSpawn;
 
     private float endPosSpawnX;
-    private GameController gameController;
 
     private void Awake()
     {
-        gameController = GameObject.FindObjectOfType<GameController>();
         endPosSpawnX = obstaclesParent.InverseTransformPoint(finish.position).x;
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        gameController.LevelStarted += SpawnNewLevel;
-        gameController.LevelEnded += ClearObstacles;
+        GameController.Instance.LevelStarted += SpawnNewLevel;
+        GameController.Instance.LevelEnded += ClearObstacles;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        gameController.LevelStarted -= SpawnNewLevel;
-        gameController.LevelEnded -= ClearObstacles;
+        GameController.Instance.LevelStarted -= SpawnNewLevel;
+        GameController.Instance.LevelEnded -= ClearObstacles;
     }
 
     private void SpawnNewLevel()

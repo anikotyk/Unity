@@ -13,29 +13,32 @@ public class AudioController : MonoBehaviour
     [SerializeField] private AudioClip breakball;
     [SerializeField] private AudioClip breakingSound;
 
-    private GameController gameController;
-    private PlayerController playerController;
-    
+    public static AudioController Instance { get; private set; }
+
     private void Awake()
     {
-        gameController = GameObject.FindObjectOfType<GameController>();
-        playerController = GameObject.FindObjectOfType<PlayerController>();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        gameController.LevelEnded += OnLevelEnded;
-        gameController.AddedMoney += MoneySound;
-        gameController.LevelLooseScreen += GameOverSound;
-        playerController.LevelLoose += OnLevelLoose;
+        GameController.Instance.LevelEnded += OnLevelEnded;
+        GameController.Instance.AddedMoney += MoneySound;
+        GameController.Instance.LevelLooseScreen += GameOverSound;
+        PlayerController.Instance.LevelLoose += OnLevelLoose;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        gameController.LevelEnded -= OnLevelEnded;
-        gameController.AddedMoney -= MoneySound;
-        gameController.LevelLooseScreen -= GameOverSound;
-        playerController.LevelLoose -= OnLevelLoose;
+        GameController.Instance.LevelEnded -= OnLevelEnded;
+        GameController.Instance.AddedMoney -= MoneySound;
+        GameController.Instance.LevelLooseScreen -= GameOverSound;
+        PlayerController.Instance.LevelLoose -= OnLevelLoose;
     }
 
     private void OnLevelEnded()

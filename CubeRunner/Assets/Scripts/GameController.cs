@@ -55,8 +55,6 @@ public class GameController : MonoBehaviour
     private int health;
     private int counterGoldWindow;
     
-    private PlayerController playerNew;
-    private AdsController adsController;
 
     public GameObject toDestroyIfContinueRunning;
 
@@ -67,10 +65,18 @@ public class GameController : MonoBehaviour
     public event UnityAction NextLevelClicked;
     public event UnityAction LevelLooseScreen;
 
+    public static GameController Instance { get; private set; }
+
     private void Awake()
     {
-        playerNew = GameObject.FindObjectOfType<PlayerController>();
-        adsController = GameObject.FindObjectOfType<AdsController>();
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+
+        Instance = this;
+
         //PlayerPrefs.SetInt("isFirstTime", 12);
         if (PlayerPrefs.GetInt("isFirstTime") != 18)
         {
@@ -100,31 +106,30 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        PlayerController.Instance.LevelLoose += OnLevelLoose;
+        PlayerController.Instance.SpeedChanged += ShowSpeed;
+        PlayerController.Instance.LevelComplete += LevelComplete;
+        PlayerController.Instance.SpeederCountChanged += UpdateSpeederCount;
+        PlayerController.Instance.GetDamage += MinusHealth;
+
+        AdsController.Instance.ContinueButtonClicked += ContinuePlaying;
+
+
         shopBtn.GetComponent<AnimController>().Show();
         adsBtn.GetComponent<AnimController>().Show();
 
         StartCoroutine(WaitingForTap());
     }
+    
 
-    private void OnEnable()
+    private void OnDestroy()
     {
-        playerNew.LevelLoose += OnLevelLoose;
-        playerNew.SpeedChanged += ShowSpeed;
-        playerNew.LevelComplete += LevelComplete;
-        playerNew.SpeederCountChanged += UpdateSpeederCount;
-        playerNew.GetDamage += MinusHealth;
-
-        adsController.ContinueButtonClicked += ContinuePlaying;
-    }
-
-    private void OnDisable()
-    {
-        playerNew.LevelLoose -= OnLevelLoose;
-        playerNew.SpeedChanged -= ShowSpeed;
-        playerNew.LevelComplete -= LevelComplete;
-        playerNew.SpeederCountChanged -= UpdateSpeederCount;
-        playerNew.GetDamage -= MinusHealth;
-        adsController.ContinueButtonClicked -= ContinuePlaying;
+        PlayerController.Instance.LevelLoose -= OnLevelLoose;
+        PlayerController.Instance.SpeedChanged -= ShowSpeed;
+        PlayerController.Instance.LevelComplete -= LevelComplete;
+        PlayerController.Instance.SpeederCountChanged -= UpdateSpeederCount;
+        PlayerController.Instance.GetDamage -= MinusHealth;
+        AdsController.Instance.ContinueButtonClicked -= ContinuePlaying;
     }
 
     public void UpdateSpeed()
@@ -327,7 +332,7 @@ public class GameController : MonoBehaviour
         {
             isLocked = true;
             adscount = 0;
-            adsController.ShowAdsVideo(AdsController._video, false);
+            AdsController.Instance.ShowAdsVideo(AdsController._video, false);
         }
 
         tapText.SetActive(true);
@@ -420,7 +425,7 @@ public class GameController : MonoBehaviour
     {
         if (GameObject.FindObjectOfType<AdsController>())
         {
-            GameObject.FindObjectOfType<AdsController>().DeleteListener();
+            AdsController.Instance.DeleteListener();
         }
         StartCoroutine(LoadingSceneCoroutine(scene));
     }

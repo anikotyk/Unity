@@ -228,7 +228,7 @@ public class BreakableWindow : MonoBehaviour {
 
         if (breakingSound != null)
         {
-            GameObject.FindObjectOfType<AudioController>().BreakingSound();
+            AudioController.Instance.BreakingSound();
         }
 
         return splinters.ToArray();
@@ -238,28 +238,27 @@ public class BreakableWindow : MonoBehaviour {
     {
         if (useCollision == true && col.gameObject.tag=="Player")
         {
-            if (GameObject.FindObjectOfType<PlayerController>().CheckIsDead())
+            if (PlayerController.Instance.CheckIsDead())
             {
                 return;
             }
 
             if (gameObject.tag != "Obstacle")
             {
-                GameObject.FindObjectOfType<GameController>().AddMoney();
+                GameController.Instance.AddMoney();
             }
             else
             {
-                GameObject.FindObjectOfType<PlayerController>().OnObstacleCollid();
-                
+                PlayerController.Instance.OnObstacleCollid();
             }
             
-            if (!GameObject.FindObjectOfType<PlayerController>().CheckIsDead())
+            if (!PlayerController.Instance.CheckIsDead())
             {
                 breakWindow();
             }
             else
             {
-                GameObject.FindObjectOfType<GameController>().toDestroyIfContinueRunning = parentToDestroy;
+                GameController.Instance.toDestroyIfContinueRunning = parentToDestroy;
                 Destroy(GetComponent<Collider>());
             }
         }        

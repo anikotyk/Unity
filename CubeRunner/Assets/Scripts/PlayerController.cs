@@ -27,9 +27,6 @@ public class PlayerController : MonoBehaviour
 
     private int health;
 
-    private GameController gameController;
-    private AdsController adsController;
-
     private Vector3 forwardMove;
     private Vector3 horizontalMove;
 
@@ -39,12 +36,19 @@ public class PlayerController : MonoBehaviour
     public event UnityAction SpeederCountChanged;
     public event UnityAction<int> SpeedChanged;
 
+    public static PlayerController Instance { get; private set; }
+
     private void Awake()
     {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(this);
+            return;
+        }
+        Instance = this;
+
         isRunning = false;
         isSpeeder = false;
-        gameController = GameObject.FindObjectOfType<GameController>();
-        adsController = GameObject.FindObjectOfType<AdsController>();
         health = PlayerPrefs.GetInt("lives");
         speed = PlayerPrefs.GetInt("speed");
         indexShownBallState = 0;
@@ -58,22 +62,22 @@ public class PlayerController : MonoBehaviour
         ResetPlayer();
     }
 
-    private void OnEnable()
+    private void Start()
     {
-        gameController.LevelStarted += StartRunning;
-        gameController.LevelContinued += StartRunning;
-        gameController.LevelEnded += OnLevelEnded;
-        adsController.ContinueButtonClicked += ContinueLevel;
-        gameController.NextLevelClicked += OnNextLevelClicked;
+        GameController.Instance.LevelStarted += StartRunning;
+        GameController.Instance.LevelContinued += StartRunning;
+        GameController.Instance.LevelEnded += OnLevelEnded;
+        AdsController.Instance.ContinueButtonClicked += ContinueLevel;
+        GameController.Instance.NextLevelClicked += OnNextLevelClicked;
     }
 
-    private void OnDisable()
+    private void OnDestroy()
     {
-        gameController.LevelStarted -= StartRunning;
-        gameController.LevelContinued -= StartRunning;
-        gameController.LevelEnded -= OnLevelEnded;
-        adsController.ContinueButtonClicked -= ContinueLevel;
-        gameController.NextLevelClicked -= OnNextLevelClicked;
+        GameController.Instance.LevelStarted -= StartRunning;
+        GameController.Instance.LevelContinued -= StartRunning;
+        GameController.Instance.LevelEnded -= OnLevelEnded;
+        AdsController.Instance.ContinueButtonClicked -= ContinueLevel;
+        GameController.Instance.NextLevelClicked -= OnNextLevelClicked;
     }
 
     private void StartRunning()
