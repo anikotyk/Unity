@@ -7125,6 +7125,7 @@ GameObject:
   - component: {fileID: 2046023994}
   - component: {fileID: 2046023991}
   - component: {fileID: 2046023990}
+  - component: {fileID: 2046023995}
   m_Layer: 0
   m_Name: Runner
   m_TagString: Player
@@ -7240,9 +7241,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81d62c32176e8b488c7294c6d61610d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedHorizontal: 10
-  direction: {x: -1, y: 0, z: 0}
-  finish: {fileID: 1663227659649978692}
   brokenBalls:
   - {fileID: 5707139293362419831}
   - {fileID: 4121955996811879018}
@@ -7344,6 +7342,21 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &2046023995
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2046023988}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 44e5e41993582074f8cfe74a835e042f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  speedHorizontal: 20
+  direction: {x: -1, y: 0, z: 0}
+  finish: {fileID: 1663227659649978692}
 --- !u!1 &2051648385
 GameObject:
   m_ObjectHideFlags: 0
