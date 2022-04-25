@@ -10,12 +10,7 @@ using UnityEngine.UI;
 
 public class GameController : MonoBehaviour
 {
-    [SerializeField] private GameObject[] hearts;
     [SerializeField] private GameObject tapText;
-
-    [SerializeField] private GameObject LoadingCanvas;
-    [SerializeField] private Text levelNow;
-    [SerializeField] private Text levelNext;
 
     [SerializeField] private GameObject levelEnd;
 
@@ -36,8 +31,7 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject shopButton;
 
     [SerializeField] private Text speederText;
-    [SerializeField] private Text speedText;
-
+    
     [SerializeField] private GameObject speederBtn;
     [SerializeField] private GameObject adsBtn;
     [SerializeField] private GameObject shopBtn;
@@ -49,13 +43,10 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private GameObject buttonRestartSmall;
 
-    public bool isLocked;
-
-    private int adscount;
-    private int health;
+    [SerializeField] private GameObject panelWaitingOnClick;
+    
     private int counterGoldWindow;
     
-
     public GameObject toDestroyIfContinueRunning;
 
     public event UnityAction LevelStarted;
@@ -77,70 +68,55 @@ public class GameController : MonoBehaviour
 
         Instance = this;
 
-        //PlayerPrefs.SetInt("isFirstTime", 12);
-        if (PlayerPrefs.GetInt("isFirstTime") != 18)
+        //PlayerPrefs.SetInt("isFirstTime", 0);
+        if (PlayerPrefs.GetInt("isFirstTime") != 1)
         {
-            Debug.Log("FIRST TIME");
-            PlayerPrefs.SetInt("money", 10000);
-            PlayerPrefs.SetInt("isFirstTime", 18);
+            PlayerPrefs.SetInt("money", 100);
+            PlayerPrefs.SetInt("isFirstTime", 1);
             PlayerPrefs.SetInt("speeder", 3);
             PlayerPrefs.SetInt("speederTime", 2);
-            PlayerPrefs.SetInt("speederTimeCount", 1);
+            PlayerPrefs.SetInt("speederTimeIndex", 1);
             PlayerPrefs.SetInt("speed", 15);
             PlayerPrefs.SetInt("lives", 1);
+            PlayerPrefs.SetInt("livesIndex", 1);
             PlayerPrefs.SetInt("level", 1);
         }
-
-        adscount = 0;
-        isLocked = false;
-        ShowLevel();
-        ShowSpeed(PlayerPrefs.GetInt("speed"));
         
-        ShowHearts();
         counterGoldWindow = 0;
+        UpdateSpeederCount();
         moneyPanel.SetActive(false);
         speederBtn.SetActive(false);
-        speederText.text ="x"+ PlayerPrefs.GetInt("speeder");
         levelEnd.SetActive(false);
     }
 
     private void Start()
     {
-        PlayerController.Instance.LevelLoose += OnLevelLoose;
-        PlayerController.Instance.SpeedChanged += ShowSpeed;
-        PlayerController.Instance.LevelComplete += LevelComplete;
-        PlayerController.Instance.SpeederCountChanged += UpdateSpeederCount;
-        PlayerController.Instance.GetDamage += MinusHealth;
-
-        AdsController.Instance.ContinueButtonClicked += ContinuePlaying;
-
+        InitEvents();
 
         shopBtn.GetComponent<AnimController>().Show();
         adsBtn.GetComponent<AnimController>().Show();
 
-        StartCoroutine(WaitingForTap());
+        SetStateWaitingOnClick();
+    }
+
+    private void InitEvents()
+    {
+        HealthController.Instance.LevelLoose += OnLevelLoose;
+        PlayerController.Instance.LevelComplete += LevelComplete;
+        PlayerController.Instance.SpeederCountChanged += UpdateSpeederCount;
+
+        AdsController.Instance.ContinueButtonClicked += ContinuePlaying;
     }
     
 
     private void OnDestroy()
     {
-        PlayerController.Instance.LevelLoose -= OnLevelLoose;
-        PlayerController.Instance.SpeedChanged -= ShowSpeed;
+        HealthController.Instance.LevelLoose -= OnLevelLoose;
         PlayerController.Instance.LevelComplete -= LevelComplete;
         PlayerController.Instance.SpeederCountChanged -= UpdateSpeederCount;
-        PlayerController.Instance.GetDamage -= MinusHealth;
         AdsController.Instance.ContinueButtonClicked -= ContinuePlaying;
     }
-
-    public void UpdateSpeed()
-    {
-        if (PlayerPrefs.GetInt("level") % 5 == 0)
-        {
-            PlayerPrefs.SetInt("speed", PlayerPrefs.GetInt("speed")+1);
-            ShowSpeed(PlayerPrefs.GetInt("speed"));
-        }
-    }
-
+    
     private void UpdateSpeederCount()
     {
         speederText.text = "x" + PlayerPrefs.GetInt("speeder");
@@ -210,21 +186,17 @@ public class GameController : MonoBehaviour
 
     public void RestartLevel()
     {
-        adscount++;
         LevelEnded?.Invoke();
-        ShowHearts();
         levelEnd.SetActive(false);
         buttonNextLevel.SetActive(false);
         shopButton.SetActive(false);
 
-        StartCoroutine(WaitingForTap());
+        SetStateWaitingOnClick();
     }
 
     public void LevelComplete()
     {
         GameOver();
-        PlayerPrefs.SetInt("level", PlayerPrefs.GetInt("level") + 1);
-        UpdateSpeed();
         LevelEnded?.Invoke();
 
         ShowEndLevel(true);
@@ -233,7 +205,7 @@ public class GameController : MonoBehaviour
     public void AddMoney(int amount = 5)
     {
         counterGoldWindow += 1;
-        PlayerPrefs.SetInt("money", PlayerPrefs.GetInt("money")+amount);
+        MoneyController.Instance.SetMoney(MoneyController.Instance.GetMoneyAmount() + amount);
         moneyPanel.SetActive(true);
         moneyPanel.GetComponent<Animation>().Play();
         AddedMoney?.Invoke();
@@ -257,46 +229,19 @@ public class GameController : MonoBehaviour
     {
         Destroy(toDestroyIfContinueRunning);
         levelEnd.SetActive(false);
-        ShowHearts();
         buttonContinue.SetActive(false);
-        
-        StartCoroutine(WaitingForTap(true));
-    }
 
-    public void ShowLevel()
-    {
-        levelNow.text = PlayerPrefs.GetInt("level") + "";
-        levelNext.text = PlayerPrefs.GetInt("level")+1 + "";
+        SetStateWaitingOnClick(true);
     }
-
-    public void ShowHearts()
-    {
-        health = PlayerPrefs.GetInt("lives");
-        for (int i = 0; i < 5; i++)
-        {
-            hearts[i].SetActive(false);
-        }
-        for (int i = 0; i < PlayerPrefs.GetInt("lives"); i++)
-        {
-            hearts[i].SetActive(true);
-            hearts[i].GetComponent<Animation>().Play("HeartReturn");
-            /*if (hearts[i].transform.localScale.x < 1)
-            {
-                hearts[i].GetComponent<Animation>().Play("HeartReturn");
-            }*/
-        }
-    }
+    
 
     public void NextLevel()
     {
-        adscount++;
         NextLevelClicked?.Invoke();
-        ShowLevel();
-        ShowHearts();
         levelEnd.SetActive(false);
         buttonNextLevel.SetActive(false);
 
-        StartCoroutine(WaitingForTap());
+        SetStateWaitingOnClick();
     }
     
     public void StartRunning(bool isContinue=false)
@@ -309,8 +254,6 @@ public class GameController : MonoBehaviour
         {
             LevelContinued?.Invoke();
         }
-
-        ShowHearts();
         
         tapText.SetActive(false);
 
@@ -326,119 +269,26 @@ public class GameController : MonoBehaviour
         speederBtn.GetComponent<AnimController>().Hide();
     }
 
-    public IEnumerator WaitingForTap(bool isContinue=false)
+    private void SetStateWaitingOnClick(bool isContinue = false)
     {
-        if (adscount != 0 && adscount % 3 == 0 && Advertisement.IsReady())
-        {
-            isLocked = true;
-            adscount = 0;
-            AdsController.Instance.ShowAdsVideo(AdsController._video, false);
-        }
-
         tapText.SetActive(true);
-        StartCoroutine(ChangeAlpha(tapText.GetComponent<Text>()));
-
-        yield return new WaitForSeconds(0.5f);
-        while (true)
-        {
-            if ((Input.GetMouseButtonDown(0) || Input.touchCount > 0))
-            {
-#if !UNITY_EDITOR
-            if (Input.GetTouch(0).phase != TouchPhase.Began)
-            {
-                    yield return new WaitForSeconds(0.01f);
-                    continue;
-            }
-#endif
-
-                if (isLocked)
-                {
-                    yield return null;
-                    continue;
-                }
-                if (EventSystem.current.currentSelectedGameObject)
-                {
-                    if (!EventSystem.current.currentSelectedGameObject.CompareTag("Button"))
-                    {
-                        StartRunning(isContinue);
-                        yield break;
-                    }
-                }
-                else
-                {
-                    StartRunning(isContinue);
-                    yield break;
-                }
-                
-            }
-            yield return null;
-        }
-    }
-
-    private void ShowSpeed(int speed)
-    {
-        speedText.text = "Speed: " + speed;
+        panelWaitingOnClick.GetComponent<Button>().onClick.RemoveAllListeners();
+        panelWaitingOnClick.GetComponent<Button>().onClick.AddListener(()=> {
+            StartRunning(isContinue);
+            panelWaitingOnClick.SetActive(false);
+        });
+        panelWaitingOnClick.SetActive(true);
     }
 
     private void OnLevelLoose()
     {
         GameOver();
-        StartCoroutine(gameovercoroutine());
+        StartCoroutine(GameOverCoroutine());
     }
 
-    public void MinusHealth()
-    {
-        hearts[health - 1].GetComponent<Animation>().Play("Heart");
-        health -= 1;
-    }
-
-    public IEnumerator gameovercoroutine()
+    public IEnumerator GameOverCoroutine()
     {
         yield return new WaitForSeconds(1f);
         LevelLoose();
     }
-    
-    public IEnumerator ChangeAlpha(Text obj, float min=0.3f, float max=0.8f, float time=1f)
-    {
-        Color color = obj.color;
-        float timeSpan = time / 100f;
-        while (true)
-        {
-            color.a = min;
-            while (color.a <= max)
-            {
-                color.a += 0.01f;
-                obj.color = color;
-                yield return new WaitForSeconds(timeSpan);
-            }
-
-            while (color.a >= min)
-            {
-                color.a -= 0.01f;
-                obj.color = color;
-                yield return new WaitForSeconds(timeSpan);
-            }
-        }
-    }
-    
-    public void LoadScene(string scene)
-    {
-        if (GameObject.FindObjectOfType<AdsController>())
-        {
-            AdsController.Instance.DeleteListener();
-        }
-        StartCoroutine(LoadingSceneCoroutine(scene));
-    }
-
-    public IEnumerator LoadingSceneCoroutine(string scene)
-    {
-        AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
-        LoadingCanvas.SetActive(true);
-        
-        while (!operation.isDone)
-        {
-            yield return null;
-        }
-    }
-    
 }

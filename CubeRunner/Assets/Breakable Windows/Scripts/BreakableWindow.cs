@@ -238,7 +238,7 @@ public class BreakableWindow : MonoBehaviour {
     {
         if (useCollision == true && col.gameObject.tag=="Player")
         {
-            if (PlayerController.Instance.CheckIsDead())
+            if (HealthController.Instance.CurrentHealth<=0)
             {
                 return;
             }
@@ -252,7 +252,7 @@ public class BreakableWindow : MonoBehaviour {
                 PlayerController.Instance.OnObstacleCollid();
             }
             
-            if (!PlayerController.Instance.CheckIsDead())
+            if (HealthController.Instance.CurrentHealth > 0)
             {
                 breakWindow();
             }

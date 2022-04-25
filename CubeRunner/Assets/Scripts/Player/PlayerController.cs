@@ -12,16 +12,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private GameObject levelBarContainer;
     [SerializeField] private GameObject levelBar;
     
-    private int health;
     private bool isSpeeder;
 
     private int indexShownBallState;
-
-    public event UnityAction LevelLoose;
+    
     public event UnityAction LevelComplete;
     public event UnityAction GetDamage;
     public event UnityAction SpeederCountChanged;
-    public event UnityAction<int> SpeedChanged;
 
     public static PlayerController Instance { get; private set; }
 
@@ -35,7 +32,6 @@ public class PlayerController : MonoBehaviour
         Instance = this;
         
         isSpeeder = false;
-        health = PlayerPrefs.GetInt("lives");
         indexShownBallState = 0;
         
         ResetProgressBar();
@@ -52,6 +48,7 @@ public class PlayerController : MonoBehaviour
         GameController.Instance.LevelEnded += OnLevelEnded;
         AdsController.Instance.ContinueButtonClicked += ContinueLevel;
         GameController.Instance.NextLevelClicked += OnNextLevelClicked;
+        HealthController.Instance.LevelLoose += OnLevelLoose;
     }
 
     private void OnDestroy()
@@ -61,11 +58,11 @@ public class PlayerController : MonoBehaviour
         GameController.Instance.LevelEnded -= OnLevelEnded;
         AdsController.Instance.ContinueButtonClicked -= ContinueLevel;
         GameController.Instance.NextLevelClicked -= OnNextLevelClicked;
+        HealthController.Instance.LevelLoose -= OnLevelLoose;
     }
 
     private void StartRunning()
     {
-        health = PlayerPrefs.GetInt("lives");
         Camera.main.GetComponent<FollowTarget>().SetTarget(this.gameObject);
         soundball.Play();
     }
@@ -101,7 +98,6 @@ public class PlayerController : MonoBehaviour
     private void ResetPlayer()
     {
         ResetPlayerAppearance();
-        //transform.localPosition = posStart;
     }
 
     private void ResetPlayerAppearance()
@@ -114,27 +110,24 @@ public class PlayerController : MonoBehaviour
 
     private void ContinueLevel()
     {
-        health = PlayerPrefs.GetInt("lives");
         ResetPlayerAppearance();
-        //transform.localPosition = new Vector3(transform.localPosition.x, posStart.y, posStart.z);
     }
 
     public void OnObstacleCollid()
     {
         if (!isSpeeder)
         {
-            health -= 1;
-            GetDamage?.Invoke();
             indexShownBallState += 1;
             SetBall(indexShownBallState);
-            if (health <= 0)
-            {
-                LevelLoose?.Invoke();
-                OnGameOver();
-                Camera.main.GetComponent<FollowTarget>().RemoveTarget();
-                ShowDieAnim();
-            }
+            GetDamage?.Invoke();
         }
+    }
+
+    private void OnLevelLoose()
+    {
+        OnGameOver();
+        Camera.main.GetComponent<FollowTarget>().RemoveTarget();
+        ShowDieAnim();
     }
 
     private void SetBall(int index)
@@ -180,7 +173,7 @@ public class PlayerController : MonoBehaviour
         {
             isSpeeder = true;
             fire.SetActive(true);
-            SpeedChanged?.Invoke(PlayerPrefs.GetInt("speed") + 10);
+            SpeedController.Instance.ChangeCurrentSpeed(SpeedController.Instance.GetPlayerPrefsSpeed() + 10);
             PlayerPrefs.SetInt("speeder", PlayerPrefs.GetInt("speeder") - 1);
             SpeederCountChanged?.Invoke();
             StartCoroutine(speederwait(PlayerPrefs.GetInt("speederTime")));
@@ -198,7 +191,7 @@ public class PlayerController : MonoBehaviour
 
     private void DecreaseSpeedAfterSpeeder()
     {
-        SpeedChanged?.Invoke(PlayerPrefs.GetInt("speed"));
+        SpeedController.Instance.ChangeCurrentSpeed(SpeedController.Instance.GetPlayerPrefsSpeed());
     }
 
     private void OnEndSpeeder()
@@ -212,10 +205,5 @@ public class PlayerController : MonoBehaviour
         soundball.Stop();
         DecreaseSpeedAfterSpeeder();
         OnEndSpeeder();
-    }
-
-    public bool CheckIsDead()
-    {
-        return health <= 0;
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AnimController : MonoBehaviour
 {
-    public bool isJustOneAnim;
+    [SerializeField] private bool isJustOneAnim;
 
     public void Show()
     {

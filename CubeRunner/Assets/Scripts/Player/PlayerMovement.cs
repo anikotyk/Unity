@@ -8,23 +8,20 @@ public class PlayerMovement : MonoBehaviour
     [SerializeField] private float speedHorizontal = 20f;
     [SerializeField] private Vector3 direction;
     [SerializeField] private Transform finish;
-
-    private int speed;
+    
     private bool isRunning;
 
     private Vector3 posStart;
     private float xPosFinish;
     private Rigidbody rb;
     private Vector2 touchPos;
-
-
+    
     private Vector3 forwardMove;
     private Vector3 horizontalMove;
 
     private void Awake()
     {
         isRunning = false;
-        speed = PlayerPrefs.GetInt("speed");
         xPosFinish = finish.position.x;
         posStart = transform.localPosition;
         rb = GetComponent<Rigidbody>();
@@ -36,9 +33,8 @@ public class PlayerMovement : MonoBehaviour
     {
         GameController.Instance.LevelStarted += OnStartMoving;
         GameController.Instance.LevelContinued += OnStartMoving;
-        PlayerController.Instance.SpeedChanged += UpdateSpeed;
         PlayerController.Instance.LevelComplete += StopRunning;
-        PlayerController.Instance.LevelLoose += StopRunning;
+        HealthController.Instance.LevelLoose += StopRunning;
         AdsController.Instance.ContinueButtonClicked += ResetPlayerPositionAtContinue;
         GameController.Instance.LevelEnded += ResetPlayerPositionAtStart;
     }
@@ -47,16 +43,10 @@ public class PlayerMovement : MonoBehaviour
     {
         GameController.Instance.LevelStarted -= OnStartMoving;
         GameController.Instance.LevelContinued -= OnStartMoving;
-        PlayerController.Instance.SpeedChanged -= UpdateSpeed;
         PlayerController.Instance.LevelComplete -= StopRunning;
-        PlayerController.Instance.LevelLoose -= StopRunning;
+        HealthController.Instance.LevelLoose -= StopRunning;
         AdsController.Instance.ContinueButtonClicked -= ResetPlayerPositionAtContinue;
         GameController.Instance.LevelEnded -= ResetPlayerPositionAtStart;
-    }
-
-    private void UpdateSpeed(int newSpeed)
-    {
-        speed = newSpeed;
     }
 
     private void StopRunning()
@@ -73,7 +63,6 @@ public class PlayerMovement : MonoBehaviour
     private void OnStartMoving()
     {
         touchPos = Vector2.zero;
-        speed = PlayerPrefs.GetInt("speed");
         rb.isKinematic = false;
         rb.useGravity = true;
         isRunning = true;
@@ -107,7 +96,7 @@ public class PlayerMovement : MonoBehaviour
             touchPos = touchPos.normalized;
         }
 
-        forwardMove = direction * speed * Time.fixedDeltaTime;
+        forwardMove = direction * SpeedController.Instance.CurrentSpeed * Time.fixedDeltaTime;
         horizontalMove = new Vector3(0, 0, touchPos.x) * speedHorizontal * Time.fixedDeltaTime;
         rb.velocity = (forwardMove + horizontalMove) * 40;
 

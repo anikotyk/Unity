@@ -8,12 +8,13 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 {
     [SerializeField] private bool _testMode = true;
 
-    private string _gameId = "4547153"; 
+    private string _gameId = "4547153";
 
     public static string _video = "Interstitial_Android";
     public static string _rewardedVideo = "Rewarded_Android";
 
-    private bool isContinue=false;
+    private bool isContinue = false;
+    private int adscount;
 
     public static AdsController Instance { get; private set; }
     public event UnityAction ContinueButtonClicked;
@@ -26,17 +27,43 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
             return;
         }
         Instance = this;
+
+        adscount = 0;
     }
 
-    private void Start() 
+    private void Start()
     {
         Advertisement.AddListener(this);
         Advertisement.Initialize(_gameId, _testMode);
+
+        GameController.Instance.LevelEnded += IncreaseCounterForAds;
+    }
+
+    private void OnDestroy()
+    {
+        DeleteListener();
+        GameController.Instance.LevelEnded -= IncreaseCounterForAds;
+    }
+
+    private void IncreaseCounterForAds()
+    {
+        adscount++;
+        if (adscount >= 3)
+        {
+            adscount = 0;
+            ShowAdsVideo(_video, false);
+        }
     }
 
     public void DeleteListener()
     {
         Advertisement.RemoveListener(this);
+    }
+
+
+    public void ShowRewardedVideo( bool isForContinue)
+    {
+        ShowAdsVideo(_rewardedVideo, isForContinue);
     }
 
     public void ShowAdsVideo(string placementId, bool isForContinue)
@@ -55,7 +82,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsDidError(string message)
     {
-        GameController.Instance.isLocked = false;
+        
     }
 
     public void OnUnityAdsDidStart(string placementId)
@@ -65,8 +92,6 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
     {
-        GameController.Instance.isLocked = false;
-        
         if (showResult == ShowResult.Finished)
         {
             if(placementId == _rewardedVideo)

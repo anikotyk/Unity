@@ -42,7 +42,6 @@ public class SpawnObstacles : MonoBehaviour
             newObstacle.transform.localPosition = localPos;
             positionToSpawn.x += differenceBetweenPosSpawn;
         }
-       
     }
 
     private void ClearObstacles()

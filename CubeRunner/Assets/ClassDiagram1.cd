@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Class Name="AdsController" Collapsed="true" BaseTypeListCollapsed="true">
+    <Position X="21.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAACEAACAAAAIAoIAIAAAAADAAQIAAAABEQGA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\AdsController.cs</FileName>
+    </TypeIdentifier>
+    <Lollipop Position="0.2" Collapsed="true" />
+  </Class>
+  <Class Name="AnimController" Collapsed="true">
+    <Position X="23.25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAEAAAAAAAAAAEAAgAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\AnimController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="AudioController" Collapsed="true">
+    <Position X="25" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAAACACAAQACAEAAAAAAAAAAAEEAAQAAAACACAEU=</HashCode>
+      <FileName>Assets\Scripts\Controllers\AudioController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="GameController">
+    <Position X="20.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AEwDgIImADFEAC4gBBCEAgAQQAEIBEAhQMQAABABBmA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\GameController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="HealthController" Collapsed="true">
+    <Position X="23.25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAgBBAAAACAgAAAAAAAAAAQAAAAAAAAAQAAAIAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\HealthController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LevelController" Collapsed="true">
+    <Position X="25" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAEICAABAAAAAAIAAABAAAAAAAAQAAAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\LevelController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="LoadingSceneController" Collapsed="true">
+    <Position X="26.75" Y="3.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAACAAAAAAAAAAIAAAAEAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\LoadingSceneController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="MoneyController" Collapsed="true">
+    <Position X="21.5" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgAAAAAAAAAAAAAACABAAAIAAABAAQABAAAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\MoneyController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpeedController" Collapsed="true">
+    <Position X="26.75" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAACAAAEAAAgAAAAAAEABQCAAAQAAAAAAAAGA=</HashCode>
+      <FileName>Assets\Scripts\Controllers\SpeedController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="FollowTarget" Collapsed="true">
+    <Position X="26.75" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AACAgAAAAAAAAAAAIAAAJAAAAAAgAAAAAAIAAAAAAAI=</HashCode>
+      <FileName>Assets\Scripts\FollowTarget.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PartOfBallData" Collapsed="true">
+    <Position X="23.25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>ACFQAAAAAgAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Assets\Scripts\PartOfBallData.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerController" Collapsed="true">
+    <Position X="25" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AIARAFwAAChAAABALAACQAgAAACMAUgERAgIgAAAAkE=</HashCode>
+      <FileName>Assets\Scripts\Player\PlayerController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="PlayerMovement" Collapsed="true">
+    <Position X="26.75" Y="4.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAABAAAAAiQAIABFgAAAAAIAIAAAEEgIAEAACAAAAEA=</HashCode>
+      <FileName>Assets\Scripts\Player\PlayerMovement.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShopItemCountable" Collapsed="true">
+    <Position X="21.5" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>IAIBBACIACAAAAAAAAAACAAAAAACAAAIAAAAAAAACEA=</HashCode>
+      <FileName>Assets\Scripts\Shop\ShopItemCountable.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="ShopItemImprover" Collapsed="true">
+    <Position X="23.25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAIBAACBACAABAAAAAAACAAAAAAACAAKAAAAAAgACEA=</HashCode>
+      <FileName>Assets\Scripts\Shop\ShopItemImprover.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="SpawnObstacles" Collapsed="true">
+    <Position X="25" Y="5.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAABAAAAACAAAAAAAAAAAICAAAAAAAAAACBAKAAAAEE=</HashCode>
+      <FileName>Assets\Scripts\SpawnObstacles.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="BreakableWindow" Collapsed="true">
+    <Position X="28.5" Y="2.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAWAAEDIAAAQABABAAAIQAAAKgQAABBAGAUg=</HashCode>
+      <FileName>Assets\Breakable Windows\Scripts\BreakableWindow.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

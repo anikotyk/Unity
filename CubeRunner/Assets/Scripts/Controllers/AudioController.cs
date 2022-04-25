@@ -30,7 +30,7 @@ public class AudioController : MonoBehaviour
         GameController.Instance.LevelEnded += OnLevelEnded;
         GameController.Instance.AddedMoney += MoneySound;
         GameController.Instance.LevelLooseScreen += GameOverSound;
-        PlayerController.Instance.LevelLoose += OnLevelLoose;
+        HealthController.Instance.LevelLoose += OnLevelLoose;
     }
 
     private void OnDestroy()
@@ -38,7 +38,7 @@ public class AudioController : MonoBehaviour
         GameController.Instance.LevelEnded -= OnLevelEnded;
         GameController.Instance.AddedMoney -= MoneySound;
         GameController.Instance.LevelLooseScreen -= GameOverSound;
-        PlayerController.Instance.LevelLoose -= OnLevelLoose;
+        HealthController.Instance.LevelLoose -= OnLevelLoose;
     }
 
     private void OnLevelEnded()
