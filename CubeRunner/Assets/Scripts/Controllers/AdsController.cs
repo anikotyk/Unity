@@ -7,15 +7,17 @@ using UnityEngine.Events;
 public class AdsController : MonoBehaviour, IUnityAdsListener
 {
     [SerializeField] private bool _testMode = true;
+    [SerializeField] private int _countOfPlayedGamesBeforeShowAds = 3;
+    [SerializeField] private int _moneyAmountAfterAds = 100;
 
-    private string _gameId = "4547153";
+    private const string _gameId = "4547153";
 
-    public static string _video = "Interstitial_Android";
-    public static string _rewardedVideo = "Rewarded_Android";
+    private const string _video = "Interstitial_Android";
+    private const string _rewardedVideo = "Rewarded_Android";
 
-    private bool isContinue = false;
-    private int adscount;
-
+    private bool _isContinue = false;
+    private int _countOfPlayedGames;
+    
     public static AdsController Instance { get; private set; }
     public event UnityAction ContinueButtonClicked;
 
@@ -28,7 +30,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
         }
         Instance = this;
 
-        adscount = 0;
+        _countOfPlayedGames = 0;
     }
 
     private void Start()
@@ -47,20 +49,19 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     private void IncreaseCounterForAds()
     {
-        adscount++;
-        if (adscount >= 3)
+        _countOfPlayedGames++;
+        if (_countOfPlayedGames >= _countOfPlayedGamesBeforeShowAds)
         {
-            adscount = 0;
+            _countOfPlayedGames = 0;
             ShowAdsVideo(_video, false);
         }
     }
 
-    public void DeleteListener()
+    private void DeleteListener()
     {
         Advertisement.RemoveListener(this);
     }
-
-
+    
     public void ShowRewardedVideo( bool isForContinue)
     {
         ShowAdsVideo(_rewardedVideo, isForContinue);
@@ -68,7 +69,7 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     public void ShowAdsVideo(string placementId, bool isForContinue)
     {
-        isContinue = isForContinue;
+        _isContinue = isForContinue;
         if (Advertisement.IsReady())
         {
             Advertisement.Show(placementId);
@@ -77,17 +78,17 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
 
     public void OnUnityAdsReady(string placementId)
     {
-        
+        //Ads ready
     }
 
     public void OnUnityAdsDidError(string message)
     {
-        
+        //Ads error
     }
 
     public void OnUnityAdsDidStart(string placementId)
     {
-
+        //Ads started
     }
 
     public void OnUnityAdsDidFinish(string placementId, ShowResult showResult)
@@ -96,24 +97,15 @@ public class AdsController : MonoBehaviour, IUnityAdsListener
         {
             if(placementId == _rewardedVideo)
             {
-                if (isContinue)
+                if (_isContinue)
                 {
                     ContinueButtonClicked?.Invoke();
                 }
                 else
                 {
-                    PlayerPrefs.SetInt("money", PlayerPrefs.GetInt("money") + 100);
+                    MoneyController.Instance.AddMoneyAmount(_moneyAmountAfterAds);
                 }
-
             }
-        }
-        else if (showResult == ShowResult.Skipped)
-        {
-
-        }
-        else if (showResult == ShowResult.Failed)
-        {
-
         }
     }
 }

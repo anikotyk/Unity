@@ -4,19 +4,19 @@ using UnityEngine;
 
 public class PartOfBallData : MonoBehaviour
 {
-    private List<Vector3> partsPositions = new List<Vector3>();
-    private List<Quaternion> partsRotations = new List<Quaternion>();
+    private List<Vector3> _partsPositions = new List<Vector3>();
+    private List<Quaternion> _partsRotations = new List<Quaternion>();
     
-    public void GetAwakeState()
+    public void SaveAwakePosRotOfBallParts()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
-            partsPositions.Add(transform.GetChild(i).localPosition);
-            partsRotations.Add(transform.GetChild(i).localRotation);
+            _partsPositions.Add(transform.GetChild(i).localPosition);
+            _partsRotations.Add(transform.GetChild(i).localRotation);
         }
     }
 
-    public void SetAwakeState()
+    public void ReturnBallPartsToAwakePosRot()
     {
         for (int i = 0; i < transform.childCount; i++)
         {
@@ -29,12 +29,12 @@ public class PartOfBallData : MonoBehaviour
             {
                 meshCollider.enabled = false;
             }
-            transform.GetChild(i).localPosition = partsPositions[i];
-            transform.GetChild(i).localRotation = partsRotations[i];
+            transform.GetChild(i).localPosition = _partsPositions[i];
+            transform.GetChild(i).localRotation = _partsRotations[i];
         }
     }
 
-    public void SetDieState()
+    public void TurnOnDiePhysicsOfBallParts()
     {
         for (int i = 0; i < transform.childCount; i++)
         {

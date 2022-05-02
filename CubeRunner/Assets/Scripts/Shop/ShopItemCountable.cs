@@ -5,13 +5,13 @@ using UnityEngine.UI;
 
 public class ShopItemCountable : MonoBehaviour
 {
-    [SerializeField] private GameObject buttonBuy;
-    [SerializeField] private int toAdd;
-    [SerializeField] private Text countText;
-    [SerializeField] private string namePlayerPrefs;
-    [SerializeField] private int price;
-    [SerializeField] private Text priceText;
-    [SerializeField] private float limitLow;
+    [SerializeField] private GameObject _buttonBuy;
+    [SerializeField] private int _amountToAdd;
+    [SerializeField] private Text _countText;
+    [SerializeField] private string _namePlayerPrefs;
+    [SerializeField] private int _price;
+    [SerializeField] private Text _priceText;
+    [SerializeField] private float _limitLow=-1;
 
     private void Awake()
     {
@@ -20,37 +20,50 @@ public class ShopItemCountable : MonoBehaviour
 
     private void OnEnable()
     {
-        buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
-        buttonBuy.GetComponent<Button>().onClick.AddListener(() => { Buy(); });
+        _buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
+        _buttonBuy.GetComponent<Button>().onClick.AddListener(() => { Buy(); });
     }
 
     private void OnDisable()
     {
-        buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
+        _buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
     }
 
-    private void ShowItem()
+    public void ShowItem()
     {
-        countText.text = "x" + PlayerPrefs.GetInt(namePlayerPrefs);
-        priceText.text = price + "";
+        _countText.text = "x" + PlayerPrefs.GetInt(_namePlayerPrefs);
+        _priceText.text = _price + "";
 
-        if (limitLow >= PlayerPrefs.GetInt(namePlayerPrefs))
+        if (_limitLow >= PlayerPrefs.GetInt(_namePlayerPrefs))
         {
-            buttonBuy.SetActive(false);
+            _buttonBuy.SetActive(false);
         }
         else
         {
-            buttonBuy.SetActive(true);
+            _buttonBuy.SetActive(true);
+            _buttonBuy.GetComponent<Button>().interactable = (_price <= MoneyController.Instance.GetMoneyAmount());
         }
     }
 
     private void Buy()
     {
-        if (price <= MoneyController.Instance.GetMoneyAmount())
+        if (_price <= MoneyController.Instance.GetMoneyAmount())
         {
-            PlayerPrefs.SetInt(namePlayerPrefs, PlayerPrefs.GetInt(namePlayerPrefs) + toAdd);
-            ShowItem();
-            MoneyController.Instance.SetMoney(MoneyController.Instance.GetMoneyAmount() - price);
+            PlayerPrefs.SetInt(_namePlayerPrefs, PlayerPrefs.GetInt(_namePlayerPrefs) + _amountToAdd);
+            MoneyController.Instance.AddMoneyAmount(-_price);
+            ReShowAllItems();
+        }
+    }
+
+    private void ReShowAllItems()
+    {
+        foreach (ShopItemCountable item in GameObject.FindObjectsOfType<ShopItemCountable>())
+        {
+            item.ShowItem();
+        }
+        foreach (ShopItemImprover item in GameObject.FindObjectsOfType<ShopItemImprover>())
+        {
+            item.ShowItem();
         }
     }
 }

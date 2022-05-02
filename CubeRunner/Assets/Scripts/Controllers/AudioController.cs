@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class AudioController : MonoBehaviour
 {
-    [SerializeField] private AudioSource audioSource;
-    [SerializeField] private AudioSource audioSource2;
+    [SerializeField] private AudioSource _audioSource;
+    [SerializeField] private AudioSource _audioSource2;
 
-    [SerializeField] private AudioClip win;
-    [SerializeField] private AudioClip gameover;
-    [SerializeField] private AudioClip getcoin;
-    [SerializeField] private AudioClip breakball;
-    [SerializeField] private AudioClip breakingSound;
+    [SerializeField] private AudioClip _winSound;
+    [SerializeField] private AudioClip _gameOverSound;
+    [SerializeField] private AudioClip _getCoinSound;
+    [SerializeField] private AudioClip _breakBallSound;
+    [SerializeField] private AudioClip _breakingWindowSound;
 
     public static AudioController Instance { get; private set; }
 
@@ -28,46 +28,46 @@ public class AudioController : MonoBehaviour
     private void Start()
     {
         GameController.Instance.LevelEnded += OnLevelEnded;
-        GameController.Instance.AddedMoney += MoneySound;
-        GameController.Instance.LevelLooseScreen += GameOverSound;
-        HealthController.Instance.LevelLoose += OnLevelLoose;
+        GameController.Instance.AddedMoney += PlayGetCoinSound;
+        GameController.Instance.LevelLoseScreen += PlayGameOverSound;
+        HealthController.Instance.LevelLose += OnLevelLose;
     }
 
     private void OnDestroy()
     {
         GameController.Instance.LevelEnded -= OnLevelEnded;
-        GameController.Instance.AddedMoney -= MoneySound;
-        GameController.Instance.LevelLooseScreen -= GameOverSound;
-        HealthController.Instance.LevelLoose -= OnLevelLoose;
+        GameController.Instance.AddedMoney -= PlayGetCoinSound;
+        GameController.Instance.LevelLoseScreen -= PlayGameOverSound;
+        HealthController.Instance.LevelLose -= OnLevelLose;
     }
 
     private void OnLevelEnded()
     {
-        audioSource.clip = win;
-        audioSource.Play();
+        _audioSource.clip = _winSound;
+        _audioSource.Play();
     }
 
-    private void OnLevelLoose()
+    private void OnLevelLose()
     {
-        audioSource.clip = breakball;
-        audioSource.Play();
+        _audioSource.clip = _breakBallSound;
+        _audioSource.Play();
     }
 
-    private void MoneySound()
+    private void PlayGetCoinSound()
     {
-        audioSource2.clip = getcoin;
-        audioSource2.Play();
+        _audioSource2.clip = _getCoinSound;
+        _audioSource2.Play();
     }
 
-    private void GameOverSound()
+    private void PlayGameOverSound()
     {
-        audioSource.clip = gameover;
-        audioSource.Play();
+        _audioSource.clip = _gameOverSound;
+        _audioSource.Play();
     }
 
-    public void BreakingSound()
+    public void PlayBreakingWindowSound()
     {
-        audioSource.clip = breakingSound;
-        audioSource.Play();
+        _audioSource.clip = _breakingWindowSound;
+        _audioSource.Play();
     }
 }

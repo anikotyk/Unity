@@ -10,7 +10,7 @@ using UnityEngine.UI;
 
 public class LoadingSceneController : MonoBehaviour
 {
-    [SerializeField] private GameObject LoadingCanvas;
+    [SerializeField] private GameObject _loadingCanvas;
     
     public void LoadScene(string scene)
     {
@@ -20,14 +20,12 @@ public class LoadingSceneController : MonoBehaviour
     private IEnumerator LoadingSceneCoroutine(string scene)
     {
         AsyncOperation operation = SceneManager.LoadSceneAsync(scene);
-        if (LoadingCanvas != null)
-        {
-            LoadingCanvas.SetActive(true);
-        }
         
-        while (!operation.isDone)
+        if (_loadingCanvas != null)
         {
-            yield return null;
+            _loadingCanvas.SetActive(true);
         }
+
+        yield return operation;
     }
 }

@@ -5,14 +5,14 @@ using UnityEngine.UI;
 
 public class ShopItemImprover : MonoBehaviour
 {
-    [SerializeField] private GameObject buttonBuy;
-    [SerializeField] private string namePlayerPrefsIndex;
-    [SerializeField] private string namePlayerPrefsValue;
-    [SerializeField] private Text priceText;
-    [SerializeField] private Sprite boughtSprite;
-    [SerializeField] private GameObject[] improvementCells;
-    [SerializeField] private int[] prices;
-    [SerializeField] private int[] valuesToSet;
+    [SerializeField] private GameObject _buttonBuy;
+    [SerializeField] private string _namePlayerPrefsIndex;
+    [SerializeField] private string _namePlayerPrefsValue;
+    [SerializeField] private Text _priceText;
+    [SerializeField] private Sprite _boughtSprite;
+    [SerializeField] private GameObject[] _improvementCells;
+    [SerializeField] private int[] _prices;
+    [SerializeField] private int[] _valuesToSet;
 
     private void Awake()
     {
@@ -21,40 +21,41 @@ public class ShopItemImprover : MonoBehaviour
 
     private void OnEnable()
     {
-        buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
-        buttonBuy.GetComponent<Button>().onClick.AddListener(() => { Buy(); });
+        _buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
+        _buttonBuy.GetComponent<Button>().onClick.AddListener(() => { Buy(); });
     }
 
     private void OnDisable()
     {
-        buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
+        _buttonBuy.GetComponent<Button>().onClick.RemoveAllListeners();
     }
 
-    private void ShowItem()
+    public void ShowItem()
     {
-        int count = PlayerPrefs.GetInt(namePlayerPrefsIndex);
-        for (int j = 0; j < Mathf.Min(count, improvementCells.Length); j++)
+        int count = PlayerPrefs.GetInt(_namePlayerPrefsIndex);
+        for (int j = 0; j < Mathf.Min(count, _improvementCells.Length); j++)
         {
-            improvementCells[j].GetComponent<Image>().sprite = boughtSprite;
+            _improvementCells[j].GetComponent<Image>().sprite = _boughtSprite;
         }
-        if (count >= prices.Length)
+        if (count >= _prices.Length)
         {
-            buttonBuy.SetActive(false);
+            _buttonBuy.SetActive(false);
         }
         else
         {
-            priceText.text = prices[count] + "";
-            buttonBuy.SetActive(true);
+            _priceText.text = _prices[count] + "";
+            _buttonBuy.SetActive(true);
+            _buttonBuy.GetComponent<Button>().interactable = (_prices[count] <= MoneyController.Instance.GetMoneyAmount());
         }
     }
 
     private void Buy()
     {
-        int count = PlayerPrefs.GetInt(namePlayerPrefsIndex);
+        int count = PlayerPrefs.GetInt(_namePlayerPrefsIndex);
         int price;
-        if (count < prices.Length)
+        if (count < _prices.Length)
         {
-            price = prices[count];
+            price = _prices[count];
         }
         else
         {
@@ -64,12 +65,24 @@ public class ShopItemImprover : MonoBehaviour
         
         if (price <= MoneyController.Instance.GetMoneyAmount())
         {
-            PlayerPrefs.SetInt(namePlayerPrefsValue, valuesToSet[count]);
-            PlayerPrefs.SetInt(namePlayerPrefsIndex, PlayerPrefs.GetInt(namePlayerPrefsIndex) + 1);
-
-            ShowItem();
-            MoneyController.Instance.SetMoney(MoneyController.Instance.GetMoneyAmount() - price);
+            PlayerPrefs.SetInt(_namePlayerPrefsValue, _valuesToSet[count]);
+            PlayerPrefs.SetInt(_namePlayerPrefsIndex, PlayerPrefs.GetInt(_namePlayerPrefsIndex) + 1);
+            
+            MoneyController.Instance.AddMoneyAmount(-price);
+            ReShowAllItems();
         }
 
+    }
+
+    private void ReShowAllItems()
+    {
+        foreach (ShopItemCountable item in GameObject.FindObjectsOfType<ShopItemCountable>())
+        {
+            item.ShowItem();
+        }
+        foreach (ShopItemImprover item in GameObject.FindObjectsOfType<ShopItemImprover>())
+        {
+            item.ShowItem();
+        }
     }
 }

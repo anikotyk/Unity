@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    [SerializeField] private GameObject[] brokenBalls;
-    [SerializeField] private AudioSource soundball;
-    [SerializeField] private GameObject fire;
-    [SerializeField] private GameObject levelBarContainer;
-    [SerializeField] private GameObject levelBar;
-    
-    private bool isSpeeder;
+    [SerializeField] private GameObject[] _brokenBalls;
+    [SerializeField] private AudioSource _ballAudioSource;
+    [SerializeField] private GameObject _fireParticleOnSpeeder;
+    [SerializeField] private int _speederIncreaseSpeedAmount = 10;
 
-    private int indexShownBallState;
+
+    private bool _isSpeeder;
+    private int _indexShownBrokenBall;
     
     public event UnityAction LevelComplete;
     public event UnityAction GetDamage;
@@ -31,14 +30,13 @@ public class PlayerController : MonoBehaviour
         }
         Instance = this;
         
-        isSpeeder = false;
-        indexShownBallState = 0;
+        _isSpeeder = false;
+        _indexShownBrokenBall = 0;
         
-        ResetProgressBar();
-        GetAllPartsOfBallAwakeState();
-        fire.GetComponent<FollowTarget>().SetTarget(this.gameObject);
+        SaveAllAwakePosRotOfBallParts();
+        _fireParticleOnSpeeder.GetComponent<FollowTarget>().SetTarget(this.gameObject);
 
-        ResetPlayer();
+        ResetPlayerAppearance();
     }
 
     private void Start()
@@ -47,8 +45,7 @@ public class PlayerController : MonoBehaviour
         GameController.Instance.LevelContinued += StartRunning;
         GameController.Instance.LevelEnded += OnLevelEnded;
         AdsController.Instance.ContinueButtonClicked += ContinueLevel;
-        GameController.Instance.NextLevelClicked += OnNextLevelClicked;
-        HealthController.Instance.LevelLoose += OnLevelLoose;
+        HealthController.Instance.LevelLose += OnLevelLose;
     }
 
     private void OnDestroy()
@@ -57,55 +54,32 @@ public class PlayerController : MonoBehaviour
         GameController.Instance.LevelContinued -= StartRunning;
         GameController.Instance.LevelEnded -= OnLevelEnded;
         AdsController.Instance.ContinueButtonClicked -= ContinueLevel;
-        GameController.Instance.NextLevelClicked -= OnNextLevelClicked;
-        HealthController.Instance.LevelLoose -= OnLevelLoose;
+        HealthController.Instance.LevelLose -= OnLevelLose;
     }
 
     private void StartRunning()
     {
         Camera.main.GetComponent<FollowTarget>().SetTarget(this.gameObject);
-        soundball.Play();
+        _ballAudioSource.Play();
     }
     
-    public void SetProgress(float progress)
-    {
-        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(levelBarContainer.GetComponent<RectTransform>().rect.width * progress, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-    }
-
-    private void ResetProgressBar()
-    {
-        levelBar.GetComponent<RectTransform>().sizeDelta = new Vector2(0, levelBar.GetComponent<RectTransform>().sizeDelta.y);
-    }
-
     private void OnLevelEnded()
     {
-        ResetProgressBar();
-        ResetPlayer();
+        ResetPlayerAppearance();
     }
 
     public void OnLevelComplete()
     {
         LevelComplete?.Invoke();
         OnGameOver();
-        SetProgress(1f);
-    }
-
-    private void OnNextLevelClicked()
-    {
-        ResetProgressBar();
-    }
-
-    private void ResetPlayer()
-    {
-        ResetPlayerAppearance();
     }
 
     private void ResetPlayerAppearance()
     {
         Camera.main.GetComponent<FollowTarget>().SetTarget(this.gameObject);
-        indexShownBallState = 0;
-        SetAllPartsOfBallToAwakeState();
-        SetBall(indexShownBallState);
+        _indexShownBrokenBall = 0;
+        ReturnAllBallPartsToAwakePosRot();
+        ShowBrokenBall(_indexShownBrokenBall);
     }
 
     private void ContinueLevel()
@@ -115,72 +89,71 @@ public class PlayerController : MonoBehaviour
 
     public void OnObstacleCollid()
     {
-        if (!isSpeeder)
+        if (!_isSpeeder)
         {
-            indexShownBallState += 1;
-            SetBall(indexShownBallState);
+            _indexShownBrokenBall += 1;
+            ShowBrokenBall(_indexShownBrokenBall);
             GetDamage?.Invoke();
         }
     }
 
-    private void OnLevelLoose()
+    private void OnLevelLose()
     {
         OnGameOver();
         Camera.main.GetComponent<FollowTarget>().RemoveTarget();
-        ShowDieAnim();
+        ShowDie();
     }
 
-    private void SetBall(int index)
+    private void ShowBrokenBall(int index)
     {
-        foreach (GameObject obj in brokenBalls)
+        foreach (GameObject obj in _brokenBalls)
         {
             obj.SetActive(false);
         }
-        brokenBalls[index].SetActive(true);
+        _brokenBalls[index].SetActive(true);
     }
 
-    private void SetAllPartsOfBallToAwakeState()
+    private void ReturnAllBallPartsToAwakePosRot()
     {
-        foreach (GameObject obj in brokenBalls)
+        foreach (GameObject obj in _brokenBalls)
         {
-            obj.GetComponent<PartOfBallData>().SetAwakeState();
+            obj.GetComponent<PartOfBallData>().ReturnBallPartsToAwakePosRot();
         }
     }
 
-    private void GetAllPartsOfBallAwakeState()
+    private void SaveAllAwakePosRotOfBallParts()
     {
-        foreach (GameObject obj in brokenBalls)
+        foreach (GameObject obj in _brokenBalls)
         {
-            obj.GetComponent<PartOfBallData>().GetAwakeState();
+            obj.GetComponent<PartOfBallData>().SaveAwakePosRotOfBallParts();
         }
     }
 
-    private void ShowDieAnim()
+    private void ShowDie()
     {
-        if (indexShownBallState == 0)
+        if (_indexShownBrokenBall == 0)
         {
-            indexShownBallState = 1;
-            SetBall(indexShownBallState);
+            _indexShownBrokenBall = 1;
+            ShowBrokenBall(_indexShownBrokenBall);
         }
         
-        brokenBalls[indexShownBallState].GetComponent<PartOfBallData>().SetDieState();
+        _brokenBalls[_indexShownBrokenBall].GetComponent<PartOfBallData>().TurnOnDiePhysicsOfBallParts();
     }
-
-
-    public void OnSpeeder()
+    
+    public void UseSpeeder()
     {
-        if (PlayerPrefs.GetInt("speeder") > 0 && !isSpeeder)
+        if (PlayerPrefs.GetInt("speeder") > 0 && !_isSpeeder)
         {
-            isSpeeder = true;
-            fire.SetActive(true);
-            SpeedController.Instance.ChangeCurrentSpeed(SpeedController.Instance.GetPlayerPrefsSpeed() + 10);
+            _isSpeeder = true;
+            _fireParticleOnSpeeder.SetActive(true);
+            SpeedController.Instance.IncreaseCurrentSpeed(_speederIncreaseSpeedAmount);
             PlayerPrefs.SetInt("speeder", PlayerPrefs.GetInt("speeder") - 1);
             SpeederCountChanged?.Invoke();
-            StartCoroutine(speederwait(PlayerPrefs.GetInt("speederTime")));
+            StartCoroutine(OnEndSpeederCoroutine(PlayerPrefs.GetInt("speederTime")));
         }
     }
 
-    private IEnumerator speederwait(float time)
+    private IEnumerator OnEndSpeederCoroutine(float time)
     {
         yield return new WaitForSeconds(time);
         DecreaseSpeedAfterSpeeder();
@@ -191,18 +164,18 @@ public class PlayerController : MonoBehaviour
 
     private void DecreaseSpeedAfterSpeeder()
     {
-        SpeedController.Instance.ChangeCurrentSpeed(SpeedController.Instance.GetPlayerPrefsSpeed());
+        SpeedController.Instance.ResetCurrentSpeed();
     }
 
     private void OnEndSpeeder()
     {
-        isSpeeder = false;
-        fire.SetActive(false);
+        _isSpeeder = false;
+        _fireParticleOnSpeeder.SetActive(false);
     }
 
     private void OnGameOver()
     {
-        soundball.Stop();
+        _ballAudioSource.Stop();
         DecreaseSpeedAfterSpeeder();
         OnEndSpeeder();
     }

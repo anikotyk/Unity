@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class AnimController : MonoBehaviour
 {
-    [SerializeField] private bool isJustOneAnim;
+    [SerializeField] private bool _isJustOneAnim;
 
     public void Show()
     {
         gameObject.SetActive(true);
-        if (isJustOneAnim)
+        if (_isJustOneAnim)
         {
             gameObject.GetComponent<Animation>().Play();
         }

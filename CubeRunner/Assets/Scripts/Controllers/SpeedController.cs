@@ -5,7 +5,7 @@ using UnityEngine.UI;
 
 public class SpeedController : MonoBehaviour
 {
-    [SerializeField] private Text speedText;
+    [SerializeField] private Text _speedText;
 
     public int CurrentSpeed { get; private set; }
 
@@ -21,8 +21,7 @@ public class SpeedController : MonoBehaviour
 
         Instance = this;
 
-        CurrentSpeed = GetPlayerPrefsSpeed();
-        ShowSpeed();
+        ResetCurrentSpeed();
     }
 
     private void Start()
@@ -39,28 +38,34 @@ public class SpeedController : MonoBehaviour
     {
         if (LevelController.Instance.GetLevel() % 5 == 0)
         {
-            ChangePlayerPrefsSpeed(GetPlayerPrefsSpeed() + 1);
-            ChangeCurrentSpeed(GetPlayerPrefsSpeed());
+            IncreasePlayerPrefsSpeed();
+            ResetCurrentSpeed();
         }
     }
 
     private void ShowSpeed()
     {
-        if (speedText != null)
+        if (_speedText != null)
         {
-            speedText.text = "Speed: " + CurrentSpeed;
+            _speedText.text = "Speed: " + CurrentSpeed;
         }
     }
 
-    public void ChangeCurrentSpeed(int speed)
+    public void ResetCurrentSpeed()
     {
-        CurrentSpeed = speed;
+        CurrentSpeed = GetPlayerPrefsSpeed();
         ShowSpeed();
     }
 
-    public void ChangePlayerPrefsSpeed(int speed)
+    public void IncreaseCurrentSpeed(int amount)
     {
-        PlayerPrefs.SetInt("speed", speed);
+        CurrentSpeed += amount;
+        ShowSpeed();
+    }
+    
+    public void IncreasePlayerPrefsSpeed(int amount=1)
+    {
+        PlayerPrefs.SetInt("speed", GetPlayerPrefsSpeed()+amount);
     }
 
     public int GetPlayerPrefsSpeed()

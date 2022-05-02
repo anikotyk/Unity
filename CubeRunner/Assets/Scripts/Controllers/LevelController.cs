@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class LevelController : MonoBehaviour
 {
-    [SerializeField] private Text levelNow;
-    [SerializeField] private Text levelNext;
+    [SerializeField] private Text _levelNow;
+    [SerializeField] private Text _levelNext;
 
     public static LevelController Instance { get; private set; }
     
@@ -48,7 +48,7 @@ public class LevelController : MonoBehaviour
 
     private void ShowLevel()
     {
-        levelNow.text = GetLevel() + "";
-        levelNext.text = GetLevel() + 1 + "";
+        _levelNow.text = GetLevel() + "";
+        _levelNext.text = GetLevel() + 1 + "";
     }
 }

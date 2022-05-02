@@ -5,8 +5,8 @@ using UnityEngine.UI;
 
 public class MoneyController : MonoBehaviour
 {
-    [SerializeField] private Text moneyText;
-    [SerializeField] private AudioSource moneySound;
+    [SerializeField] private Text _moneyText;
+    [SerializeField] private AudioSource _moneyAudioSource;
     
     public static MoneyController Instance { get; private set; }
 
@@ -20,14 +20,18 @@ public class MoneyController : MonoBehaviour
 
         Instance = this;
 
-        SetMoneyText();
+        ShowMoneyCountText();
     }
-
-    public void SetMoney(int amount)
+    
+    public void AddMoneyAmount(int amount)
     {
-        PlayerPrefs.SetInt("money", amount);
+        PlayerPrefs.SetInt("money", GetMoneyAmount() + amount);
+        if (GetMoneyAmount() < 0)
+        {
+            PlayerPrefs.SetInt("money", 0);
+        }
 
-        SetMoneyText();
+        ShowMoneyCountText();
         PlayMoneySound();
     }
 
@@ -36,19 +40,19 @@ public class MoneyController : MonoBehaviour
         return PlayerPrefs.GetInt("money");
     }
 
-    private void SetMoneyText()
+    private void ShowMoneyCountText()
     {
-        if (moneyText != null)
+        if (_moneyText != null)
         {
-            moneyText.text = GetMoneyAmount()+"";
+            _moneyText.text = GetMoneyAmount()+"";
         }
     }
 
     private void PlayMoneySound()
     {
-        if (moneySound != null)
+        if (_moneyAudioSource != null)
         {
-            moneySound.Play();
+            _moneyAudioSource.Play();
         }
     }
 }

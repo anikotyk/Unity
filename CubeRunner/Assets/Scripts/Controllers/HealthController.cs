@@ -5,11 +5,11 @@ using UnityEngine.Events;
 
 public class HealthController : MonoBehaviour
 {
-    [SerializeField] private GameObject[] hearts;
+    [SerializeField] private GameObject[] _hearts;
 
     public int CurrentHealth { get; private set; }
 
-    public event UnityAction LevelLoose;
+    public event UnityAction LevelLose;
 
     public static HealthController Instance { get; private set; }
 
@@ -27,49 +27,50 @@ public class HealthController : MonoBehaviour
     private void Start()
     {
         PlayerController.Instance.GetDamage += MinusHealth;
-        GameController.Instance.LevelEnded += SetHealthToMax;
-        AdsController.Instance.ContinueButtonClicked += SetHealthToMax;
-        GameController.Instance.NextLevelClicked += SetHealthToMax;
-        GameController.Instance.LevelStarted += SetHealthToMax;
-        GameController.Instance.LevelContinued += SetHealthToMax;
+        GameController.Instance.LevelEnded += SetHealthToCurrentMax;
+        AdsController.Instance.ContinueButtonClicked += SetHealthToCurrentMax;
+        GameController.Instance.NextLevelClicked += SetHealthToCurrentMax;
+        GameController.Instance.LevelStarted += SetHealthToCurrentMax;
+        GameController.Instance.LevelContinued += SetHealthToCurrentMax;
 
-        SetHealthToMax();
+        SetHealthToCurrentMax();
     }
 
     private void OnDestroy()
     {
         PlayerController.Instance.GetDamage -= MinusHealth;
-        GameController.Instance.LevelEnded -= SetHealthToMax;
-        AdsController.Instance.ContinueButtonClicked -= SetHealthToMax;
-        GameController.Instance.NextLevelClicked -= SetHealthToMax;
-        GameController.Instance.LevelStarted -= SetHealthToMax;
-        GameController.Instance.LevelContinued -= SetHealthToMax;
+        GameController.Instance.LevelEnded -= SetHealthToCurrentMax;
+        AdsController.Instance.ContinueButtonClicked -= SetHealthToCurrentMax;
+        GameController.Instance.NextLevelClicked -= SetHealthToCurrentMax;
+        GameController.Instance.LevelStarted -= SetHealthToCurrentMax;
+        GameController.Instance.LevelContinued -= SetHealthToCurrentMax;
     }
 
-    private void SetHealthToMax()
+    private void SetHealthToCurrentMax()
     {
-        CurrentHealth = PlayerPrefs.GetInt("lives");
+        int currentMaxHealthCount = PlayerPrefs.GetInt("lives");
+        CurrentHealth = currentMaxHealthCount;
 
-        for (int i = 0; i < CurrentHealth; i++)
+        for (int i = 0; i < currentMaxHealthCount; i++)
         {
-            hearts[i].SetActive(true);
-            hearts[i].GetComponent<Animation>().Play("HeartReturn");
+            _hearts[i].SetActive(true);
+            _hearts[i].GetComponent<Animation>().Play("HeartReturn");
         }
 
-        for(int i = CurrentHealth; i < hearts.Length; i++)
+        for(int i = currentMaxHealthCount; i < _hearts.Length; i++)
         {
-            hearts[i].SetActive(false);
+            _hearts[i].SetActive(false);
         }
     }
 
     private void MinusHealth()
     {
-        hearts[CurrentHealth - 1].GetComponent<Animation>().Play("Heart");
+        _hearts[CurrentHealth - 1].GetComponent<Animation>().Play("Heart");
         CurrentHealth -= 1;
 
         if (CurrentHealth <= 0)
         {
-            LevelLoose?.Invoke();
+            LevelLose?.Invoke();
         }
     }
 }

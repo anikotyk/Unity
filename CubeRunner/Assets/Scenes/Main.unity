@@ -585,7 +585,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bb7910caf2f4e3142aa0606beb821a41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  LoadingCanvas: {fileID: 702997509}
+  _loadingCanvas: {fileID: 702997509}
 --- !u!1 &174364715
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,28 +615,30 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a03a65cd633848b4cb4263496d3cb885, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  tapText: {fileID: 1614165522}
-  levelEnd: {fileID: 1417056135}
-  buttonContinue: {fileID: 1402124280}
-  buttonNextLevel: {fileID: 1562582358}
-  buttonRestart: {fileID: 1968104759}
-  LevelCompletedContainer: {fileID: 1524276127}
-  LevelFailedContainer: {fileID: 1442159838}
-  LevelCompletedText: {fileID: 1284663984}
-  LevelFailedText: {fileID: 914285044}
-  endMoneyContainer: {fileID: 7012745}
-  endMoneyText: {fileID: 1090745808}
-  timer: {fileID: 1259344668}
-  shopButton: {fileID: 873074915}
-  speederText: {fileID: 689845469}
-  speederBtn: {fileID: 2102431907}
-  adsBtn: {fileID: 239523502}
-  shopBtn: {fileID: 486116110}
-  moneyPanel: {fileID: 1896898580}
-  panelTooFast: {fileID: 129294600}
-  panelTooFastImage: {fileID: 722353451}
-  buttonRestartSmall: {fileID: 1366903827}
-  panelWaitingOnClick: {fileID: 2061097222}
+  _tapText: {fileID: 1614165522}
+  _levelEndPanel: {fileID: 1417056135}
+  _buttonContinue: {fileID: 1402124280}
+  _buttonNextLevel: {fileID: 1562582358}
+  _buttonRestart: {fileID: 1968104759}
+  _levelCompletedContainer: {fileID: 1524276127}
+  _levelFailedContainer: {fileID: 1442159838}
+  _levelCompletedText: {fileID: 1284663984}
+  _levelFailedText: {fileID: 914285044}
+  _addedMoneyContainer: {fileID: 7012745}
+  _addedMoneyText: {fileID: 1090745808}
+  _timer: {fileID: 1259344668}
+  _shopButton: {fileID: 873074915}
+  _speederCountText: {fileID: 689845469}
+  _speederBtn: {fileID: 2102431907}
+  _adsBtn: {fileID: 239523502}
+  _shopBtn: {fileID: 486116110}
+  _plusCoinsPanel: {fileID: 1896898580}
+  _panelTooFast: {fileID: 129294600}
+  _panelTooFastImage: {fileID: 722353451}
+  _buttonRestartSmall: {fileID: 1366903827}
+  _panelWaitingForClick: {fileID: 2061097222}
+  _levelBarContainer: {fileID: 1920839672}
+  _levelBar: {fileID: 201458377}
   toDestroyIfContinueRunning: {fileID: 0}
 --- !u!4 &174364717
 Transform:
@@ -985,7 +987,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75be8a4d3b730b40bbe75b0baff7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJustOneAnim: 0
+  _isJustOneAnim: 0
 --- !u!1 &242332262
 GameObject:
   m_ObjectHideFlags: 0
@@ -1022,7 +1024,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.22700001, y: 0.0991522}
   m_AnchorMax: {x: 0.4831922, y: 0.28}
-  m_AnchoredPosition: {x: -1.0000305, y: -0.3451538}
+  m_AnchoredPosition: {x: -1, y: -0.3451538}
   m_SizeDelta: {x: -0.960022, y: 1.2510071}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &242332264
@@ -1235,6 +1237,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _testMode: 0
+  _countOfPlayedGamesBeforeShowAds: 3
+  _moneyAmountAfterAds: 100
 --- !u!4 &348056132
 Transform:
   m_ObjectHideFlags: 0
@@ -1740,7 +1744,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75be8a4d3b730b40bbe75b0baff7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJustOneAnim: 0
+  _isJustOneAnim: 0
 --- !u!1 &499086378
 GameObject:
   m_ObjectHideFlags: 0
@@ -2707,8 +2711,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8117f053dcdbe4eacea9f51823c701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 0, y: 0.6, z: 0}
-  smoothSpeed: 1
+  _offset: {x: 0, y: 0.6, z: 0}
+  _smoothSpeed: 1
 --- !u!1 &799931074
 GameObject:
   m_ObjectHideFlags: 0
@@ -2752,7 +2756,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfc8759bcb672364f98a96d6cf35f46f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedText: {fileID: 540376290}
+  _speedText: {fileID: 540376290}
 --- !u!1 &840038130
 GameObject:
   m_ObjectHideFlags: 0
@@ -2796,8 +2800,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ec84ea7536b5006499bc14acf1f9ea37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  levelNow: {fileID: 2112099299}
-  levelNext: {fileID: 1087223367}
+  _levelNow: {fileID: 2112099299}
+  _levelNext: {fileID: 1087223367}
 --- !u!1 &852076873
 GameObject:
   m_ObjectHideFlags: 0
@@ -3055,7 +3059,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75be8a4d3b730b40bbe75b0baff7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJustOneAnim: 1
+  _isJustOneAnim: 1
 --- !u!1 &897729248
 GameObject:
   m_ObjectHideFlags: 0
@@ -3312,8 +3316,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5d8117f053dcdbe4eacea9f51823c701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  offset: {x: 5, y: 3, z: 0}
-  smoothSpeed: 1
+  _offset: {x: 5, y: 3, z: 0}
+  _smoothSpeed: 1
 --- !u!1 &965234353
 GameObject:
   m_ObjectHideFlags: 0
@@ -3357,7 +3361,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 554161e156b671949817390c5ac0a87b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hearts:
+  _hearts:
   - {fileID: 1659506360}
   - {fileID: 471979701}
   - {fileID: 223833490}
@@ -3501,7 +3505,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5c31744778c909e4a9431890f2fa4656, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  obstaclesPrefabs:
+  _obstaclesPrefabs:
   - {fileID: 2340469019102836415, guid: 6ccdbf471ec7ed541b1829c6fbcfb91c, type: 3}
   - {fileID: 749642425246806832, guid: 71c55c53355b5e441a6308d9705490dc, type: 3}
   - {fileID: 5682193284059250445, guid: 886c08ffbb04eb64c9708b86a0cfe6d7, type: 3}
@@ -3510,10 +3514,10 @@ MonoBehaviour:
   - {fileID: 2555849050504709962, guid: 7fdb51dd5c474734a8be6ba2aa052ed1, type: 3}
   - {fileID: 4581211713692066830, guid: 9b7df6045117cf9428788fee0b03f174, type: 3}
   - {fileID: 1121724149057029811, guid: 2a2a6e21c196b284496e30ea1ddc4af0, type: 3}
-  obstaclesParent: {fileID: 1727542415}
-  startPosSpawn: {x: -30, y: 0, z: 0}
-  finish: {fileID: 1663227659649978692}
-  differenceBetweenPosSpawn: -15
+  _obstaclesContainer: {fileID: 1727542415}
+  _startPositionSpawn: {x: -30, y: 0, z: 0}
+  _finish: {fileID: 1663227659649978692}
+  _differenceBetweenSpawnPositions: -15
 --- !u!1 &1087223365
 GameObject:
   m_ObjectHideFlags: 0
@@ -3995,8 +3999,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 590689cf9442c4a4390b0110c59a9cdd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moneyText: {fileID: 0}
-  moneySound: {fileID: 0}
+  _moneyText: {fileID: 0}
+  _moneyAudioSource: {fileID: 0}
 --- !u!1 &1218595534
 GameObject:
   m_ObjectHideFlags: 0
@@ -4569,7 +4573,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75be8a4d3b730b40bbe75b0baff7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJustOneAnim: 1
+  _isJustOneAnim: 1
 --- !u!114 &1366903831
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6261,7 +6265,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.126, y: 0.2581902}
   m_AnchorMax: {x: 0.88787144, y: 0.82400006}
-  m_AnchoredPosition: {x: -0.20500183, y: -3.5}
+  m_AnchoredPosition: {x: -0.20498657, y: -3.5}
   m_SizeDelta: {x: 0.49700165, y: 37}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1707136176
@@ -6596,13 +6600,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71f11b0632a207d41b31a0414dd2166c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  audioSource: {fileID: 1823807059}
-  audioSource2: {fileID: 1823807062}
-  win: {fileID: 8300000, guid: 7ec0e9a6ce6d53243a4d87eb45a42446, type: 3}
-  gameover: {fileID: 8300000, guid: 920a8f5c36627da44bb93632868cc688, type: 3}
-  getcoin: {fileID: 8300000, guid: b6e6b42068bf7a1449617fa52f4388cc, type: 3}
-  breakball: {fileID: 8300000, guid: 261c2deb14507a040963a6f154a030ba, type: 3}
-  breakingSound: {fileID: 8300000, guid: 5c2f5ca33485fbd42a9e7af0cf292651, type: 3}
+  _audioSource: {fileID: 1823807059}
+  _audioSource2: {fileID: 1823807062}
+  _winSound: {fileID: 8300000, guid: 7ec0e9a6ce6d53243a4d87eb45a42446, type: 3}
+  _gameOverSound: {fileID: 8300000, guid: 920a8f5c36627da44bb93632868cc688, type: 3}
+  _getCoinSound: {fileID: 8300000, guid: b6e6b42068bf7a1449617fa52f4388cc, type: 3}
+  _breakBallSound: {fileID: 8300000, guid: 261c2deb14507a040963a6f154a030ba, type: 3}
+  _breakingWindowSound: {fileID: 8300000, guid: 5c2f5ca33485fbd42a9e7af0cf292651, type: 3}
 --- !u!82 &1823807062
 AudioSource:
   m_ObjectHideFlags: 0
@@ -7258,7 +7262,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75be8a4d3b730b40bbe75b0baff7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJustOneAnim: 1
+  _isJustOneAnim: 1
 --- !u!1 &2032644460
 GameObject:
   m_ObjectHideFlags: 0
@@ -7468,17 +7472,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f81d62c32176e8b488c7294c6d61610d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  brokenBalls:
+  _brokenBalls:
   - {fileID: 5707139293362419831}
   - {fileID: 4121955996811879018}
   - {fileID: 6342734779937222939}
   - {fileID: 1085511696363916631}
   - {fileID: 4166299825015154618}
   - {fileID: 1445479706680740695}
-  soundball: {fileID: 2046023989}
-  fire: {fileID: 783877475}
-  levelBarContainer: {fileID: 1920839672}
-  levelBar: {fileID: 201458377}
+  _ballAudioSource: {fileID: 2046023989}
+  _fireParticleOnSpeeder: {fileID: 783877475}
+  _speederIncreaseSpeedAmount: 10
 --- !u!54 &2046023991
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -7581,9 +7584,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 44e5e41993582074f8cfe74a835e042f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedHorizontal: 20
-  direction: {x: -1, y: 0, z: 0}
-  finish: {fileID: 1663227659649978692}
+  _speedHorizontal: 20
+  _velocityCoeff: 40
+  _moveDirection: {x: -1, y: 0, z: 0}
+  _finish: {fileID: 1663227659649978692}
 --- !u!1 &2051648385
 GameObject:
   m_ObjectHideFlags: 0
@@ -7945,8 +7949,8 @@ MonoBehaviour:
     m_PersistentCalls:
       m_Calls:
       - m_Target: {fileID: 2046023990}
-        m_TargetAssemblyTypeName: Movement, Assembly-CSharp
-        m_MethodName: OnSpeeder
+        m_TargetAssemblyTypeName: PlayerController, Assembly-CSharp
+        m_MethodName: UseSpeeder
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -8023,7 +8027,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c75be8a4d3b730b40bbe75b0baff7097, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  isJustOneAnim: 0
+  _isJustOneAnim: 0
 --- !u!1 &2112099297
 GameObject:
   m_ObjectHideFlags: 0

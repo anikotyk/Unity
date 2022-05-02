@@ -3,35 +3,33 @@ using System.Collections.Generic;
 using UnityEngine;
 public class FollowTarget : MonoBehaviour
 {
-    [SerializeField] private Vector3 offset;
-    [SerializeField] private float smoothSpeed = 1f;
+    [SerializeField] private Vector3 _offset;
+    [SerializeField] private float _smoothSpeed = 1f;
 
-    private GameObject target;
-    private Vector3 newPos;
-    private Vector3 smoothFollow;
+    private GameObject _target;
+    private Vector3 _newPos;
 
     private void LateUpdate()
     {
-        if (target == null)
+        if (_target == null)
         {
             return;
         }
 
-        newPos = transform.position;
-        newPos.z = target.transform.position.z;
-        newPos = target.transform.position + offset;
-
-        smoothFollow = Vector3.Lerp(transform.position, newPos, smoothSpeed);
-        transform.position = smoothFollow;
+        _newPos = transform.position;
+        _newPos.z = _target.transform.position.z;
+        _newPos = _target.transform.position + _offset;
+        
+        transform.position = Vector3.Lerp(transform.position, _newPos, _smoothSpeed);
     }
 
     public void RemoveTarget()
     {
-        target = null;
+        _target = null;
     }
 
-    public void SetTarget(GameObject newTarget)
+    public void SetTarget(GameObject target)
     {
-        target = newTarget;
+        _target = target;
     }
 }
