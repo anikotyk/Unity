@@ -6,33 +6,86 @@ using UnityEngine;
 public class CocroachMovement : MonoBehaviour
 {
     private Rigidbody rb;
-
-    [SerializeField] private int speed = 10;
-    private Vector3 direction;
+    
     private float angleMin;
     private float angleMax;
     
     private float angle;
 
+    private int speed;
+
+    private float timer;
+    private float timeToChangeDirection;
+
+    private bool isMoving;
+
     private void Awake()
     {
         rb = GetComponent<Rigidbody>();
-        ChangeDirection();
+        //ChangeDirection();
+        isMoving = true;
+    }
+
+    public void EndMovement()
+    {
+        isMoving = false;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = Vector3.zero;
+        rb.Sleep();
+        rb.isKinematic = true;
+        rb.useGravity = false;
+    }
+
+    public void StartMovement()
+    {
+        rb.isKinematic = false;
+        rb.useGravity = true;
+        isMoving = true;
     }
 
     private void Update()
     {
+        if (!isMoving) { return; }
         rb.velocity = transform.forward * speed;
+        timer += Time.deltaTime;
+        if(timer >= timeToChangeDirection)
+        {
+            ChangeDirection();
+        }
     }
+
+    private void ResetTimer()
+    {
+        timer = 0;
+        timeToChangeDirection = Random.Range(1f, 4f);
+    }
+
+    private void ChangeSpeedRandomly()
+    {
+        speed = Random.Range(7, 12);
+    }
+
     private void ChangeDirection()
     {
         angleMin = 0;
         angleMax = 360;
 
         angle = Random.Range(angleMin, angleMax);
-        Debug.Log(angleMin + " " + angleMax + " " + angle);
 
         transform.localRotation = Quaternion.Euler(0, angle, 0);
+
+        ResetTimer();
+        ChangeSpeedRandomly();
+    }
+    
+    public void SetDirection(Vector3 normal)
+    {
+        ChangeDirection(normal);
+    }
+
+    public void SetDirection()
+    {
+        ChangeDirection();
     }
 
     private void ChangeDirection(Vector3 normal)
@@ -44,32 +97,19 @@ public class CocroachMovement : MonoBehaviour
         }
         angleMin = angle-80;
         angleMax = angle+80;
-        Debug.Log(normal + " " + Vector3.forward);
-        Debug.Log(angle);
         angle = Random.Range(angleMin, angleMax);
-
-        Debug.Log(angleMin+" "+ angleMax+" "+angle);
         
         transform.localRotation = Quaternion.Euler(0, angle, 0);
+
+        ResetTimer();
+        ChangeSpeedRandomly();
     }
 
     private void OnCollisionEnter(Collision collision)
     {
         if (collision.gameObject.tag != "Floor")
         {
-            var point = collision.contacts[0].point;
-
-            var dir = collision.contacts[0].normal;
             ChangeDirection(collision.contacts[0].normal);
-            point -= dir;
-            RaycastHit hitInfo;
-            if (collision.collider.Raycast(new Ray(point, dir), out hitInfo, 2))
-            {
-                var normal = hitInfo.normal;
-                
-                
-            }
-            
         }
     }
     
