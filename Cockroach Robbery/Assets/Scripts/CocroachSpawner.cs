@@ -16,35 +16,54 @@ public class CocroachSpawner : MonoBehaviour
 
     [SerializeField] private int countMinSpawnAtStart;
     [SerializeField] private int countMaxSpawnAtStart;
-
-    [SerializeField] private int countMinSpawnAtWave;
+    
     [SerializeField] private int countMaxSpawnAtWave;
 
     [SerializeField] private LayerMask _cocroachLayer;
+    
+
 
     public static CocroachSpawner Instance { get; private set; }
 
     private void Awake()
     {
-        if(Instance!=null && Instance != this)
+        if (Instance != null && Instance != this)
         {
             Destroy(this);
             return;
         }
 
         Instance = this;
-        SpawnLevel(countMinSpawnAtStart, countMaxSpawnAtStart);
+    }
+
+    private void Start()
+    {
+        CocroachesCountControl.Instance.LevelLose += ClearCocroachesContainer;
+        WavesController.Instance.LevelWin += ClearCocroachesContainer;
+        WavesController.Instance.WaveSpawn += SpawnNewWave;
+        GameController.Instance.StartLevel += SpawnLevel;
+    }
+
+    private void OnDestroy()
+    {
+        CocroachesCountControl.Instance.LevelLose -= ClearCocroachesContainer;
+        WavesController.Instance.LevelWin -= ClearCocroachesContainer;
+        WavesController.Instance.WaveSpawn -= SpawnNewWave;
+        GameController.Instance.StartLevel -= SpawnLevel;
+    }
+
+    private void SpawnLevel()
+    {
+        SpawnCocroaches(Random.Range(countMinSpawnAtStart, countMaxSpawnAtStart));
     }
 
     private void SpawnNewWave()
     {
-        SpawnLevel(countMinSpawnAtWave, countMaxSpawnAtWave);
+        SpawnCocroaches(Mathf.Min(countMaxSpawnAtWave, CocroachesCountControl.Instance.LoseCocroachesCount/(WavesController.Instance.WavesCount+1)));
     }
 
-    private void SpawnLevel(int cntMin, int cntMax)
+    private void SpawnCocroaches(int cnt)
     {
-        int cnt = Random.Range(cntMin, cntMax);
-        
         for(int i=0; i<cnt; i++)
         {
             GameObject newCocroach = Instantiate(cocroachPrefab);
@@ -80,5 +99,13 @@ public class CocroachSpawner : MonoBehaviour
         newCocroach.transform.localPosition = pos;
         newCocroach.GetComponent<CocroachGrowth>().SetMinSize();
         newCocroach.GetComponent<CocroachMovement>().SetDirection(normal);
+    }
+
+    private void ClearCocroachesContainer()
+    {
+        for(int i = 0; i < cocroachesContainer.childCount; i++)
+        {
+            Destroy(cocroachesContainer.GetChild(i).gameObject);
+        }
     }
 }

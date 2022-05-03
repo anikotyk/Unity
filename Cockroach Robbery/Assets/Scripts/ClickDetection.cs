@@ -10,7 +10,18 @@ public class ClickDetection : MonoBehaviour
 
     private void Start()
     {
+        CocroachesCountControl.Instance.LevelLose += EndGame;
+        WavesController.Instance.LevelWin += EndGame;
+        GameController.Instance.StartLevel += StartGame;
+
         StartGame();
+    }
+
+    private void OnDestroy()
+    {
+        CocroachesCountControl.Instance.LevelLose -= EndGame;
+        WavesController.Instance.LevelWin -= EndGame;
+        GameController.Instance.StartLevel -= StartGame;
     }
 
     private void StartGame()
