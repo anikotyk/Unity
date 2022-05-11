@@ -1,45 +1,61 @@
 using System.Collections;
+using Unity.Burst;
 using System.Collections.Generic;
-using System.IO;
 using Unity.Collections;
 using Unity.Jobs;
-using UnityEditor;
 using UnityEngine;
+using System.IO;
+using UnityEditor;
 using UnityEngine.UI;
 
 public class ChangeColor : MonoBehaviour
 {
-    [SerializeField] private RawImage shownImage;
-    [SerializeField] private GameObject saveBtn;
-    [SerializeField] private Texture2D standardImage;
-    [SerializeField] private bool isToUseJobSystem;
-    private Texture2D textureToChange;
+    [SerializeField] private RawImage _shownImage;
+    [SerializeField] private GameObject _saveBtn;
+    [SerializeField] private GameObject _undoBtn;
+    [SerializeField] private Texture2D _standardImage;
+    [SerializeField] private Toggle _isToUseMultithreading;
+    [SerializeField] private Text _timeText;
+
+    private Texture2D _textureToChange;
+    private string _pathToShownImage;
 
     private void Start()
     {
-        textureToChange = new Texture2D(standardImage.width, standardImage.height);
-        textureToChange.SetPixels(standardImage.GetPixels());
-        textureToChange.Apply();
-        shownImage.texture = textureToChange;
+        _textureToChange = new Texture2D(_standardImage.width, _standardImage.height);
+        _textureToChange.SetPixels(_standardImage.GetPixels());
+        _textureToChange.Apply();
+        _shownImage.texture = _textureToChange;
 
-        saveBtn.SetActive(false);
+        _saveBtn.SetActive(false);
+        _undoBtn.SetActive(false);
     }
 
     public void LoadImageBtn()
     {
-        string path = EditorUtility.OpenFilePanel("Open image", "", "png,jpg");
+        LoadImage(EditorUtility.OpenFilePanel("Open image", "", "png,jpg"));
+    }
+
+    private void LoadImage(string path)
+    {
         if (path.Length != 0)
         {
             var fileContent = File.ReadAllBytes(path);
             if (fileContent.Length > 0)
             {
-                (shownImage.texture as Texture2D).LoadImage(fileContent);
-                float coeff = shownImage.texture.width*1f / shownImage.texture.height;
-                shownImage.GetComponent<RectTransform>().sizeDelta = new Vector2(shownImage.GetComponent<RectTransform>().rect.height * coeff, shownImage.GetComponent<RectTransform>().rect.height);
-                saveBtn.SetActive(false);
+                _pathToShownImage = path;
+                (_shownImage.texture as Texture2D).LoadImage(fileContent);
+                float coeff = _shownImage.texture.width*1f / _shownImage.texture.height;
+                _shownImage.GetComponent<RectTransform>().sizeDelta = new Vector2(_shownImage.GetComponent<RectTransform>().rect.height * coeff, _shownImage.GetComponent<RectTransform>().rect.height);
+                _saveBtn.SetActive(false);
+                _undoBtn.SetActive(false);
             }
-            
         }
+    }
+
+    public void UndoChangesInImage()
+    {
+        LoadImage(_pathToShownImage);
     }
 
     public void SaveImageBtn()
@@ -49,68 +65,67 @@ public class ChangeColor : MonoBehaviour
         {
             return;
         }
-        File.WriteAllBytes(path, textureToChange.EncodeToPNG());
+        File.WriteAllBytes(path, _textureToChange.EncodeToPNG());
     }
 
     public void ChangeColorImageBtn()
     {
         float startTime = Time.realtimeSinceStartup;
-        textureToChange = new Texture2D(shownImage.texture.width, shownImage.texture.height);
-        textureToChange.SetPixels((shownImage.texture as Texture2D).GetPixels());
-        textureToChange.Apply();
-        if (isToUseJobSystem)
+
+        _textureToChange = new Texture2D(_shownImage.texture.width, _shownImage.texture.height);
+        _textureToChange.SetPixels((_shownImage.texture as Texture2D).GetPixels());
+        _textureToChange.Apply();
+
+        if (_isToUseMultithreading.isOn)
         {
-            var data = textureToChange.GetRawTextureData<Color32>();
-            ImageChanger jobChangeImage = new ImageChanger()
+            var textureData = _textureToChange.GetRawTextureData<Color32>();
+            ImageProcessor jobProcessImage = new ImageProcessor()
             {
-                texture = data
+                Texture = textureData
             };
-            JobHandle jobChangeImageHandle = jobChangeImage.Schedule();
-            jobChangeImageHandle.Complete();
-            
+            JobHandle jobProcessImageHandle = jobProcessImage.Schedule(textureData.Length, 4);
+            jobProcessImageHandle.Complete();
         }
         else
         {
-            for (int y = 0; y < textureToChange.height; y++)
+            for (int y = 0; y < _textureToChange.height; y++)
             {
-                for (int x = 0; x < textureToChange.width; x++)
+                for (int x = 0; x < _textureToChange.width; x++)
                 {
                     ChangePixelColor(x, y);
                 }
             }
         }
         
-        textureToChange.Apply();
-        shownImage.texture = textureToChange;
-        saveBtn.SetActive(true);
-        Debug.Log("Time of changing image: "+(Time.realtimeSinceStartup - startTime));
+        _textureToChange.Apply();
+        _shownImage.texture = _textureToChange;
+        _saveBtn.SetActive(true);
+        _undoBtn.SetActive(true);
+        _timeText.text = "Time: " + (Time.realtimeSinceStartup - startTime);
     }
 
     private void ChangePixelColor(int indexX, int indexY)
     {
-        float newColor = (textureToChange.GetPixel(indexX, indexY).r + textureToChange.GetPixel(indexX, indexY).b + textureToChange.GetPixel(indexX, indexY).g) / 3;
+        float newColor = (_textureToChange.GetPixel(indexX, indexY).r + _textureToChange.GetPixel(indexX, indexY).b + _textureToChange.GetPixel(indexX, indexY).g) / 3;
         Color color = new Color(newColor, newColor, newColor);
-        textureToChange.SetPixel(indexX, indexY, color);
+        _textureToChange.SetPixel(indexX, indexY, color);
     }
 }
 
-
-public struct ImageChanger : IJob
+[BurstCompile(CompileSynchronously = false)]
+public struct ImageProcessor : IJobParallelFor
 {
-    public NativeArray<Color32> texture;
+    public NativeArray<Color32> Texture;
     
-    public void Execute()
+    public void Execute(int index)
     {
-        for (int x = 0; x < texture.Length; x++)
-        {
-            ChangePixelColor(x);
-        }
+        ChangePixelColor(index);
     }
 
     private void ChangePixelColor(int x)
     {
-        byte newColor = (byte)((texture[x].r + texture[x].b + texture[x].g) / 3);
-        Color32 color = new Color32(newColor, newColor, newColor, texture[x].a);
-        texture[x] = color;
+        byte newColor = (byte)(0.30f * Texture[x].r + 0.59f * Texture[x].b + 0.11f * Texture[x].g);
+        Color32 color = new Color32(newColor, newColor, newColor, Texture[x].a);
+        Texture[x] = color;
     }
 }
