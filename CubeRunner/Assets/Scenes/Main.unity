@@ -639,7 +639,7 @@ MonoBehaviour:
   _panelWaitingForClick: {fileID: 2061097222}
   _levelBarContainer: {fileID: 1920839672}
   _levelBar: {fileID: 201458377}
-  toDestroyIfContinueRunning: {fileID: 0}
+  ToDestroyIfContinueRunning: {fileID: 0}
 --- !u!4 &174364717
 Transform:
   m_ObjectHideFlags: 0
@@ -1236,7 +1236,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: baca17ff1c4884b40b84fcf9447e0c51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _testMode: 0
+  _testMode: 1
   _countOfPlayedGamesBeforeShowAds: 3
   _moneyAmountAfterAds: 100
 --- !u!4 &348056132
