@@ -12,10 +12,10 @@ public class SpawnPlayers : MonoBehaviour
         {
             GameController.Instance.StartGame();
         }
-
-
+        
         GameObject player = PhotonNetwork.Instantiate(_playerPrefab.name, Vector3.zero, Quaternion.identity);
         player.transform.SetParent(_playerParent);
         player.transform.localPosition = _playerPrefab.transform.localPosition;
+        
     }
 }

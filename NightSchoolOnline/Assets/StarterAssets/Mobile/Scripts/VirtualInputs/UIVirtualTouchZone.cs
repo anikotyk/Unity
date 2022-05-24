@@ -14,6 +14,7 @@ public class UIVirtualTouchZone : MonoBehaviour, IPointerDownHandler, IDragHandl
     [Header("Settings")]
     public bool clampToMagnitude;
     public float magnitudeMultiplier = 1f;
+    public float magnitudeMultiplierForAndroid = 4f;
     public bool invertXOutputValue;
     public bool invertYOutputValue;
 
@@ -26,6 +27,10 @@ public class UIVirtualTouchZone : MonoBehaviour, IPointerDownHandler, IDragHandl
 
     void Start()
     {
+        if (!Application.isEditor)
+        {
+            magnitudeMultiplier = magnitudeMultiplierForAndroid;
+        }
         SetupHandle();
     }
 
