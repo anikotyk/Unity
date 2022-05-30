@@ -1,44 +1,64 @@
 using Photon.Pun;
 using Photon.Realtime;
+using UnityEngine;
 using UnityEngine.UI;
 
 public class CreateAndJoinRooms : MonoBehaviourPunCallbacks
 {
-    public InputField createInput;
-    public InputField joinInput;
-    public InputField nameInput;
+    [SerializeField] private InputField _roomNameInput;
+    [SerializeField] private GameObject _loadingPanel;
+    [SerializeField] private GameObject _errorText;
+    [SerializeField] private Toggle _femaleToggle;
 
-    public void CreateRoom()
+    public void CreateOrJoinRoom()
     {
         if (!PhotonNetwork.IsConnected)
         {
-            print("Not connected");
+            _errorText.GetComponent<Text>().text = "<color='red'>Error.</color> Check you internet connection!";
+            _errorText.SetActive(true);
             return;
         }
-        GetPlayerName();
+        _errorText.SetActive(false);
         RoomOptions roomOptions = new RoomOptions();
         roomOptions.MaxPlayers = 2;
-        PhotonNetwork.CreateRoom(createInput.text, roomOptions, TypedLobby.Default);
-       // PhotonNetwork.CreateRoom(createInput.text); 
+        PhotonNetwork.JoinOrCreateRoom(_roomNameInput.text, roomOptions, TypedLobby.Default);
+        _loadingPanel.SetActive(true);
     }
     
-
-    public void JoinRoom()
-    {
-        GetPlayerName();
-        /*RoomOptions roomOptions = new RoomOptions();
-        roomOptions.MaxPlayers = 5;
-        PhotonNetwork.JoinOrCreateRoom(joinInput.text, roomOptions, null);*/
-        PhotonNetwork.JoinRoom(joinInput.text);
-    }
-
     public override void OnJoinedRoom()
     {
+        _errorText.SetActive(false);
+        if (_femaleToggle.isOn)
+        {
+            PlayerPrefs.SetInt("isFemale", 1);
+        }
+        else
+        {
+            PlayerPrefs.SetInt("isFemale", 0);
+        }
+        
+        
         PhotonNetwork.LoadLevel("GameOnline");
     }
 
-    private void GetPlayerName()
+    public override void OnJoinRoomFailed(short returnCode, string message)
     {
-        PhotonNetwork.NickName = nameInput.text;
+        _loadingPanel.SetActive(false);
+        _errorText.GetComponent<Text>().text = "<color='red'>Error.</color> Try another room name and check your internet connection!";
+        _errorText.SetActive(true);
+    }
+
+    public override void OnCreateRoomFailed(short returnCode, string message)
+    {
+        _loadingPanel.SetActive(false);
+        _errorText.GetComponent<Text>().text = "<color='red'>Error.</color> Check your internet connection!";
+        _errorText.SetActive(true);
+    }
+
+    public override void OnDisconnected(DisconnectCause cause)
+    {
+        _loadingPanel.SetActive(false);
+        _errorText.GetComponent<Text>().text = "<color='red'>Error.</color> Check you internet connection!";
+        _errorText.SetActive(true);
     }
 }

@@ -7,4 +7,5 @@ public class Buttons : MonoBehaviour
     {
         SceneManager.LoadScene(sceneName);
     }
+    
 }
