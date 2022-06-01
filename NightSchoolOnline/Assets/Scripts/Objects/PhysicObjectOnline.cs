@@ -10,20 +10,19 @@ public class PhysicObjectOnline : PhysicObject
     protected override void Awake()
     {
         base.Awake();
-
         _view = GetComponent<PhotonView>();
     }
 
     public override void PhysicsOff()
     {
         _view.RPC("PhysicsOffRPC", RpcTarget.Others);
-        PhysicsOffRPC();
+        base.PhysicsOff();
     }
 
     public override void PhysicsOn()
     {
         _view.RPC("PhysicsOnRPC", RpcTarget.Others);
-        PhysicsOnRPC();
+        base.PhysicsOn();
     }
 
     public override void DestroyObject()
@@ -34,15 +33,13 @@ public class PhysicObjectOnline : PhysicObject
     [PunRPC]
     private void PhysicsOnRPC()
     {
-        _collider.enabled = true;
-        _rb.constraints = RigidbodyConstraints.None;
+        base.PhysicsOn();
     }
 
     [PunRPC]
     private void PhysicsOffRPC()
     {
-        _collider.enabled = false;
-        _rb.constraints = RigidbodyConstraints.FreezeAll;
+        base.PhysicsOff();
     }
     
 }

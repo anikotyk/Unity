@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.UI;
 
 public class DialogController : MonoBehaviour
@@ -11,17 +12,18 @@ public class DialogController : MonoBehaviour
     private DialogObject _nowDialog;
     private bool _unlocked;
     private int _replicaIndex;
-    private StarterAssets.FirstPersonController _playerControll;
+
+    public event UnityAction StartDialog;
+    public event UnityAction EndDialog;
 
     private void Awake()
     {
         _textPlace.SetActive(false);
-        _playerControll = GameObject.FindObjectOfType<StarterAssets.FirstPersonController>();
     }
 
     public void StartReplicasSet(DialogObject dialog)
     {
-        _playerControll.enabled = false;
+        StartDialog?.Invoke();
         _isNowTexting = true;
         _nowDialog = dialog;
         _replicaIndex = 0;
@@ -59,7 +61,7 @@ public class DialogController : MonoBehaviour
         _isNowTexting = false;
         _unlocked = false;
         _textPlace.SetActive(false);
-        _playerControll.enabled = true;
+        EndDialog?.Invoke();
         /*if (_nowDialog.funcsAfterDialogs.Count > _nowDialog.nowReplicasSet)
         {
             _nowDialog.funcsAfterDialogs[_nowDialog.nowReplicasSet].Invoke();

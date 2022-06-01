@@ -4,6 +4,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PickUpObject : MonoBehaviour, IPickUpObject
 {
@@ -14,6 +15,9 @@ public class PickUpObject : MonoBehaviour, IPickUpObject
     [SerializeField] private string _objectName;
 
     public string ObjectName => _objectName;
+    public event UnityAction PickUpAction;
+    public event UnityAction ThrowAction;
+    public event UnityAction DestroyAction;
 
     private void Awake()
     {
@@ -25,11 +29,22 @@ public class PickUpObject : MonoBehaviour, IPickUpObject
     
     public void PickUp()
     {
-        GetComponent<PhysicObject>().PhysicsOff();
+        PickUpAction?.Invoke();
         PickUpController.Instance.PickUp(gameObject);
+        SetPickedSettings();
+    }
+    
+    public void Throw()
+    {
+        ThrowAction?.Invoke();
     }
 
-    public void SetPickedSettings()
+    public void DestroyObject()
+    {
+        DestroyAction?.Invoke();
+    }
+
+    private void SetPickedSettings()
     {
         transform.localPosition = _pickedPosition;
         transform.localRotation = Quaternion.Euler(_pickedRotation);

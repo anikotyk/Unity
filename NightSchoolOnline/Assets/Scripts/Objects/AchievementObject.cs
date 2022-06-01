@@ -5,6 +5,8 @@ using UnityEngine.UI;
 
 public class AchievementObject : MonoBehaviour
 {
-    public Image StarImage;
-    public Text AchievementName;
+    [SerializeField] private Image _starImage;
+    public Image StarImage => _starImage;
+    [SerializeField] private Text _achievementName;
+    public Text AchievementName=> _achievementName;
 }

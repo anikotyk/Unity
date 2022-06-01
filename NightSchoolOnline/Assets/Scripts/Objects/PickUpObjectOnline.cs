@@ -3,6 +3,7 @@ using Photon.Realtime;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class PickUpObjectOnline : MonoBehaviourPun, IPunOwnershipCallbacks, IPickUpObject
 {
@@ -13,6 +14,9 @@ public class PickUpObjectOnline : MonoBehaviourPun, IPunOwnershipCallbacks, IPic
     [SerializeField] private string _objectName;
 
     public string ObjectName => _objectName;
+    public event UnityAction PickUpAction;
+    public event UnityAction ThrowAction;
+    public event UnityAction DestroyAction;
 
     private PhotonView _view;
 
@@ -54,8 +58,7 @@ public class PickUpObjectOnline : MonoBehaviourPun, IPunOwnershipCallbacks, IPic
 
         if (_view.IsMine)
         {
-            GetComponent<PhysicObject>().PhysicsOff();
-            PickUpController.Instance.PickUp(gameObject);
+            PickUp();
         }
     }
 
@@ -71,10 +74,29 @@ public class PickUpObjectOnline : MonoBehaviourPun, IPunOwnershipCallbacks, IPic
 
     public void PickUp()
     {
-        base.photonView.RequestOwnership();
+        if (_view.IsMine)
+        {
+            PickUpAction?.Invoke();
+            PickUpController.Instance.PickUp(gameObject);
+            SetPickedSettings();
+        }
+        else
+        {
+            base.photonView.RequestOwnership();
+        }
     }
 
-    public void SetPickedSettings()
+    public void Throw()
+    {
+        ThrowAction?.Invoke();
+    }
+
+    public void DestroyObject()
+    {
+        DestroyAction?.Invoke();
+    }
+
+    private void SetPickedSettings()
     {
         transform.localPosition = _pickedPosition;
         transform.localRotation = Quaternion.Euler(_pickedRotation);

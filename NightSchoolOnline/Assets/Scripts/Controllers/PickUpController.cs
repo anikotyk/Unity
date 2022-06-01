@@ -51,14 +51,13 @@ public class PickUpController : MonoBehaviour
         _pickedUpObject = obj;
         _pickedUpObject.transform.position = _containerForPickedUpObjects.position;
         _pickedUpObject.transform.parent = _containerForPickedUpObjects;
-        _pickedUpObject.GetComponent<IPickUpObject>().SetPickedSettings();
         _throwButton.SetActive(true);
     }
 
     public void Throw()
     {
         _pickedUpObject.transform.parent = null;
-        _pickedUpObject.GetComponent<PhysicObject>().PhysicsOn();
+        _pickedUpObject.GetComponent<IPickUpObject>().Throw();
         _pickedUpObject = null;
         _throwButton.SetActive(false);
     }
@@ -69,7 +68,7 @@ public class PickUpController : MonoBehaviour
         {
             return;
         }
-        _pickedUpObject.GetComponent<PhysicObject>().DestroyObject();
+        _pickedUpObject.GetComponent<IPickUpObject>().DestroyObject();
         _pickedUpObject = null;
         _throwButton.SetActive(false);
     }
