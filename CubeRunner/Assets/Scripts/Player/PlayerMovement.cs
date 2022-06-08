@@ -15,7 +15,9 @@ public class PlayerMovement : MonoBehaviour
     private float _xPosFinish;
     private Rigidbody _rb;
     private Vector2 _touchPos;
-    
+
+    private float _speedHorizontalUsingCoeff;
+
     private Vector3 _forwardMove;
     private Vector3 _horizontalMove;
 
@@ -93,11 +95,21 @@ public class PlayerMovement : MonoBehaviour
         {
             _touchPos = Input.GetTouch(0).position;
             _touchPos -= new Vector2(Screen.width / 2, Screen.height / 2);
+            if(Screen.width< Screen.height)
+            {
+                _speedHorizontalUsingCoeff = Mathf.Min(1, Mathf.Abs(_touchPos.x * 2 / Screen.width)) * _speedHorizontal;
+            }
+            else
+            {
+                _speedHorizontalUsingCoeff = Mathf.Min(1, Mathf.Abs(_touchPos.x * 2 / Screen.height)) * _speedHorizontal;
+            }
+           
+           
             _touchPos = _touchPos.normalized;
         }
-
+        
         _forwardMove = _moveDirection * SpeedController.Instance.CurrentSpeed * Time.fixedDeltaTime;
-        _horizontalMove = new Vector3(0, 0, _touchPos.x) * _speedHorizontal * Time.fixedDeltaTime;
+        _horizontalMove = new Vector3(0, 0, _touchPos.x) * _speedHorizontalUsingCoeff * Time.fixedDeltaTime;
         _rb.velocity = (_forwardMove + _horizontalMove) * _velocityCoeff;
 
         GameController.Instance.SetProgress((_posStart.x - transform.localPosition.x) / (_posStart.x - _xPosFinish));

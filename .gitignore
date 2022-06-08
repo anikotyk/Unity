@@ -57,8 +57,11 @@ sysinfo.txt
 *.aab
 *.unitypackage
 
+
 #Keys
 *.keystore
+*.der
+*.pem
 
 # Crashlytics generated file
 crashlytics-build.properties

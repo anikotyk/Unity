@@ -25,13 +25,13 @@ public class LevelController : MonoBehaviour
 
     private void Start()
     {
-        GameController.Instance.LevelEnded += NextLevel;
+        GameController.Instance.LevelCompleted += NextLevel;
         GameController.Instance.NextLevelClicked += ShowLevel;
     }
 
     private void OnDestroy()
     {
-        GameController.Instance.LevelEnded -= NextLevel;
+        GameController.Instance.LevelCompleted -= NextLevel;
         GameController.Instance.NextLevelClicked -= ShowLevel;
     }
 

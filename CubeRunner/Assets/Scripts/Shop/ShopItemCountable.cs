@@ -13,7 +13,9 @@ public class ShopItemCountable : MonoBehaviour
     [SerializeField] private Text _priceText;
     [SerializeField] private float _limitLow=-1;
 
-    private void Awake()
+    [SerializeField] private GameObject _warningPanel;
+
+    private void Start()
     {
         ShowItem();
     }
@@ -41,7 +43,7 @@ public class ShopItemCountable : MonoBehaviour
         else
         {
             _buttonBuy.SetActive(true);
-            _buttonBuy.GetComponent<Button>().interactable = (_price <= MoneyController.Instance.GetMoneyAmount());
+            //_buttonBuy.GetComponent<Button>().interactable = (_price <= MoneyController.Instance.GetMoneyAmount());
         }
     }
 
@@ -52,6 +54,10 @@ public class ShopItemCountable : MonoBehaviour
             PlayerPrefs.SetInt(_namePlayerPrefs, PlayerPrefs.GetInt(_namePlayerPrefs) + _amountToAdd);
             MoneyController.Instance.AddMoneyAmount(-_price);
             ReShowAllItems();
+        }
+        else
+        {
+            _warningPanel.SetActive(true);
         }
     }
 

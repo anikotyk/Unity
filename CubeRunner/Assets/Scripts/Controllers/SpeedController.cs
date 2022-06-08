@@ -27,11 +27,13 @@ public class SpeedController : MonoBehaviour
     private void Start()
     {
         GameController.Instance.LevelEnded += CheckUpdateSpeed;
+        Settings.Instance.LanguageChanged += ShowSpeed;
     }
 
     private void OnDestroy()
     {
         GameController.Instance.LevelEnded -= CheckUpdateSpeed;
+        Settings.Instance.LanguageChanged -= ShowSpeed;
     }
     
     private void CheckUpdateSpeed()
@@ -47,7 +49,7 @@ public class SpeedController : MonoBehaviour
     {
         if (_speedText != null)
         {
-            _speedText.text = "Speed: " + CurrentSpeed;
+            _speedText.text = Lean.Localization.LeanLocalization.GetTranslationText("Speed")+": " + CurrentSpeed;
         }
     }
 

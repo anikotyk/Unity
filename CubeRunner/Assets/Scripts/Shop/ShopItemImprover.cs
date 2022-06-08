@@ -14,7 +14,9 @@ public class ShopItemImprover : MonoBehaviour
     [SerializeField] private int[] _prices;
     [SerializeField] private int[] _valuesToSet;
 
-    private void Awake()
+    [SerializeField] private GameObject _warningPanel;
+
+    private void Start()
     {
         ShowItem();
     }
@@ -45,7 +47,7 @@ public class ShopItemImprover : MonoBehaviour
         {
             _priceText.text = _prices[count] + "";
             _buttonBuy.SetActive(true);
-            _buttonBuy.GetComponent<Button>().interactable = (_prices[count] <= MoneyController.Instance.GetMoneyAmount());
+            //_buttonBuy.GetComponent<Button>().interactable = (_prices[count] <= MoneyController.Instance.GetMoneyAmount());
         }
     }
 
@@ -70,6 +72,10 @@ public class ShopItemImprover : MonoBehaviour
             
             MoneyController.Instance.AddMoneyAmount(-price);
             ReShowAllItems();
+        }
+        else
+        {
+            _warningPanel.SetActive(true);
         }
 
     }

@@ -8,6 +8,7 @@ using UnityEngine.EventSystems;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
+
 public class GameController : MonoBehaviour
 {
     [SerializeField] private GameObject _tapText;
@@ -35,7 +36,8 @@ public class GameController : MonoBehaviour
     [SerializeField] private GameObject _speederBtn;
     [SerializeField] private GameObject _adsBtn;
     [SerializeField] private GameObject _shopBtn;
-    
+    [SerializeField] private GameObject _settingsBtn;
+
     [SerializeField] private GameObject _plusCoinsPanel;
 
     [SerializeField] private GameObject _panelTooFast;
@@ -47,7 +49,7 @@ public class GameController : MonoBehaviour
 
     [SerializeField] private GameObject _levelBarContainer;
     [SerializeField] private GameObject _levelBar;
-
+    
     private int _counterBrokenGoldWindow;
     
     public GameObject ToDestroyIfContinueRunning;
@@ -55,6 +57,7 @@ public class GameController : MonoBehaviour
     public event UnityAction LevelStarted;
     public event UnityAction LevelContinued;
     public event UnityAction LevelEnded;
+    public event UnityAction LevelCompleted;
     public event UnityAction AddedMoney;
     public event UnityAction NextLevelClicked;
     public event UnityAction LevelLoseScreen;
@@ -63,6 +66,7 @@ public class GameController : MonoBehaviour
 
     private void Awake()
     {
+        
         if (Instance != null && Instance != this)
         {
             Destroy(this);
@@ -72,7 +76,8 @@ public class GameController : MonoBehaviour
         Instance = this;
 
         //PlayerPrefs.SetInt("isFirstTime", 0);
-        if (PlayerPrefs.GetInt("isFirstTime") != 1)
+        //PlayerPrefs.SetInt("money", 1000);
+        if (PlayerPrefs.GetInt("isFirstTime") < 1)
         {
             PlayerPrefs.SetInt("money", 100);
             PlayerPrefs.SetInt("isFirstTime", 1);
@@ -95,8 +100,10 @@ public class GameController : MonoBehaviour
 
     private void Start()
     {
+        
         InitEvents();
 
+        _settingsBtn.GetComponent<AnimController>().Show();
         _shopBtn.GetComponent<AnimController>().Show();
         _adsBtn.GetComponent<AnimController>().Show();
 
@@ -147,7 +154,7 @@ public class GameController : MonoBehaviour
             _shopButton.SetActive(true);
             _shopButton.GetComponent<Animation>().Play();
             _levelCompletedContainer.GetComponent<Animation>().Play();
-            _levelCompletedText.text = "LEVEL " + PlayerPrefs.GetInt("level") + "\nCOMPLETED";
+            _levelCompletedText.text = Lean.Localization.LeanLocalization.GetTranslationText("Level")+" " + PlayerPrefs.GetInt("level") + "\n"+ Lean.Localization.LeanLocalization.GetTranslationText("Completed");
             _buttonNextLevel.SetActive(true);
             _buttonNextLevel.GetComponent<Animation>().Play();
             _buttonContinue.SetActive(false);
@@ -158,6 +165,7 @@ public class GameController : MonoBehaviour
             _addedMoneyText.text = "+"+ (_counterBrokenGoldWindow*5);
             _counterBrokenGoldWindow = 0;
             _timer.SetActive(false);
+            LevelCompleted?.Invoke();
         }
         else
         {
@@ -165,7 +173,7 @@ public class GameController : MonoBehaviour
             _shopButton.SetActive(false);
             _levelFailedContainer.GetComponent<Animation>().Play();
             _levelCompletedContainer.SetActive(false);
-            _levelFailedText.GetComponent<Text>().text = "LEVEL " + PlayerPrefs.GetInt("level") + "\nFAILED";
+            _levelFailedText.GetComponent<Text>().text = Lean.Localization.LeanLocalization.GetTranslationText("Level") + " " + PlayerPrefs.GetInt("level") + "\n"+ Lean.Localization.LeanLocalization.GetTranslationText("Failed");
             _buttonNextLevel.SetActive(false);
             _buttonContinue.SetActive(true);
             _buttonContinue.GetComponent<Animation>().Play();
@@ -274,6 +282,7 @@ public class GameController : MonoBehaviour
         
         _tapText.SetActive(false);
 
+        _settingsBtn.GetComponent<AnimController>().Hide();
         _shopBtn.GetComponent<AnimController>().Hide();
         _adsBtn.GetComponent<AnimController>().Hide();
         _speederBtn.GetComponent<AnimController>().Show();
@@ -281,6 +290,7 @@ public class GameController : MonoBehaviour
 
     public void GameOver()
     {
+        _settingsBtn.GetComponent<AnimController>().Show();
         _shopBtn.GetComponent<AnimController>().Show();
         _adsBtn.GetComponent<AnimController>().Show();
         _speederBtn.GetComponent<AnimController>().Hide();
