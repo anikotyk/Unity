@@ -122,11 +122,14 @@ public class GameController : MonoBehaviour
 
         List<RaycastResult> results = new List<RaycastResult>();
         EventSystem.current.RaycastAll(pointerData, results);
-        
-        if (results[0].gameObject == _startPanel && results.Count==1)
+        if (results.Count > 0)
         {
-            return true;
+            if (results[0].gameObject == _startPanel && results.Count == 1)
+            {
+                return true;
+            }
         }
+        
 
         return false;
     }

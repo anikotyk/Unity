@@ -21,8 +21,7 @@ public class VibrationsController : MonoBehaviour
         }
 
         SetVibrationsState();
-        HapticController.outputLevel = 0.1f;
-        HapticController.clipLevel = 0.2f;
+        //HapticController.outputLevel = 0.5f;
     }
     
     public void SetVibrationsState()

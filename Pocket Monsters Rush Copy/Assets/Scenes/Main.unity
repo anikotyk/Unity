@@ -16362,7 +16362,7 @@ MonoBehaviour:
   _posMaxX: 1.5
   _coefTouchDelta: 0.02
   _coefTouchDeltaEditor: 0.01
-  _isEditor: 1
+  _isEditor: 0
   _followPath: {fileID: 2088280457}
 --- !u!54 &601113733
 Rigidbody:
@@ -26610,6 +26610,7 @@ GameObject:
   - component: {fileID: 1754260540}
   - component: {fileID: 1754260543}
   - component: {fileID: 1754260544}
+  - component: {fileID: 1754260545}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -26764,6 +26765,18 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_AspectMode: 1
   m_AspectRatio: 1
+--- !u!114 &1754260545
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1754260538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a21cd87be024c7d478ff89b3d3db4dc1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1759034658
 GameObject:
   m_ObjectHideFlags: 0
@@ -26788,7 +26801,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1759034658}
-  m_LocalRotation: {x: 0.107167415, y: 0.6639594, z: -0.09698518, w: 0.7336668}
+  m_LocalRotation: {x: 0.1071674, y: 0.6639594, z: -0.09698518, w: 0.7336668}
   m_LocalPosition: {x: -89.271484, y: 4, z: 111.200005}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
