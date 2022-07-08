@@ -1,0 +1,487 @@
+fileFormatVersion: 2
+guid: 793a2d9291a6f0b4f8757e35854091d5
+ModelImporter:
+  serializedVersion: 20200
+  internalIDToNameTable: []
+  externalObjects:
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BetweenFloors
+    second: {fileID: 2100000, guid: 74c83cf153186dc4b9b10c2685d622e6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BigCorridorUnderCeiling
+    second: {fileID: 2100000, guid: 1ecae1c6ad7fc7d44bb093805a6189bd, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BigCorridorUnderFloor
+    second: {fileID: 2100000, guid: b5d23c493d837da4d8066eca3e6eef35, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BigCorridorUnderWalls
+    second: {fileID: 2100000, guid: 1110670cbedab714786f9b8a3f94a467, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Biol2Floor
+    second: {fileID: 2100000, guid: 4a19007ab9f6ed24899f507dc7c9ca88, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BiolCeiling
+    second: {fileID: 2100000, guid: 70efa45b4818cd242adb45df1102b106, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BiolWalls
+    second: {fileID: 2100000, guid: 1eeee2f58206cca448765ac02b0a0e86, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombShellUnderCeiling
+    second: {fileID: 2100000, guid: d813aab63d3673d47bbc12b9b2b6ea02, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombShellUnderFloor
+    second: {fileID: 2100000, guid: 29b98fce43deeb34d992a7b2c3cf11ab, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: BombShellUnderWalls
+    second: {fileID: 2100000, guid: 9f98ab5200193db439504412ddb4609a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom2_1Ceiling
+    second: {fileID: 2100000, guid: 60f8eb2ddfbe2254c9261e52d6fbb22a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom2_1Floor
+    second: {fileID: 2100000, guid: c8e42a5e7ffe10e4fb25f81e49fa5ae9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom2_1Walls
+    second: {fileID: 2100000, guid: 8d04eec25017dd942965cd800484f066, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom2_2Ceiling
+    second: {fileID: 2100000, guid: 7b4fc403e99cdcd4788b98e9b1d8679a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom2_2Floor
+    second: {fileID: 2100000, guid: 043bc6459a9429640ad5cd2c1f02b2d3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom2_2Walls
+    second: {fileID: 2100000, guid: 86f0cae1a685b5f428d6734fb4ed0d4b, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom3_1Ceiling
+    second: {fileID: 2100000, guid: 7848667dc7a15a84490d61aba9aed3b2, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom3_1Floor
+    second: {fileID: 2100000, guid: 22488fc0e95c7124d8a294f2d176ec12, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom3_1Walls
+    second: {fileID: 2100000, guid: 810fa2ef4b1cda04d8022c7a412ef109, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom3_2Ceiling
+    second: {fileID: 2100000, guid: 25b25a8f7a069b64eab76343f6fc0f3d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom3_2Floor
+    second: {fileID: 2100000, guid: 47ed713a3915cd24d8b5d422854109ae, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom3_2Walls
+    second: {fileID: 2100000, guid: 0839649aa1ad2df4d8416e83a1690792, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom4_1Ceiling
+    second: {fileID: 2100000, guid: 10ac8a3dbf706dd4eb21719618b14c59, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom4_1Floor
+    second: {fileID: 2100000, guid: d84dcacad76108d4fac41e9ab9d80716, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom4_1Walls
+    second: {fileID: 2100000, guid: a3c86e713e0665c4eb320eb206a88f1a, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom4_2Ceiling
+    second: {fileID: 2100000, guid: 877a277bf3c83c041a80b944d22efe99, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom4_2Floor
+    second: {fileID: 2100000, guid: 511b8682707d38f4a9e4682eeadd0d20, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Classroom4_2Walls
+    second: {fileID: 2100000, guid: a14da554f95d48e46b7aea50958812c7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CleanerRoom3Ceiling
+    second: {fileID: 2100000, guid: b1322cb742cd2ec4b834b4b37f549f51, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CleanerRoom3Floor.001
+    second: {fileID: 2100000, guid: fdda15ca82b4021458007b0495dac30e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: CleanerRoom3Walls
+    second: {fileID: 2100000, guid: cc06fe7561c399648a5920484622ecc7, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ClothesRoom1Ceiling
+    second: {fileID: 2100000, guid: 2185db13bc0de964784f75c9e007639c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ClothesRoom1Floor
+    second: {fileID: 2100000, guid: be2e6f58f6b49414cba93ed247212462, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: ClothesRoom1Walls
+    second: {fileID: 2100000, guid: 2b269606cafeae44facfb29abc8c2d8c, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor1Ceiling
+    second: {fileID: 2100000, guid: 8811d1ffd547cd24b86d7e237b34d7de, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor1Floor
+    second: {fileID: 2100000, guid: 7c8d562d0bca6474da0feb7b93d58909, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor1Walls
+    second: {fileID: 2100000, guid: ab6892c73e2d771468834a1ce1a1f3a9, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor2Ceiling
+    second: {fileID: 2100000, guid: bb8940d5771b66845ad6a7532bc0410d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor2Floor
+    second: {fileID: 2100000, guid: 46ae96ad1d8e1724fa0bfca6f649ac7d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor2Walls
+    second: {fileID: 2100000, guid: e61ae120afc7fcf428211eefe12f38fa, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor3Ceiling
+    second: {fileID: 2100000, guid: 850ecf6724c98f1418a311c5d1d0186f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor3Floor.001
+    second: {fileID: 2100000, guid: d4f3692c726d30c4cbd837a308cb2a22, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor3Walls
+    second: {fileID: 2100000, guid: 89b825f1646998649a0ec12a2ed11bd1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor4Ceiling
+    second: {fileID: 2100000, guid: 9de15974c2a1f164f88a16abd62abf9e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor4Floor
+    second: {fileID: 2100000, guid: c94c4eb36573a7f4d8f4229a805958c6, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Corridor4Walls
+    second: {fileID: 2100000, guid: d3a6aa8fa95e6544bb193e23b0345e12, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Door_inside
+    second: {fileID: 2100000, guid: dbf69be16ed558e44adecf2ed6445298, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Door_outside
+    second: {fileID: 2100000, guid: d7f7877787d2b884389c2b19ca408417, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Handle_inside
+    second: {fileID: 2100000, guid: a8582f0bcca29c6478822ba4182322ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: KItchen1Floor
+    second: {fileID: 2100000, guid: 8a7c0cdea8dad5a4caed370148854079, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Kitchen1Ceiling
+    second: {fileID: 2100000, guid: 2d1bf9398ee964c47bd47bed3ddb6858, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Kitchen1Walls
+    second: {fileID: 2100000, guid: 74527927295a2d348a83b1b75ea8517e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MedRoom1Ceiling
+    second: {fileID: 2100000, guid: ea7766826cd657444b80b1caaaa990c1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MedRoom1Floor
+    second: {fileID: 2100000, guid: 7b812570d827b7f44ac0912e7432ab59, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: MedRoom1Walls
+    second: {fileID: 2100000, guid: aebb61b177edf9049838baadbf64f147, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: OutOfSchoolFloor
+    second: {fileID: 2100000, guid: c4de7ff3936cbcf449c74f077440895f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: RoofTop
+    second: {fileID: 2100000, guid: cc7e6c6f6bb1bfe4b8ef00e5309059ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SchoolWallsOutside
+    second: {fileID: 2100000, guid: b7f86ae069f075e438b2a21580337a02, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SecretWayUnderCeiling
+    second: {fileID: 2100000, guid: e289f04a53bc3a842b939c50c0e3b286, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SecretWayUnderFloor
+    second: {fileID: 2100000, guid: 91c0ea0eaf2c75b418c6bdb8b57cdcca, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SecretWayUnderWalls
+    second: {fileID: 2100000, guid: 038ce17a0ae736c498d6e72dab3ab40e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmallCorridorUnderCeiling
+    second: {fileID: 2100000, guid: 3e47e279f8f842d4590ca5b404e9fa38, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmallCorridorUnderFloor
+    second: {fileID: 2100000, guid: 4af49820f7ee9dc4180ec0d655d73c1f, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: SmallCorridorUnderWalls
+    second: {fileID: 2100000, guid: ba37c207721ce6947b921864bb45f6ec, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stair_glass
+    second: {fileID: 2100000, guid: f9ab2dd6ec134d64c978bfb73a5f47df, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stair_metal
+    second: {fileID: 2100000, guid: 99fdb12c89c30d64c82948bc98a355f1, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stair_white
+    second: {fileID: 2100000, guid: 4f6656ef6bcedaa4b85a496b50f85445, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Stair_wood
+    second: {fileID: 2100000, guid: 1e5dd0d4dbc80584d93495605e0b4795, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet2Ceiling
+    second: {fileID: 2100000, guid: 30399898644056249b879f19ac266dc5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet2Floor
+    second: {fileID: 2100000, guid: 33a2fccca7fa82546b95783005c7998e, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet2Walls
+    second: {fileID: 2100000, guid: c374a01ea006c9a4e971da2444dc8ca5, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet4Ceiling
+    second: {fileID: 2100000, guid: 1cca9bef1c50a174eabf2a80a271cc9d, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet4Floor
+    second: {fileID: 2100000, guid: d0660b265bc440043a5110e0c2ddee64, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Toilet4Walls
+    second: {fileID: 2100000, guid: 73270d7e36c599a4ea8bca2e2e4312d0, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window_glass
+    second: {fileID: 2100000, guid: a349d79d7f1eedf408339064b97c30ef, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window_inside
+    second: {fileID: 2100000, guid: b083e6429badda24dba8c8b3f41e02a3, type: 2}
+  - first:
+      type: UnityEngine:Material
+      assembly: UnityEngine.CoreModule
+      name: Window_outside
+    second: {fileID: 2100000, guid: 1a10a23efc981c24187cb584178b38f8, type: 2}
+  materials:
+    materialImportMode: 2
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    fileIdsGeneration: 2
+    swapUVChannels: 1
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    bakeAxisConversion: 0
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVMarginMethod: 1
+    secondaryUVMinLightmapResolution: 40
+    secondaryUVMinObjectScale: 1
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  autoGenerateAvatarMappingIfUnspecified: 1
+  animationType: 2
+  humanoidOversampling: 1
+  avatarSetup: 0
+  addHumanoidExtraRootOnlyWhenUsingAvatar: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
