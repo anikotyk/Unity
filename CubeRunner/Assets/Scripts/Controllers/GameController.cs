@@ -116,7 +116,7 @@ public class GameController : MonoBehaviour
         PlayerController.Instance.LevelComplete += LevelComplete;
         PlayerController.Instance.SpeederCountChanged += UpdateSpeederCount;
 
-        AdsController.Instance.ContinueButtonClicked += ContinuePlaying;
+        GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked += ContinuePlaying;
     }
     
 
@@ -125,7 +125,7 @@ public class GameController : MonoBehaviour
         HealthController.Instance.LevelLose -= OnLevelLose;
         PlayerController.Instance.LevelComplete -= LevelComplete;
         PlayerController.Instance.SpeederCountChanged -= UpdateSpeederCount;
-        AdsController.Instance.ContinueButtonClicked -= ContinuePlaying;
+       // GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked -= ContinuePlaying;
     }
 
     public void SetProgress(float progress)

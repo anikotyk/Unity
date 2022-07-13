@@ -44,7 +44,7 @@ public class PlayerController : MonoBehaviour
         GameController.Instance.LevelStarted += StartRunning;
         GameController.Instance.LevelContinued += StartRunning;
         GameController.Instance.LevelEnded += OnLevelEnded;
-        AdsController.Instance.ContinueButtonClicked += ContinueLevel;
+        GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked += ContinueLevel;
         HealthController.Instance.LevelLose += OnLevelLose;
     }
 
@@ -53,7 +53,7 @@ public class PlayerController : MonoBehaviour
         GameController.Instance.LevelStarted -= StartRunning;
         GameController.Instance.LevelContinued -= StartRunning;
         GameController.Instance.LevelEnded -= OnLevelEnded;
-        AdsController.Instance.ContinueButtonClicked -= ContinueLevel;
+        //GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked -= ContinueLevel;
         HealthController.Instance.LevelLose -= OnLevelLose;
     }
 

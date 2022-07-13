@@ -1360,19 +1360,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 239523505}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 348056131}
-        m_TargetAssemblyTypeName: AdsController, Assembly-CSharp
-        m_MethodName: ShowRewardedVideo
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 100
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &239523505
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1683,6 +1671,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 348056132}
+  - component: {fileID: 348056135}
+  - component: {fileID: 348056134}
+  - component: {fileID: 348056133}
   - component: {fileID: 348056131}
   m_Layer: 0
   m_Name: AdsController
@@ -1700,12 +1691,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 348056130}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: baca17ff1c4884b40b84fcf9447e0c51, type: 3}
+  m_Script: {fileID: 11500000, guid: 73b989fe61a9266469219ac1cac5dd68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _testMode: 0
+  _androidAdUnitId: Interstitial_Android
+  _iOSAdUnitId: Interstitial_iOS
   _countOfPlayedGamesBeforeShowAds: 3
-  _moneyAmountAfterAds: 100
 --- !u!4 &348056132
 Transform:
   m_ObjectHideFlags: 0
@@ -1720,6 +1711,52 @@ Transform:
   m_Father: {fileID: 1354809819}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &348056133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348056130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2895a73994853b545a1709961d450dd3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showAdButton: {fileID: 239523504}
+  _androidAdUnitId: Rewarded_Android
+  _iOSAdUnitId: Rewarded_iOS
+  _moneyAmountAfterAds: 100
+--- !u!114 &348056134
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348056130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c4a98ab17b89a124a89ae89667410b24, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _showAdButton: {fileID: 1402124282}
+  _androidAdUnitId: Rewarded_Android
+  _iOSAdUnitId: Rewarded_iOS
+--- !u!114 &348056135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 348056130}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2e67a34b8b5c57439ca00a46f65da7a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _androidGameId: 4547153
+  _iOSGameId: 4547152
+  _testMode: 1
 --- !u!4 &359891809 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8062777447723195597, guid: 960e6fc5672f0204685cea69a733013e, type: 3}
@@ -6980,19 +7017,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1402124283}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 348056131}
-        m_TargetAssemblyTypeName: AdsController, Assembly-CSharp
-        m_MethodName: ShowRewardedVideo
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &1402124283
 MonoBehaviour:
   m_ObjectHideFlags: 0

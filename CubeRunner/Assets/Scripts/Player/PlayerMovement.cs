@@ -37,7 +37,7 @@ public class PlayerMovement : MonoBehaviour
         GameController.Instance.LevelContinued += OnStartMoving;
         PlayerController.Instance.LevelComplete += StopRunning;
         HealthController.Instance.LevelLose += StopRunning;
-        AdsController.Instance.ContinueButtonClicked += ResetPlayerPositionAtContinue;
+        GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked += ResetPlayerPositionAtContinue;
         GameController.Instance.LevelEnded += ResetPlayerPositionAtStart;
     }
 
@@ -47,7 +47,7 @@ public class PlayerMovement : MonoBehaviour
         GameController.Instance.LevelContinued -= OnStartMoving;
         PlayerController.Instance.LevelComplete -= StopRunning;
         HealthController.Instance.LevelLose -= StopRunning;
-        AdsController.Instance.ContinueButtonClicked -= ResetPlayerPositionAtContinue;
+        //GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked -= ResetPlayerPositionAtContinue;
         GameController.Instance.LevelEnded -= ResetPlayerPositionAtStart;
     }
 

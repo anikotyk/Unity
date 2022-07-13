@@ -28,7 +28,7 @@ public class HealthController : MonoBehaviour
     {
         PlayerController.Instance.GetDamage += MinusHealth;
         GameController.Instance.LevelEnded += SetHealthToCurrentMax;
-        AdsController.Instance.ContinueButtonClicked += SetHealthToCurrentMax;
+        GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked += SetHealthToCurrentMax;
         GameController.Instance.NextLevelClicked += SetHealthToCurrentMax;
         GameController.Instance.LevelStarted += SetHealthToCurrentMax;
         GameController.Instance.LevelContinued += SetHealthToCurrentMax;
@@ -40,7 +40,7 @@ public class HealthController : MonoBehaviour
     {
         PlayerController.Instance.GetDamage -= MinusHealth;
         GameController.Instance.LevelEnded -= SetHealthToCurrentMax;
-        AdsController.Instance.ContinueButtonClicked -= SetHealthToCurrentMax;
+        //GameObject.FindObjectOfType<ContinueButton>().ContinueButtonClicked -= SetHealthToCurrentMax;
         GameController.Instance.NextLevelClicked -= SetHealthToCurrentMax;
         GameController.Instance.LevelStarted -= SetHealthToCurrentMax;
         GameController.Instance.LevelContinued -= SetHealthToCurrentMax;
