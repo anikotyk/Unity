@@ -107,7 +107,7 @@ public class GameController : MonoBehaviour
 
         if (_adsCount >= 3)
         {
-            AdsManager.ShowAdsVideo(AdsManager.interstitialVideo);
+            InterstitialAd.S.ShowAd();
             _adsCount = 0;
         }
 
@@ -120,12 +120,7 @@ public class GameController : MonoBehaviour
         _playerSquad.OnGameStart();
         _playerSquad.SetIsRun(false);
     }
-
-    public void OnExtraTimeButtonClick()
-    {
-        AdsManager.ShowAdsVideo(AdsManager.rewardedVideo);
-    }
-
+    
     public void ContinueRuningExtraTime()
     {
         _isExtraTime = true;
